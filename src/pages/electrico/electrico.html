@@ -1,0 +1,55 @@
+<!--
+  Generated template for the ElectricoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+	<ion-navbar color="orange" *ngIf=!busqueda>
+
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>
+			<img src="assets/icon_casco.png">
+			<label>CAPP</label>
+			<div class="text-title">Electricos</div>
+		</ion-title>
+
+		<ion-buttons end>
+			<button ion-button icon-only (click)="busqueda=true">
+				<ion-icon name="search"></ion-icon>
+			</button>
+		</ion-buttons>
+
+	</ion-navbar>
+
+	<ion-navbar color="orange" *ngIf=busqueda>
+
+		<ion-searchbar></ion-searchbar>
+
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content style="background-color: #E0E0E0" (click)="busqueda=false">
+	<div class="div-banner">
+		<img class="banner" src="assets/banners/banner_ferreelectricos.png" alt="">
+	</div>
+
+	<ion-row>
+		<ion-col col-6 col-lg-3 *ngFor="let electrico of electricos" style="margin-bottom: 20px">
+			<ion-card>
+				<img src="{{imagen}}{{electrico.imagen}}" style="height: 150px">
+				<ion-card-content>
+					<p>
+					{{electrico.nombre}}
+					</p>
+				</ion-card-content>
+			</ion-card>
+		</ion-col>
+	</ion-row>
+
+</ion-content>
