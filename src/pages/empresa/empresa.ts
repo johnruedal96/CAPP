@@ -20,7 +20,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  	constructor(public navCtrl: NavController, public navParams: NavParams) {
  		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
  		this.empresa = navParams.get('empresa');
- 		console.log(navParams.get('empresa'));
  	}
 
  	ionViewDidLoad() {
