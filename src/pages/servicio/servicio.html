@@ -18,16 +18,23 @@
 		</ion-title>
 
 		<ion-buttons end>
-			<button ion-button icon-only (click)="busqueda=true">
+			<button ion-button icon-only (click)="inputSearch()">
 				<ion-icon name="search"></ion-icon>
 			</button>
 		</ion-buttons>
 
 	</ion-navbar>
 
-	<ion-navbar color="orange" *ngIf=busqueda>
+	<ion-navbar calss="search-header" *ngIf=busqueda>
 
-		<ion-searchbar></ion-searchbar>
+		<ion-searchbar
+			#searchbar
+			placeholder="buscar"
+			(keypress)="search($event.keyCode)"
+			[(ngModel)]="txtSearch"
+			[showCancelButton]="true"
+			(ionCancel)="closeSearch($event)">
+		</ion-searchbar>
 
 	</ion-navbar>
 
@@ -36,11 +43,11 @@
 
 <ion-content style="background-color: #E0E0E0" (click)="busqueda=false">
 	<div class="div-banner">
-		<img class="banner" src="assets/banners/banner_ferreelectricos.png" alt="">
+		<img class="banner" src="assets/banners/banner_servicios.png" alt="">
 	</div>
 
 	<ion-row>
-		<ion-col col-6 col-lg-3 *ngFor="let servicio of servicios" style="margin-bottom: 20px">
+		<ion-col col-6 col-lg-3 *ngFor="let servicio of servicios" style="margin-bottom: 20px" (click)="goToEmpresa(servicio)">
 			<ion-card>
 				<img src="{{imagen}}{{servicio.imagen}}" style="height: 150px">
 				<ion-card-content>

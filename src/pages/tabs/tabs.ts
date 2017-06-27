@@ -1,4 +1,5 @@
 import { Component, ElementRef, Renderer } from '@angular/core';
+import { MenuController } from 'ionic-angular';
 
 @Component({
 	templateUrl: 'tabs.html'
@@ -9,8 +10,8 @@ export class TabsPage {
 	tab2Root = 'ElectricoPage';
 	tab3Root = 'ServicioPage';
 
-	constructor(public element:ElementRef, public renderer:Renderer ) {
-
+	constructor(public element:ElementRef, public renderer:Renderer, public menuController: MenuController ) {
+		menuController.enable(true);
 	}
 
 	ionViewDidLoad(){

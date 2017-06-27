@@ -1,0 +1,99 @@
+<!--
+  Generated template for the EmpresaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+	<ion-navbar color="orange">
+
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>
+			<img src="assets/icon_casco.png">
+			<label>CAPP</label>
+			<!-- <div class="text-title">Ferreterias</div> -->
+		</ion-title>
+
+	</ion-navbar>
+
+	<ion-navbar calss="search-header" *ngIf=busqueda>
+
+		<ion-searchbar
+		#searchbar
+		placeholder="buscar"
+		(keypress)="search($event.keyCode)"
+		[(ngModel)]="txtSearch"
+		[showCancelButton]="true"
+		(ionCancel)="closeSearch($event)">
+	</ion-searchbar>
+
+</ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+	<!-- <ion-row>
+		<ion-col col-6 col-lg-3 *ngFor="let ferreteria of ferreterias" style="margin-bottom: 20px" (click)="goToEmpresa(ferreteria)">
+			<ion-card>
+				<img src="{{imagen}}{{ferreteria.imagen}}" style="height: 150px">
+				<ion-card-content>
+					<p>
+					{{ferreteria.nombre}}
+					</p>
+				</ion-card-content>
+			</ion-card>
+		</ion-col>
+	</ion-row> -->
+
+	<ion-card>
+		<div class="title-name">
+			{{empresa.nombre}}
+		</div>
+
+		<img src="{{imagen}}{{empresa.imagen}}">
+
+		<div class="section">
+			<h2 class="sub-title">Descripción</h2>
+			<p>{{empresa.descripcion}}</p>
+		</div>
+
+		<div class="section">
+			<h2 class="sub-title">Servicio</h2>
+			<p>{{empresa.servicios}}</p>
+		</div>
+
+		<div class="section">
+			<h2 class="sub-title">Horario</h2>
+			<p>{{empresa.horarios}}</p>
+		</div>
+
+		<div class="section">
+			<h2 class="sub-title">Web</h2>
+			<p>{{empresa.url}}</p>
+		</div>
+
+		<ion-item>
+			<ion-row>
+				<ion-col col-4>
+					<button ion-fab color="orange"><ion-icon name="call"></ion-icon></button>
+				</ion-col>
+
+				<ion-col col-4>
+					<button ion-fab color="orange"><ion-icon name="mail"></ion-icon></button>
+				</ion-col>
+
+				<ion-col col-4>
+					<button ion-fab color="orange"><ion-icon name="chatboxes"></ion-icon></button>
+				</ion-col>
+			</ion-row>
+		</ion-item>
+	</ion-card>
+
+
+</ion-content>
+

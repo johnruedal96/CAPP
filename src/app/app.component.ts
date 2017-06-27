@@ -3,14 +3,12 @@ import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { TabsPage } from '../pages/tabs/tabs';
-
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild('NAV') nav: Nav;
-  rootPage:any = TabsPage;
+  rootPage:any;
 
   public pages: Array<{title:string, componet:string, icon:string}>;
 
@@ -18,10 +16,10 @@ export class MyApp {
 
     this.pages = [
       {title: 'Mi Perfil', componet:'FerreteriaPage', icon:'person'},
-      {title: 'Datos de envio', componet:'FerreteriaPage', icon:'person'},
-      {title: 'Contactenos', componet:'FerreteriaPage', icon:'person'},
-      {title: 'Acerca', componet:'FerreteriaPage', icon:'person'},
-      {title: 'Cerrar sesion', componet:'FerreteriaPage', icon:'person'}
+      {title: 'Datos de envio', componet:'FerreteriaPage', icon:'send'},
+      {title: 'Contactenos', componet:'FerreteriaPage', icon:'mail'},
+      {title: 'Acerca', componet:'FerreteriaPage', icon:'information-circle'},
+      {title: 'Cerrar sesion', componet:'LoginPage', icon:'power'}
     ]
 
     platform.ready().then(() => {
@@ -29,6 +27,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+      this.rootPage = 'LoginPage';
     });
   }
 

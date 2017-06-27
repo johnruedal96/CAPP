@@ -11,6 +11,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpModule } from '@angular/http';
 import { WebServiceProvider } from '../providers/web-service/web-service';
 
+import { Keyboard } from '@ionic-native/keyboard';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -30,7 +32,8 @@ import { WebServiceProvider } from '../providers/web-service/web-service';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    WebServiceProvider
+    WebServiceProvider,
+    Keyboard
   ]
 })
 export class AppModule {}
