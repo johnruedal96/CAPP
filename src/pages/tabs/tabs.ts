@@ -9,6 +9,7 @@ export class TabsPage {
 	tab1Root = 'FerreteriaPage';
 	tab2Root = 'ElectricoPage';
 	tab3Root = 'ServicioPage';
+	tab4Root = 'CotizacionPage';
 
 	constructor(public element:ElementRef, public renderer:Renderer, public menuController: MenuController ) {
 		menuController.enable(true);
@@ -31,10 +32,10 @@ export class TabsPage {
 
 		if(content == undefined){
 			// icono ios
-			content = this.element.nativeElement.getElementsByClassName('ios-add-'+icon)[0];
+			content = this.element.nativeElement.getElementsByClassName('ion-ios-'+icon)[0];
 			if(content == undefined){
 				// icono ios-outline
-				content = this.element.nativeElement.getElementsByClassName('ios-add-outline-'+icon)[0];
+				content = this.element.nativeElement.getElementsByClassName('ion-ios-'+icon+'-outline')[0];
 			}
 		}
 
@@ -46,6 +47,6 @@ export class TabsPage {
 		this.renderer.setElementStyle(content, 'width', '24px');
 		this.renderer.setElementStyle(content, 'height', '24px');
 		this.renderer.setElementStyle(content, 'background-size', 'contain');
-		this.renderer.setElementStyle(content, 'background-repat', 'norepeat');
+		this.renderer.setElementStyle(content, 'background-repeat', 'no-repeat');
 	}
 }

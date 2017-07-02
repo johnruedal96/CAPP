@@ -9,9 +9,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HttpModule } from '@angular/http';
-import { WebServiceProvider } from '../providers/web-service/web-service';
-
 import { Keyboard } from '@ionic-native/keyboard';
+import { HeaderColor } from '@ionic-native/header-color';
+
+// providers
+import { WebServiceProvider } from '../providers/web-service/web-service';
+import { AuthProvider } from '../providers/auth/auth';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +37,9 @@ import { Keyboard } from '@ionic-native/keyboard';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     WebServiceProvider,
-    Keyboard
+    AuthProvider,
+    Keyboard,
+    HeaderColor
   ]
 })
 export class AppModule {}

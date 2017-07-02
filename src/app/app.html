@@ -1,10 +1,11 @@
 <ion-menu [content]="NAV">
 	<ion-content>
-	<div class="banner-sidebar" style="background-image: url('assets/sideMenu.png')">
+	<div  *ngIf="login" class="banner-sidebar" style="background-image: url('assets/sideMenu.png')">
 		<div style="padding: 20px">
-			<img class="logo_usuario" src="assets/logo_casco.png">
+			<img class="logo_usuario" src="{{urlImagen}}logo_casco.png" *ngIf='user.foto == null' (click)="goToPage('PerfilPage')" menuClose>
+			<img *ngIf='user.foto != null' class="logo_usuario" src="{{urlImagen}}{{user.foto}}"  (click)="goToPage('PerfilPage')" menuClose>
 			<div class="name-user">
-				Nombre del usuario
+				{{user.nombre}}
 			</div>
 		</div>
 	</div>

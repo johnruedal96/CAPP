@@ -8,13 +8,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, ElementRef, Renderer } from '@angular/core';
+import { MenuController } from 'ionic-angular';
 var TabsPage = (function () {
-    function TabsPage(element, renderer) {
+    function TabsPage(element, renderer, menuController) {
         this.element = element;
         this.renderer = renderer;
+        this.menuController = menuController;
         this.tab1Root = 'FerreteriaPage';
         this.tab2Root = 'ElectricoPage';
         this.tab3Root = 'ServicioPage';
+        this.tab4Root = 'CotizacionPage';
+        menuController.enable(true);
     }
     TabsPage.prototype.ionViewDidLoad = function () {
         var content = this.setIcon('ferreteria');
@@ -29,10 +33,10 @@ var TabsPage = (function () {
         var content = this.element.nativeElement.getElementsByClassName('ion-md-' + icon)[0];
         if (content == undefined) {
             // icono ios
-            content = this.element.nativeElement.getElementsByClassName('ios-add-' + icon)[0];
+            content = this.element.nativeElement.getElementsByClassName('ion-ios-' + icon)[0];
             if (content == undefined) {
                 // icono ios-outline
-                content = this.element.nativeElement.getElementsByClassName('ios-add-outline-' + icon)[0];
+                content = this.element.nativeElement.getElementsByClassName('ion-ios-' + icon + '-outline')[0];
             }
         }
         return content;
@@ -42,7 +46,7 @@ var TabsPage = (function () {
         this.renderer.setElementStyle(content, 'width', '24px');
         this.renderer.setElementStyle(content, 'height', '24px');
         this.renderer.setElementStyle(content, 'background-size', 'contain');
-        this.renderer.setElementStyle(content, 'background-repat', 'norepeat');
+        this.renderer.setElementStyle(content, 'background-repeat', 'no-repeat');
     };
     return TabsPage;
 }());
@@ -50,7 +54,7 @@ TabsPage = __decorate([
     Component({
         templateUrl: 'tabs.html'
     }),
-    __metadata("design:paramtypes", [ElementRef, Renderer])
+    __metadata("design:paramtypes", [ElementRef, Renderer, MenuController])
 ], TabsPage);
 export { TabsPage };
 //# sourceMappingURL=tabs.js.map

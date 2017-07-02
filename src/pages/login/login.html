@@ -11,25 +11,31 @@
 	<!-- form -->
 	<ion-list>
 
-		<ion-item>
-			<ion-input placeholder="Usuario" type="text" value=""></ion-input>
-		</ion-item>
+		<form #formLogin="ngForm">
+			<ion-input [ngModel]="formLogin.token" name="_token" type="hidden" value="{{token}}"></ion-input>
+			
+			<ion-item>
+				<ion-input placeholder="Email" [(ngModel)]="formLogin.email" name="email" type="email" required email></ion-input>
+			</ion-item>
+			
+			<ion-item>
+				<!-- <button item-right ion-button large clear (click)="showPassword(password)"><ion-icon [name]="passwordShow ? 'eye' :'eye-off'"></ion-icon></button> -->
+				<ion-input placeholder="Contraseña" [(ngModel)]="formLogin.password" #password name="password" type="password" clearOnEdit="false" required></ion-input>
+			</ion-item>
 
-		<ion-item>
-			<ion-input placeholder="Contraseña" type="password"></ion-input>
-		</ion-item>
+		</form>
 
 		<a class="button-registro" (click)="goToPage(true)">Registrarme</a>
 
 	</ion-list>
 
 	<!-- buttons -->
-	<button ion-button block color="dark" (click)="goToPage()">INICIAR SESION</button>
-	<button ion-button icon-left block (click)="goToPage()">
+	<button ion-button block color="dark" (click)="login(formLogin)" [disabled]="!formLogin.form.valid">INICIAR SESION</button>
+	<button ion-button icon-left block (click)="goToPage()" disabled="disabled">
 		<ion-icon name="logo-facebook"></ion-icon>
 		INICIAR CON FACEBOOk
 	</button>
-	<button ion-button icon-left block color="danger" (click)="goToPage()">
+	<button ion-button icon-left block color="danger" (click)="goToPage()" disabled="disabled">
 		<ion-icon name="logo-google"></ion-icon>
 		INICIAR CON FACEBOOk
 	</button>

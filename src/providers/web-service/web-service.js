@@ -19,10 +19,15 @@ import 'rxjs/add/operator/map';
 var WebServiceProvider = (function () {
     function WebServiceProvider(http) {
         this.http = http;
-        this.urlFerreteria = "http://contactoarquitectonico.com.co/capp_admin/wscapp/show/1";
+        this.url = "http://contactoarquitectonico.com.co/capp_admin/wscapp/show/";
+        this.urlSearch = "http://contactoarquitectonico.com.co/capp_admin/wscapp/search/";
     }
-    WebServiceProvider.prototype.getFerreterias = function () {
-        return this.http.get(this.urlFerreteria)
+    WebServiceProvider.prototype.getEmpresas = function (tipo) {
+        return this.http.get(this.url + tipo)
+            .map(function (res) { return res.json(); });
+    };
+    WebServiceProvider.prototype.search = function (tipo, name) {
+        return this.http.get(this.urlSearch + tipo + '/' + name)
             .map(function (res) { return res.json(); });
     };
     return WebServiceProvider;

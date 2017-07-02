@@ -1,0 +1,66 @@
+<!--
+  Generated template for the CotizacionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+	<ion-navbar color="orange">
+
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<div class="div_title">
+			<img src="assets/icon_casco.png">
+			<label>CAPP</label>
+		</div>
+		<ion-title>
+			<div class="text-title">Cotización</div>
+		</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+	<label>Empresas</label>
+	<br>
+	<ion-item class="tags" *ngFor="let tag of tags">
+		<ion-buttons lg end>
+			{{tag.nombre}}
+			<ion-icon name="close"></ion-icon>
+		</ion-buttons>
+	</ion-item>
+	<form #formCotizacion="ngForm">
+		<ion-list>
+			<ion-item>
+				<ion-label>Producto</ion-label>
+				<ion-select okText="Agregar" cancelText="Cerrar" [(ngModel)]="product" name="product">
+					<ion-option value="NES">NES</ion-option>
+					<ion-option value="Nintendo64">Nintendo64</ion-option>
+					<ion-option value="PlayStation">PlayStation</ion-option>
+					<ion-option value="Sega Genesis">Sega Genesis</ion-option>
+					<ion-option value="Sega Saturn">Sega Saturn</ion-option>
+				</ion-select>
+			</ion-item>
+		</ion-list>
+		<ion-item>
+			<ion-label>Cantidad</ion-label>
+			<ion-input [(ngModel)]="cantidad" name="cantidad" type="number"></ion-input>
+		</ion-item>
+	</form>
+	<button (click)="agregar()" ion-button block color="dark">AGREGAR</button>
+
+	<ion-fab bottom left>
+		<button color="orange" ion-fab (click)="presentCotizacionModal()">
+			<ion-icon name="cart"></ion-icon>
+		</button>
+	</ion-fab>
+
+	<ion-fab bottom right *ngIf="addEmpresa">
+		<button color="orange" ion-fab (click)="presentEmpresaModal()">
+			<ion-icon name="add"></ion-icon>
+		</button>
+	</ion-fab>
+</ion-content>

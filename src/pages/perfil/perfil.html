@@ -1,0 +1,62 @@
+<!--
+  Generated template for the PerfilPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+	<ion-navbar color="orange">
+
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<div class="div_title">
+			<img src="assets/icon_casco.png">
+			<label>CAPP</label>
+		</div>
+		<ion-title>
+			<div class="text-title">Perfil</div>
+		</ion-title>
+
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+	<div>
+		<div class="div_img">
+			<img src="{{urlImagen}}logo_casco.png" style="width: 100%;" *ngIf='user.foto == null'/>
+			<img src="{{urlImagen}}{{user.foto}}" style="width: 100%;" *ngIf='user.foto != null'/>
+				<button ion-button clear class="boton-imagen">
+				<!-- <ion-icon name="create"></ion-icon> -->
+				<ion-icon name="create"></ion-icon>
+				</button>
+		</div>
+		<ion-segment [(ngModel)]="myProfile">
+			<ion-segment-button value="profile">
+				Perfil
+			</ion-segment-button>
+			<ion-segment-button value="buys">
+				Compras
+			</ion-segment-button>
+		</ion-segment>
+	</div>
+
+	<div [ngSwitch]="myProfile">
+		<ion-list *ngSwitchCase="'buys'">
+		</ion-list>
+
+		<ion-list *ngSwitchCase="'profile'">
+			<ion-item>
+				<ion-icon name="person" item-start></ion-icon>
+				{{user.nombre}}
+			</ion-item>
+			<ion-item>
+				<ion-icon name="mail" item-start></ion-icon>
+				{{user.email}}
+			</ion-item>
+		</ion-list>
+	</div>
+</ion-content>

@@ -1,0 +1,45 @@
+<!--
+  Generated template for the ListaCotizacionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+	<ion-navbar color="orange">
+		<ion-buttons end>
+			<button ion-button clear outline (click)="dismiss()">
+				Cerrar
+			</button>
+		</ion-buttons> 
+		<ion-title>Lista Cotizacion</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+	<ion-list>
+		<ion-item>
+			<ion-row>
+				<ion-col col-3>
+					Cantidad
+				</ion-col>
+				<ion-col col-9>
+					Productos
+				</ion-col>
+			</ion-row>
+		</ion-item>
+
+		<ion-item *ngFor="let item of lista">
+			<ion-row>
+				<ion-col col-3>
+					{{item.cantidad}}
+				</ion-col>
+				<ion-col col-9>
+					{{item.producto}}
+				</ion-col>
+			</ion-row>
+		</ion-item>
+	</ion-list>
+</ion-content>

@@ -12,7 +12,11 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpModule } from '@angular/http';
+import { Keyboard } from '@ionic-native/keyboard';
+import { HeaderColor } from '@ionic-native/header-color';
+// providers
 import { WebServiceProvider } from '../providers/web-service/web-service';
+import { AuthProvider } from '../providers/auth/auth';
 var AppModule = (function () {
     function AppModule() {
     }
@@ -38,7 +42,10 @@ AppModule = __decorate([
             StatusBar,
             SplashScreen,
             { provide: ErrorHandler, useClass: IonicErrorHandler },
-            WebServiceProvider
+            WebServiceProvider,
+            AuthProvider,
+            Keyboard,
+            HeaderColor
         ]
     })
 ], AppModule);

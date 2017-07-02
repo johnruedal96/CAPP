@@ -1,30 +1,52 @@
 page-empresa {
-
-	.title img{
-		margin-left: -12px;
-		width: 30px;
-	}
-
-	.title label{
-		font-size: 13px;
+	.div-banner, .banner{
+		width: 100%;
 	}
 
 	.title-name{
 		color: #795548;
-		font-size: 20px;
+		font-size: 1.4em;
 		font-weight: bold;
-		margin: 20px;
+		margin: 10px 0;
 		text-align: center;
-	}
-
-	.section{
-		margin: 20px;
 	}
 
 	.sub-title{
 		color: #795548;
-		font-size: 18px;
+		font-size: 1.2em;
 		font-weight: bold;
 	}
-	
+
+	.section{
+		margin: 0 10px 15px
+	}
+
+	// Estilos para ios
+	.toolbar-ios .div_title .text-title{
+		text-align: center; display: inline-block; width: 75%
+	}
+
+	// estilos para android
+	.toolbar-md .title {
+		position: absolute;
+		top: 15px;
+		left: 20%;
+		text-align: center;
+		width: 70%;
+	}
+
+	// estilos ios-android
+	.toolbar-ios .div_title, .toolbar-md .div_title{
+		display: inline-block;
+		margin-right: 300px;
+	}
+
+	.toolbar-ios .div_title label, .toolbar-md .div_title label{
+		font-size: 13px;
+		color: white;
+	}
+
+	.toolbar-ios .div_title img, .toolbar-md .div_title img{
+		width: 30px;
+	}
 }

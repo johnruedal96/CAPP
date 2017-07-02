@@ -26,4 +26,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
  	}
 
+ 	cotizar(){
+ 		this.navCtrl.push('CotizacionPage', {empresa:this.empresa});
+ 	}
+
  }

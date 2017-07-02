@@ -1,8 +1,9 @@
 page-login {
 	.button-registro{
 		float: right;
-		margin-bottom: 30px;
 		font-weight: bold;
+		margin-bottom: 20px;
+		margin-top: 10px;
 	}
 
 	.logo{
@@ -13,5 +14,9 @@ page-login {
 
 	.image-body{
 		background-size: 100% 100%;
+	}
+
+	.button-clear-md, .button-clear-ios{
+		height: auto;
 	}
 }

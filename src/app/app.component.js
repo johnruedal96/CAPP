@@ -12,17 +12,40 @@ import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { TabsPage } from '../pages/tabs/tabs';
+import { AuthProvider } from '../providers/auth/auth';
 var MyApp = (function () {
-    function MyApp(platform, statusBar, splashScreen) {
-        this.rootPage = TabsPage;
+    function MyApp(platform, statusBar, splashScreen, auth) {
+        this.login = false;
+        this.urlImagen = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
         this.pages = [
-            { title: 'Ferreterias', componet: 'FerreteriaPage', icon: 'person' }
+            { title: 'Empresas', componet: TabsPage, icon: 'construct' },
+            { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person' },
+            { title: 'Datos de envio', componet: 'FerreteriaPage', icon: 'send' },
+            { title: 'Contactenos', componet: 'FerreteriaPage', icon: 'mail' },
+            { title: 'Nosotros', componet: 'FerreteriaPage', icon: 'information-circle' },
+            { title: 'Cerrar sesion', componet: 'LoginPage', icon: 'power' }
         ];
+        if (window.localStorage.getItem('token') != null) {
+            this.rootPage = TabsPage;
+            var user = JSON.parse(window.localStorage.getItem('user'));
+            // // dispositivos moviles
+            // this.user = JSON.parse(user);
+            // Pruebas computador
+            this.user = user;
+            this.login = true;
+        }
+        else {
+            this.rootPage = 'LoginPage';
+        }
         platform.ready().then(function () {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
             statusBar.styleDefault();
-            splashScreen.hide();
+            statusBar.backgroundColorByHexString("#F57C00");
+            // splashScreen.hide();
+            setTimeout(function () {
+                splashScreen.hide();
+            }, 1000);
         });
     }
     MyApp.prototype.goToPage = function (page) {
@@ -38,7 +61,7 @@ MyApp = __decorate([
     Component({
         templateUrl: 'app.html'
     }),
-    __metadata("design:paramtypes", [Platform, StatusBar, SplashScreen])
+    __metadata("design:paramtypes", [Platform, StatusBar, SplashScreen, AuthProvider])
 ], MyApp);
 export { MyApp };
 //# sourceMappingURL=app.component.js.map

@@ -11,10 +11,11 @@
 		<button ion-button menuToggle>
 			<ion-icon name="menu"></ion-icon>
 		</button>
-		<ion-title>
+		<div class="div_title">
 			<img src="assets/icon_casco.png">
 			<label>CAPP</label>
-			<!-- <div class="text-title">Ferreterias</div> -->
+		</div>
+		<ion-title>
 		</ion-title>
 
 	</ion-navbar>
@@ -37,18 +38,15 @@
 
 <ion-content>
 
-	<!-- <ion-row>
-		<ion-col col-6 col-lg-3 *ngFor="let ferreteria of ferreterias" style="margin-bottom: 20px" (click)="goToEmpresa(ferreteria)">
-			<ion-card>
-				<img src="{{imagen}}{{ferreteria.imagen}}" style="height: 150px">
-				<ion-card-content>
-					<p>
-					{{ferreteria.nombre}}
-					</p>
-				</ion-card-content>
-			</ion-card>
-		</ion-col>
-	</ion-row> -->
+	<ion-fab top right edge>
+	<button ion-fab style="background-color: #E65100" mini><ion-icon name="add"></ion-icon></button>
+		<ion-fab-list>
+			<a href="tel:{{empresa.telefono}}" ion-fab><ion-icon name="call"></ion-icon></a>
+			<a ion-fab href="mailto:{{empresa.correo}}"><ion-icon name="mail"></ion-icon></a>
+			<button ion-fab><ion-icon name="chatboxes"></ion-icon></button>
+			<button ion-fab (click)="cotizar()"><ion-icon name="cart"></ion-icon></button>
+		</ion-fab-list>
+	</ion-fab>
 
 	<ion-card>
 		<div class="title-name">
@@ -74,24 +72,10 @@
 
 		<div class="section">
 			<h2 class="sub-title">Web</h2>
-			<p>{{empresa.url}}</p>
+			<p><a href="{{empresa.url}}" *ngIf="empresa.url != 'NO DISPONIBLE'">{{empresa.url}}</a></p>
+			<p *ngIf="empresa.url == 'NO DISPONIBLE'">{{empresa.url}}</p>
 		</div>
 
-		<ion-item>
-			<ion-row>
-				<ion-col col-4>
-					<button ion-fab color="orange"><ion-icon name="call"></ion-icon></button>
-				</ion-col>
-
-				<ion-col col-4>
-					<button ion-fab color="orange"><ion-icon name="mail"></ion-icon></button>
-				</ion-col>
-
-				<ion-col col-4>
-					<button ion-fab color="orange"><ion-icon name="chatboxes"></ion-icon></button>
-				</ion-col>
-			</ion-row>
-		</ion-item>
 	</ion-card>
 
 

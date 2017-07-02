@@ -1,0 +1,53 @@
+page-perfil {
+	.boton-imagen{
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	.card{
+		height: 100%
+	}
+
+	.div-banner, .banner{
+		width: 100%;
+	}
+
+	.div_img{
+		height: 240px;
+		overflow: hidden;
+	}
+
+	.div_img:active{
+		height: auto;
+	}
+
+	// Estilos para ios
+	.toolbar-ios .div_title .text-title{
+		text-align: center; display: inline-block; width: 75%
+	}
+
+	// estilos para android
+	.toolbar-md .title {
+		position: absolute;
+		top: 15px;
+		left: 20%;
+		text-align: center;
+		width: 70%;
+	}
+
+	// estilos ios-android
+	.toolbar-ios .div_title, .toolbar-md .div_title{
+		display: inline-block;
+		margin-right: 300px;
+	}
+
+	.toolbar-ios .div_title label, .toolbar-md .div_title label{
+		font-size: 13px;
+		color: white;
+	}
+
+	.toolbar-ios .div_title img, .toolbar-md .div_title img{
+		width: 30px;
+	}
+}

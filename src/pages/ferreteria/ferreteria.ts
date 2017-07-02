@@ -44,6 +44,8 @@ import { Subscription } from 'rxjs/Subscription';
  		this.ferreteriaLoad = [];
  		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
  		this.busqueda = false;
+
+ 		// console.log(window.localStorage.getItem('token'));
  	}
 
  	ionViewDidLoad() {

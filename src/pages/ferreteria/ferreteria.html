@@ -11,9 +11,11 @@
 		<button ion-button menuToggle>
 			<ion-icon name="menu"></ion-icon>
 		</button>
-		<ion-title>
+		<div class="div_title">
 			<img src="assets/icon_casco.png">
 			<label>CAPP</label>
+		</div>
+		<ion-title>
 			<div class="text-title">Ferreterias</div>
 		</ion-title>
 
@@ -67,5 +69,9 @@
 			<ion-infinite-scroll-content></ion-infinite-scroll-content>
 		</ion-infinite-scroll>
 	</ion-row>
+
+	<div class="noEmpresas" *ngIf="ferreteriaLoad.length == 0">
+		<p>No hay empresas para mostrar</p>
+	</div>
 
 </ion-content>
