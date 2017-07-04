@@ -12,6 +12,8 @@ import { HttpModule } from '@angular/http';
 import { Keyboard } from '@ionic-native/keyboard';
 import { HeaderColor } from '@ionic-native/header-color';
 
+import { Camera } from '@ionic-native/camera';
+
 // providers
 import { WebServiceProvider } from '../providers/web-service/web-service';
 import { AuthProvider } from '../providers/auth/auth';
@@ -39,7 +41,8 @@ import { AuthProvider } from '../providers/auth/auth';
     WebServiceProvider,
     AuthProvider,
     Keyboard,
-    HeaderColor
+    HeaderColor,
+    Camera
   ]
 })
 export class AppModule {}

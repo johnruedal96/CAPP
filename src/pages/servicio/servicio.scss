@@ -7,6 +7,11 @@ page-servicio {
 		width: 100%;
 	}
 
+	.searchbar-input{
+		box-shadow: initial !important;
+		background-color: #f8f8f8 !important;
+	}
+
 	// Estilos para ios
 	.toolbar-ios .div_title .text-title{
 		text-align: center; display: inline-block; width: 75%

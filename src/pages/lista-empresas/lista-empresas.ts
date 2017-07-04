@@ -9,89 +9,119 @@ import { WebServiceProvider } from '../../providers/web-service/web-service';
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
- @IonicPage()
- @Component({
- 	selector: 'page-lista-empresas',
- 	templateUrl: 'lista-empresas.html',
- })
- export class ListaEmpresasPage {
+@IonicPage()
+@Component({
+	selector: 'page-lista-empresas',
+	templateUrl: 'lista-empresas.html',
+})
+export class ListaEmpresasPage {
 
- 	public empresas:any;
- 	public empresasAntiguas:any;
- 	public seleccion:any = [];
- 	public id:number;
- 	public filtro:number = 1;
+	// guarda las empresas a mostrar en la vista
+	public empresas: any;
+	// auxiliar, mantiene el valor del array de empresas, se utiliza en el metodo filtrar
+	public empresasAntiguas: any;
+	// array que guarda las empresas seleccionadas por el usuario
+	public seleccion: any = [];
+	// guardar el id del tipo de empresa (ferreteria, electricos, servicios)
+	public id: number;
+	// guarda el tipo de filtro (todos = 1, seleccionados = 2)
+	public filtro: number = 1;
 
- 	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider ) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider) {
 
- 		this.id = navParams.get('id');
- 		if(this.id != undefined){
- 			this.buscar(this.id);
- 		}
+		// si ecuentra el parametro, ejecuta la busqueda por el tipo de empresa (combo)
+		this.id = navParams.get('id');
+		if (this.id != undefined) {
+			this.buscar(this.id);
+		}
 
- 		this.seleccion = navParams.get('tags');
- 		if(this.seleccion == undefined){
- 			this.seleccion = [];
- 		}
+		// si no encuentra el parametro asigna un array vacio a seleccion 
+		this.seleccion = navParams.get('tags');
+		if (this.seleccion == undefined) {
+			this.seleccion = [];
+		}
 
- 	}
+	}
 
- 	ionViewDidLoad() {
+	ionViewDidLoad() {
 
- 	}
+	}
 
- 	dismiss() {
- 		let data = {
- 			'seleccion': this.seleccion,
- 			'id': this.id
- 		};
- 		this.viewCtrl.dismiss(data);
- 	}
+	dismiss() {
+		// cierra la ventana modal, y envia data como parametro a la ventana pdre
+		let data = {
+			'seleccion': this.seleccion,
+			'id': this.id
+		};
+		this.viewCtrl.dismiss(data);
+	}
 
- 	buscar(id){
- 		this.id = id;
- 		this.seleccion = [];
- 		this.ws.getEmpresas(id)
- 		.subscribe(empresas => {
- 			this.loadList(empresas.data);
- 		})
- 	}
+	buscar(id) {
+		// busca las empresas segun el id seleccionado
+		this.id = id;
+		this.seleccion = [];
+		this.ws.getEmpresas(id)
+			.subscribe(empresas => {
+				this.loadList(empresas.data);
+			})
+	}
 
- 	loadList(empresas){
- 		this.empresas = empresas;
- 		for (var i = 0; i < empresas.length; ++i) {
- 			for (var j = 0; j < this.seleccion.length; ++j) {
- 				if(empresas[i].id == this.seleccion[j].id){
- 					this.empresas[i].check = true;
- 					break;
- 				}else{
- 					this.empresas[i].check = false;
- 				}
- 			}
- 		}
- 	}
+	loadList(empresas) {
+		// carga las empresas en la vista
+		this.empresas = empresas;
+		for (var i = 0; i < empresas.length; ++i) {
+			for (var j = 0; j < this.seleccion.length; ++j) {
+				if (empresas[i].id == this.seleccion[j].id) {
+					this.empresas[i].check = true;
+					break;
+				} else {
+					this.empresas[i].check = false;
+				}
+			}
+		}
+	}
 
- 	seleccionar(event, empresa) {
- 		if(event){
- 			empresa.check = true;
- 			this.seleccion.push(empresa);
- 		}else{
- 			for (var i = 0; i < this.seleccion.length; ++i) {
- 				if(empresa.id == this.seleccion[i].id){
- 					this.seleccion.splice(i,1);
- 				}
- 			}
- 		}
- 	}
+	seleccionar(event, empresa) {
+		// agrega al array seleccion las empresas seleccionadas
+		if (event) {
+			empresa.check = true;
+			this.seleccion.push(empresa);
+		} else {
+			// elimina del array seleccion las empresas seleccionadas
+			for (var i = 0; i < this.seleccion.length; ++i) {
+				if (empresa.id == this.seleccion[i].id) {
+					this.seleccion.splice(i, 1);
+				}
+			}
+		}
+	}
 
- 	filtrar(event){
- 		if(event == 1){
- 			this.empresas = this.empresasAntiguas;
- 		}
- 		if(event == 2){
- 			this.empresasAntiguas = this.empresas;
- 			this.empresas = this.seleccion;
- 		}
- 	}
+	filtrar(event) {
+		// todos = 1
+		if (event == 1) {
+			this.empresas = this.empresasAntiguas;
+			// compara si la empresa ha sido seleccionada por el usuario, le agrega el atributo check
+			for (var i = 0; i < this.empresasAntiguas.length; i++) {
+				for (var j = 0; j < this.seleccion.length; j++) {
+					// si fue seleccionada agrega a check true
+					if (this.empresasAntiguas[i].id == this.seleccion[j].id) {
+						this.empresasAntiguas[i].check = true;
+						break;
+					// si NO fue seleccionada agrega a check false
+					} else {
+						this.empresasAntiguas[i].check = false;
+					}
 
- }
+				}
+			}
+
+			this.empresas = this.empresasAntiguas;
+		}
+		// seleccionadas = 2
+		if (event == 2) {
+			this.empresasAntiguas = this.empresas;
+			this.empresas = this.seleccion;
+		}
+	}
+
+}
