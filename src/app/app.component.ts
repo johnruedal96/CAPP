@@ -35,8 +35,8 @@ export class MyApp {
       let user = JSON.parse(window.localStorage.getItem('user'));
       // dispositivos moviles
       this.user = JSON.parse(user);
-      // Pruebas computador
-      this.user = user;
+      // // Pruebas computador
+      // this.user = user;
 
       this.login = true;
     }else{
