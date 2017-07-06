@@ -23,44 +23,102 @@
 </ion-header>
 
 
-<ion-content padding>
-	<label>Empresas</label>
-	<br>
-	<ion-item class="tags" *ngFor="let tag of tags">
-		<ion-buttons lg end>
-			{{tag.nombre}}
-			<ion-icon name="close"></ion-icon>
-		</ion-buttons>
-	</ion-item>
-	<form #formCotizacion="ngForm">
+<ion-content>
+	<form class="select-tipo">
 		<ion-list>
 			<ion-item>
-				<ion-label>Producto</ion-label>
-				<ion-select okText="Agregar" cancelText="Cerrar" [(ngModel)]="product" name="product">
-					<ion-option value="NES">NES</ion-option>
-					<ion-option value="Nintendo64">Nintendo64</ion-option>
-					<ion-option value="PlayStation">PlayStation</ion-option>
-					<ion-option value="Sega Genesis">Sega Genesis</ion-option>
-					<ion-option value="Sega Saturn">Sega Saturn</ion-option>
+				<ion-label>Tipo Empresa</ion-label>
+				<ion-select okText="Agregar" cancelText="Cerrar" [(ngModel)]="tipoEmpresaId" name="tipoEmpresaId">
+					<ion-option value="1">Ferreterias</ion-option>
+					<ion-option value="2">Electricos</ion-option>
+					<ion-option value="3">Servicios</ion-option>
 				</ion-select>
 			</ion-item>
 		</ion-list>
-		<ion-item>
-			<ion-label>Cantidad</ion-label>
-			<ion-input [(ngModel)]="cantidad" name="cantidad" type="number"></ion-input>
-		</ion-item>
 	</form>
-	<button (click)="agregar()" ion-button block color="dark">AGREGAR</button>
 
-	<ion-fab bottom left>
-		<button color="orange" ion-fab (click)="presentCotizacionModal()">
-			<ion-icon name="cart"></ion-icon>
-		</button>
-	</ion-fab>
+	<div>
+		<ion-segment [(ngModel)]="tabsCotizacion" color="dark">
+			<ion-segment-button value="productoTab">
+				Productos
+			</ion-segment-button>
+			<ion-segment-button value="empresaTab">
+				Empresas
+			</ion-segment-button>
+		</ion-segment>
+	</div>
 
-	<ion-fab bottom right *ngIf="addEmpresa">
-		<button color="orange" ion-fab (click)="presentEmpresaModal()">
-			<ion-icon name="add"></ion-icon>
-		</button>
-	</ion-fab>
+	<div [ngSwitch]="tabsCotizacion">
+		<!--tab Productos-->
+		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+		<ion-list *ngSwitchCase="'productoTab'" padding>
+			<form #formCotizacion="ngForm">
+				<ion-list>
+					<ion-item>
+						<ion-label>Producto</ion-label>
+						<ion-select okText="Agregar" cancelText="Cerrar" [(ngModel)]="product" name="product">
+							<ion-option value="Martillo">Martillo</ion-option>
+							<ion-option value="Puntilla">Puntilla</ion-option>
+							<ion-option value="Destornillador">Destornillador</ion-option>
+							<ion-option value="Taladro">Taladro</ion-option>
+							<ion-option value="Gravilla">Gravilla</ion-option>
+						</ion-select>
+					</ion-item>
+				</ion-list>
+				<ion-item>
+					<ion-label>Cantidad</ion-label>
+					<ion-input [(ngModel)]="cantidad" name="cantidad" type="number"></ion-input>
+				</ion-item>
+			</form>
+			<button (click)="agregar()" ion-button block color="dark"><ion-icon name="cart" margin-right></ion-icon>AGREGAR A CARRITO</button>
+			<hr>
+			<h3>Lista de compra</h3>
+			<ion-row class="row-head row-table">
+				<ion-col col-3 class="col-body">Cantidad</ion-col>
+				<ion-col col-9 class="col-body">Producto</ion-col>
+			</ion-row>
+
+			<ion-list>
+				<ion-item-sliding *ngFor="let item of lista">
+					<ion-item class="item-table">
+						<ion-row class="row-table">
+							<ion-col col-3 text-center>{{item.cantidad}}</ion-col>
+							<ion-col col-9 text-center>{{item.producto}}</ion-col>
+						</ion-row>
+					</ion-item>
+					<ion-item-options side="right">
+						<button ion-button color="danger">
+							<ion-icon name="close"></ion-icon>
+						</button>
+					</ion-item-options>
+				</ion-item-sliding>
+			</ion-list>
+
+
+		</ion-list>
+		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+		<!--Tab Empresas-->
+		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+		<ion-list *ngSwitchCase="'empresaTab'">
+			<ion-list class="lista">
+				<ion-item *ngFor="let empresa of empresas" class="items" (click)="goToEmpresa(empresa)">
+					<ion-avatar item-start class="avatar">
+						<img class="img-logo" src="{{imagen}}{{empresa.imagen}}">
+					</ion-avatar>
+					<h3>{{empresa.nombre}}</h3>
+					<p class="circle-estado"></p>
+				</ion-item>
+			</ion-list>
+
+			<ion-fab bottom right *ngIf="addEmpresa" class="button-fab">
+
+				<button style="background-color: #333" ion-fab (click)="presentEmpresaModal()">
+					<ion-icon name="add"></ion-icon>
+				</button>
+			</ion-fab>
+		</ion-list>
+		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+	</div>
+
 </ion-content>

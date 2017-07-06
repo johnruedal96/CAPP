@@ -11,14 +11,14 @@
 			<button ion-button clear outline (click)="dismiss()">
 				Cerrar
 			</button>
-		</ion-buttons> 
+		</ion-buttons>
 		<ion-title>Lista Cotizacion</ion-title>
 	</ion-navbar>
 
 </ion-header>
 
 
-<ion-content>
+<ion-content padding>
 	<ion-list>
 		<ion-item>
 			<ion-row>
@@ -42,4 +42,7 @@
 			</ion-row>
 		</ion-item>
 	</ion-list>
+
+	<button ion-button full color="dark" [disabled]="lista.length == 0 || empresas.length == 0">Enviar</button>
+
 </ion-content>

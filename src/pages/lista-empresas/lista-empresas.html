@@ -22,15 +22,6 @@
 
 	<form #formSelect="ngForm">
 		<ion-item>
-			<ion-label>Empresas</ion-label>
-			<ion-select required (ngModelChange)="buscar($event)" okText="Seleccionar" cancelText="Cerrar" [(ngModel)]="id" name="empresa">
-				<ion-option value="1">Ferreterias</ion-option>
-				<ion-option value="2">Electricos</ion-option>
-				<ion-option value="3">Servicios</ion-option>
-			</ion-select>
-		</ion-item>
-		
-		<ion-item>
 			<ion-label>Filtro</ion-label>
 			<ion-select [disabled]="!formSelect.form.valid" (ngModelChange)="filtrar($event)" okText="Seleccionar" cancelText="Cerrar" [(ngModel)]="filtro" name="filtro">
 				<ion-option value="1">Todas</ion-option>

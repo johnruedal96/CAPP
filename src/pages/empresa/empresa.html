@@ -22,31 +22,16 @@
 
 	<ion-navbar calss="search-header" *ngIf=busqueda>
 
-		<ion-searchbar
-		#searchbar
-		placeholder="buscar"
-		(keypress)="search($event.keyCode)"
-		[(ngModel)]="txtSearch"
-		[showCancelButton]="true"
-		(ionCancel)="closeSearch($event)">
-	</ion-searchbar>
+		<ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true"
+		 (ionCancel)="closeSearch($event)">
+		</ion-searchbar>
 
-</ion-navbar>
+	</ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-
-	<ion-fab top right edge>
-	<button ion-fab style="background-color: #E65100" mini><ion-icon name="add"></ion-icon></button>
-		<ion-fab-list>
-			<a href="tel:{{empresa.telefono}}" ion-fab><ion-icon name="call"></ion-icon></a>
-			<a ion-fab href="mailto:{{empresa.correo}}"><ion-icon name="mail"></ion-icon></a>
-			<button ion-fab><ion-icon name="chatboxes"></ion-icon></button>
-			<button ion-fab (click)="cotizar()"><ion-icon name="cart"></ion-icon></button>
-		</ion-fab-list>
-	</ion-fab>
 
 	<ion-card>
 		<div class="title-name">
@@ -55,29 +40,23 @@
 
 		<img src="{{imagen}}{{empresa.imagen}}">
 
+		<button ion-button full color="dark" (click)="cotizar()">Cotizar<ion-icon name="cart"></ion-icon></button>
+
 		<div class="section">
 			<h2 class="sub-title">Descripción</h2>
-			<p>{{empresa.descripcion}}</p>
+			<p text-justify>{{empresa.descripcion}}</p>
 		</div>
 
 		<div class="section">
 			<h2 class="sub-title">Servicio</h2>
-			<p>{{empresa.servicios}}</p>
+			<p text-justify>{{empresa.servicios}}</p>
 		</div>
 
 		<div class="section">
 			<h2 class="sub-title">Horario</h2>
-			<p>{{empresa.horarios}}</p>
-		</div>
-
-		<div class="section">
-			<h2 class="sub-title">Web</h2>
-			<p><a href="{{empresa.url}}" *ngIf="empresa.url != 'NO DISPONIBLE'">{{empresa.url}}</a></p>
-			<p *ngIf="empresa.url == 'NO DISPONIBLE'">{{empresa.url}}</p>
+			<p text-justify>{{empresa.horarios}}</p>
 		</div>
 
 	</ion-card>
 
-
 </ion-content>
-

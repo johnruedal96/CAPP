@@ -21,6 +21,47 @@ page-cotizacion {
 		border-bottom: initial !important;
 	}
 
+	.subTitle-empresas{
+		font-weight: bold;
+	}
+
+	.item-table{
+		padding: 0 !important;
+		height: 3rem;
+		min-height: 3rem;
+	}
+
+	// Estilos tabs
+	hr{
+		background-color: black !important;
+	}
+
+	.button-fab{
+		position: fixed;
+		bottom: 70px;
+	}
+
+	.col-body{
+		text-align: center;
+		color:white;
+		font-weight: bold;
+		font-size: 1.1em;
+	}
+
+	.row-head{
+		margin-top: 20px;
+		background-color: #333;
+	}
+
+	.row-table{
+		border-bottom: 1px solid
+	}
+
+	.select-tipo{
+		padding: 16px;
+		padding-bottom: 0;
+	}
+
 	// Estilos para ios
 	.toolbar-ios .div_title .text-title{
 		text-align: center; display: inline-block; width: 75%

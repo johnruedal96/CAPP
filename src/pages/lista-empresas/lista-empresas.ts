@@ -26,17 +26,15 @@ export class ListaEmpresasPage {
 	public id: number;
 	// guarda el tipo de filtro (todos = 1, seleccionados = 2)
 	public filtro: number = 1;
+	public aplicoFiltro: boolean = false;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider) {
 
 		// si ecuentra el parametro, ejecuta la busqueda por el tipo de empresa (combo)
 		this.id = navParams.get('id');
-		if (this.id != undefined) {
-			this.buscar(this.id);
-		}
-
+		this.buscar(this.id);
 		// si no encuentra el parametro asigna un array vacio a seleccion 
-		this.seleccion = navParams.get('tags');
+		this.seleccion = navParams.get('empresas');
 		if (this.seleccion == undefined) {
 			this.seleccion = [];
 		}
@@ -97,30 +95,35 @@ export class ListaEmpresasPage {
 	}
 
 	filtrar(event) {
-		// todos = 1
-		if (event == 1) {
-			this.empresas = this.empresasAntiguas;
-			// compara si la empresa ha sido seleccionada por el usuario, le agrega el atributo check
-			for (var i = 0; i < this.empresasAntiguas.length; i++) {
-				for (var j = 0; j < this.seleccion.length; j++) {
-					// si fue seleccionada agrega a check true
-					if (this.empresasAntiguas[i].id == this.seleccion[j].id) {
-						this.empresasAntiguas[i].check = true;
-						break;
-					// si NO fue seleccionada agrega a check false
-					} else {
-						this.empresasAntiguas[i].check = false;
+		if (!this.aplicoFiltro && event == 1) {
+			this.aplicoFiltro = true;
+		} else {
+			// todos = 1
+			if (event == 1) {
+				this.empresas = this.empresasAntiguas;
+				// compara si la empresa ha sido seleccionada por el usuario, le agrega el atributo check
+				for (var i = 0; i < this.empresasAntiguas.length; i++) {
+					for (var j = 0; j < this.seleccion.length; j++) {
+						// si fue seleccionada agrega a check true
+						if (this.empresasAntiguas[i].id == this.seleccion[j].id) {
+							this.empresasAntiguas[i].check = true;
+							break;
+							// si NO fue seleccionada agrega a check false
+						} else {
+							this.empresasAntiguas[i].check = false;
+						}
+
 					}
-
 				}
-			}
 
-			this.empresas = this.empresasAntiguas;
-		}
-		// seleccionadas = 2
-		if (event == 2) {
-			this.empresasAntiguas = this.empresas;
-			this.empresas = this.seleccion;
+				this.empresas = this.empresasAntiguas;
+			}
+			// seleccionadas = 2
+			if (event == 2) {
+				this.aplicoFiltro = true;
+				this.empresasAntiguas = this.empresas;
+				this.empresas = this.seleccion;
+			}
 		}
 	}
 

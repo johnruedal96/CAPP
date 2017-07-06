@@ -35,8 +35,8 @@ export class MyApp {
       let user = JSON.parse(window.localStorage.getItem('user'));
       // dispositivos moviles
       this.user = JSON.parse(user);
-      // // Pruebas computador
-      // this.user = user;
+      // Pruebas computador
+      this.user = user;
 
       this.login = true;
     }else{
@@ -47,7 +47,7 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
-      statusBar.backgroundColorByHexString("#F57C00");
+      statusBar.backgroundColorByHexString("#333");
       // splashScreen.hide();
       setTimeout(()=>{
         splashScreen.hide();
@@ -56,6 +56,6 @@ export class MyApp {
   }
 
   goToPage(page){
-    this.nav.setRoot(page);
+    this.nav.push(page);
   }
 }

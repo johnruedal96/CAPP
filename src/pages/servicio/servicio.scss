@@ -7,9 +7,72 @@ page-servicio {
 		width: 100%;
 	}
 
+	.noEmpresas{
+		display: table;
+		height: 100px;
+		width: 100%;
+		text-align: center;
+	}
+
+	.noEmpresas p{
+		display: table-cell;
+		vertical-align: middle;
+	}
+
 	.searchbar-input{
 		box-shadow: initial !important;
 		background-color: #f8f8f8 !important;
+	}
+
+	// Nuevos estilos
+	.item-ios, .item-md{
+		padding: 0 !important;
+	}
+
+	.img-logo{
+		border-radius: 10% !important;
+		box-shadow: 1px 1px 10px 0 !important;
+		height: 60px !important;
+		width: 60px !important;
+	}
+
+	.item-block{
+		align-items: initial !important;
+	}
+
+	.avatar{
+		margin: 0 !important;
+		margin-right: 8px !important;
+	}
+
+	.items{
+		// border-top-left-radius: 5% !important;
+		// border-bottom-left-radius: 5% !important;
+		border-bottom: 1px solid #dedede !important;
+		margin-bottom: 5px;
+		box-shadow: 1px 1px 10px 0px;
+	}
+
+	.circle-estado {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		background-color: #09b509;
+		border-radius: 50%;
+	}
+
+	.txt-estado {
+		display: inline-block;
+	}
+
+	.lista{
+		    margin: -2px 5px 16px;
+	}
+
+	.item-inner{
+		border-bottom: none !important;
+		display: initial !important;
+		height: 60px;
 	}
 
 	// Estilos para ios

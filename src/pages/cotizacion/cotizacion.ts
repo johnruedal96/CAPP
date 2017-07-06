@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 /**
  * Generated class for the CotizacionPage page.
  *
@@ -21,41 +22,47 @@ export class CotizacionPage {
 	public empresa: any;
 	// variable que agrega todos los productos
 	public lista: any;
-	// llega del modal lista-empresas variable que guarda los tags (empresas)
-	public tags = [];
-	//  variable que llega del modal lista-empresas que indica el tipo de empresa seleccionado
-	public id: number;
+	// llega del modal lista-empresas variable que guarda los empresas (empresas)
+	public empresas = [];
 	// variable que indica si se va a cotizar una o muchas empresas
 	public addEmpresa: boolean = true;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
+	public tabsCotizacion: string = 'productoTab';
+	public tipoEmpresaId: number;
+	public imagen: string;
+
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController) {
 		this.lista = [];
 		this.empresa = this.navParams.get('empresa');
 		if (this.empresa != undefined) {
-			this.tags.push(this.empresa);
+			this.empresas.push(this.empresa);
 			this.addEmpresa = false;
 		}
+		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 	}
 
 	ionViewDidLoad() {
 	}
 
-	presentCotizacionModal() {
-		let profileModal = this.modalCtrl.create('ListaCotizacionPage', { lista: this.lista });
-		profileModal.present();
-	}
-
 	presentEmpresaModal() {
-		let param = {
-			tags: this.tags,
-			id: this.id
+		if (this.tipoEmpresaId != undefined) {
+			let param = {
+				empresas: this.empresas,
+				id: this.tipoEmpresaId,
+			}
+			let profileModal = this.modalCtrl.create('ListaEmpresasPage', param);
+			profileModal.onDidDismiss(data => {
+				this.empresas = data.seleccion;
+			});
+			profileModal.present();
+		}else{
+			let alert = this.alertCtrl.create({
+				title:'Error',
+				subTitle: 'Seleccione primero el tipo de empresa',
+				buttons:['cerrar']
+			});
+			alert.present();
 		}
-		let profileModal = this.modalCtrl.create('ListaEmpresasPage', param);
-		profileModal.onDidDismiss(data => {
-			this.tags = data.seleccion;
-			this.id = data.id;
-		});
-		profileModal.present();
 	}
 
 	agregar() {
@@ -66,6 +73,10 @@ export class CotizacionPage {
 		this.lista.push(item);
 		this.product = '';
 		this.cantidad = '';
+	}
+
+	goToEmpresa(empresa){
+		this.navCtrl.push('EmpresaPage', empresa);
 	}
 
 }

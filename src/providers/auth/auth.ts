@@ -44,9 +44,12 @@ export class AuthProvider {
     params = 'email=' + data.email;
     params += '&password=' + data.password;
 
-
-    return this.http.post(this.urlLogin, params, options)
-      .map(res => this.extractData(res));
+    let post = this.http.post(this.urlLogin, params, options)
+      .map(res => {
+        this.extractData(res);
+      });
+    let loader = this.loader;
+    return {post, loader};
   }
 
   extractData(res) {
@@ -54,10 +57,9 @@ export class AuthProvider {
     // if (res.url == 'http://www.contactoarquitectonico.com.co/') {
       window.localStorage.setItem('token', this.token);
     } else {
-      this.presentAlert();
+      this.presentAlert('Datos invalidos','Por favor intente de nuevo');
     }
     this.loader.dismiss();
-    return res;
   }
 
   isLogged() {
@@ -103,10 +105,10 @@ export class AuthProvider {
     this.loader = loader;
   }
 
-  presentAlert() {
+  presentAlert(title, subTitle) {
     let alert = this.alertCtrl.create({
-      title: 'Datos invalidos',
-      subTitle: 'Por favor intente de nuevo',
+      title: title,
+      subTitle: subTitle,
       buttons: ['cerrar']
     });
     alert.present();

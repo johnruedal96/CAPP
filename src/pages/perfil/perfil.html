@@ -47,21 +47,21 @@
 		<ion-list *ngSwitchCase="'profile'">
 			<ion-item>
 				<ion-icon name="person" item-start></ion-icon>
-				<ion-input #inputNombre [disabled]="!editarNombre" type="text" value="{{user.nombre}}"></ion-input>
+				<ion-input #inputNombre [disabled]="!editarCampos" type="text" value="{{user.nombre}}"></ion-input>
 				<!--<button ion-button clear item-end>
 					<ion-icon color="black" color="dark" name="create" (click)="editarInputNombre()"></ion-icon>
 				</button>-->
 			</ion-item>
 			<ion-item>
 				<ion-icon name="mail" item-start></ion-icon>
-				<ion-input #inputEmail [disabled]="!editarEmail" type="text" value="{{user.email}}"></ion-input>
+				<ion-input #inputEmail [disabled]="!editarCampos" type="text" value="{{user.email}}"></ion-input>
 				<!--<button ion-button clear item-end>
 					<ion-icon color="black" color="dark" name="create" (click)="editarInputEmail()"></ion-icon>
 				</button>-->
 			</ion-item>
-			<button ion-button block (click)="editar()">
-				<label *ngIf="!editarEmail">Editar</label>
-				<label *ngIf="editarEmail">Guardar cambios</label>
+			<button ion-button color="dark" block (click)="editar()">
+				<label *ngIf="!editarCampos">Editar</label>
+				<label *ngIf="editarCampos">Guardar cambios</label>
 			</button>
 		</ion-list>
 	</div>

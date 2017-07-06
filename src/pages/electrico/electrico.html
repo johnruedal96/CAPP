@@ -29,13 +29,8 @@
 
 	<ion-navbar calss="search-header" *ngIf=busqueda>
 
-		<ion-searchbar
-			#searchbar
-			placeholder="buscar"
-			(keypress)="search($event.keyCode)"
-			[(ngModel)]="txtSearch"
-			[showCancelButton]="true"
-			(ionCancel)="closeSearch($event)">
+		<ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true"
+		 (ionCancel)="closeSearch($event)">
 		</ion-searchbar>
 
 	</ion-navbar>
@@ -45,29 +40,33 @@
 
 <ion-content style="background-color: #E0E0E0">
 	<ion-refresher (ionRefresh)="doRefresh($event)">
-		<ion-refresher-content
-			refreshingText="Actualizando...">
+		<ion-refresher-content refreshingText="Actualizando...">
 		</ion-refresher-content>
 	</ion-refresher>
 	<div class="div-banner">
 		<img class="banner" src="assets/banners/banner_ferreelectricos.png" alt="">
 	</div>
 
-	<ion-row>
-		<ion-col col-6 col-lg-3 *ngFor="let electrico of electricoLoad" style="margin-bottom: 20px" (click)="goToEmpresa(electrico)">
-			<ion-card>
-				<img src="{{imagen}}{{electrico.imagen}}" style="height: 150px">
-				<ion-card-content>
-					<p>
-					{{electrico.nombre}}
-					</p>
-				</ion-card-content>
-			</ion-card>
-		</ion-col>
+	<ion-list class="lista">
+		<ion-item *ngFor="let electrico of electricoLoad" class="items" (click)="goToEmpresa(electrico)">
+			<ion-avatar item-start class="avatar">
+				<img class="img-logo" src="{{imagen}}{{electrico.imagen}}">
+			</ion-avatar>
+			<h3>{{electrico.nombre}}</h3>
+			<p class="circle-estado"></p>
+			<p class="txt-estado">abierto</p>
+		</ion-item>
+	</ion-list>
 
-		<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-			<ion-infinite-scroll-content></ion-infinite-scroll-content>
-		</ion-infinite-scroll>
-	</ion-row>
+	<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="enabledInfinite">
+		<ion-infinite-scroll-content 
+			loadingSpinner="crescent"
+			loadingText="Cargando mas datos...">
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
+	<div class="noEmpresas" *ngIf="electricoLoad.length == 0">
+		<p>No hay empresas para mostrar</p>
+	</div>
 
 </ion-content>

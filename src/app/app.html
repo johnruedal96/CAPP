@@ -1,5 +1,5 @@
 <ion-menu [content]="NAV">
-	<ion-content>
+	<ion-content class="nav-list">
 	<div  *ngIf="login" class="banner-sidebar" style="background-image: url('assets/sideMenu.png')">
 		<div style="padding: 20px">
 			<img class="logo_usuario" src="{{urlImagen}}logo_casco.png" *ngIf='user.foto == null' (click)="goToPage('PerfilPage')" menuClose>
@@ -10,9 +10,9 @@
 		</div>
 	</div>
 		<ion-list>
-			<button ion-item *ngFor="let page of pages" (click)="goToPage(page.componet)" menuClose>
-				<ion-icon item-left name="{{page.icon}}"></ion-icon>
-				{{page.title}}
+			<button style="background-color: #333" ion-item *ngFor="let page of pages" (click)="goToPage(page.componet)" menuClose>
+				<ion-icon style="color: #b8c7ce" item-left name="{{page.icon}}"></ion-icon>
+				<label style="color: #b8c7ce">{{page.title}}</label>
 			</button>
 		</ion-list>
 	</ion-content>

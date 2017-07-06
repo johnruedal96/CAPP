@@ -7,26 +7,28 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
- @IonicPage()
- @Component({
- 	selector: 'page-lista-cotizacion',
- 	templateUrl: 'lista-cotizacion.html',
- })
- export class ListaCotizacionPage {
+@IonicPage()
+@Component({
+	selector: 'page-lista-cotizacion',
+	templateUrl: 'lista-cotizacion.html',
+})
+export class ListaCotizacionPage {
 
- 	public lista:any;
+	public lista: any;
+	public empresas: any;
 
- 	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {
- 		this.lista = navParams.get('lista');
- 	}
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {
+		this.lista = navParams.get('lista');
+		this.empresas = navParams.get('empresas');
+	}
 
- 	ionViewDidLoad() {
+	ionViewDidLoad() {
 
- 	}
+	}
 
- 	dismiss() {
- 		let data = { 'foo': 'bar' };
- 		this.viewCtrl.dismiss(data);
- 	}
+	dismiss() {
+		let data = { 'foo': 'bar' };
+		this.viewCtrl.dismiss(data);
+	}
 
- }
+}

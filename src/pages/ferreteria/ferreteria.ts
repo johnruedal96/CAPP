@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Searchbar, LoadingController } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 
@@ -36,17 +35,17 @@ export class FerreteriaPage {
 	// suscripcion a los metodos del teclado
 	private onHideSubscription: Subscription;
 
+	public enabledInfinite:boolean = true;
+
 	public loader;
 
 	public refresher;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public statusBar: StatusBar) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController) {
 		this.ferreterias = [];
 		this.ferreteriaLoad = [];
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 		this.busqueda = false;
-
-		// console.log(window.localStorage.getItem('token'));
 	}
 
 	ionViewDidLoad() {
@@ -56,6 +55,7 @@ export class FerreteriaPage {
 	}
 
 	loadEmpresa(refresh) {
+		this.enabledInfinite = true;
 		// muestra el 'Cargando' en la vista
 		// se la pagina se refresca con el efecto de estirar no se muestra el 'cargando'
 		if (!refresh) {
@@ -63,11 +63,20 @@ export class FerreteriaPage {
 		}
 		// carga la informacion del web service
 		this.ws.getEmpresas(1)
-			.subscribe(ferreteria => {
+			.subscribe(
+			(ferreteria) => {
 				this.ferreterias = ferreteria.data;
 				this.ferreteriaLoad = [];
 				this.cargarVista(20, refresh);
-			});
+			},
+			(err) => {
+				if (!refresh) {
+					this.loader.dismiss();
+				}else{
+					this.refresher.complete();
+				}
+			}
+			);
 	}
 
 	// Cargar los elementos en la lista
@@ -85,17 +94,16 @@ export class FerreteriaPage {
 			this.txtSearch = '';
 			this.busqueda = false;
 			this.loadListSearch = false;
-			this.statusBar.backgroundColorByHexString('#F57C00');
 		} else {
 			// oculta el 'cargando' de la vista
 			this.loader.dismiss();
 		}
 	}
 
-	// ejecuta el scroll infinito
+	// Presenta le ventana 'Cargando'
 	presentLoading() {
 		this.loader = this.loadingCtrl.create({
-			content: "Cargango",
+			content: "Cargando",
 		});
 		this.loader.present();
 	}
@@ -112,7 +120,6 @@ export class FerreteriaPage {
 			this.searchInput.setFocus();
 		}, 300);
 
-		this.statusBar.backgroundColorByHexString('#757575');
 	}
 
 	closeSearch() {
@@ -124,14 +131,12 @@ export class FerreteriaPage {
 			this.busqueda = false;
 			this.loadEmpresa(false);
 			this.loadListSearch = false;
-			this.statusBar.backgroundColorByHexString('#F57C00');
 		}
 	}
 
 	closeKeyboard() {
 		if (!this.loadListSearch) {
 			this.busqueda = false;
-			this.statusBar.backgroundColorByHexString('#F57C00');
 		}
 	}
 
@@ -185,6 +190,9 @@ export class FerreteriaPage {
 			}
 
 			infiniteScroll.complete();
+			if(tamano == this.ferreterias.length){
+				this.enabledInfinite = false;
+			}
 		}, 500);
 	}
 
