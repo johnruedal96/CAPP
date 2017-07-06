@@ -24,11 +24,11 @@
 
 
 <ion-content>
-	<form class="select-tipo">
+	<form class="select-tipo" #formTipoEmpresa="ngForm">
 		<ion-list>
 			<ion-item>
 				<ion-label>Tipo Empresa</ion-label>
-				<ion-select okText="Agregar" cancelText="Cerrar" [(ngModel)]="tipoEmpresaId" name="tipoEmpresaId">
+				<ion-select interface="popover" okText="Agregar" cancelText="Cerrar" [(ngModel)]="tipoEmpresaId" name="tipoEmpresaId" required>
 					<ion-option value="1">Ferreterias</ion-option>
 					<ion-option value="2">Electricos</ion-option>
 					<ion-option value="3">Servicios</ion-option>
@@ -56,7 +56,8 @@
 				<ion-list>
 					<ion-item>
 						<ion-label>Producto</ion-label>
-						<ion-select okText="Agregar" cancelText="Cerrar" [(ngModel)]="product" name="product">
+						<ion-select [selectOptions]="selectOptions" interface="popover" okText="Agregar" cancelText="Cerrar" [(ngModel)]="product"
+						 name="product" [disabled]="!formTipoEmpresa.form.valid" required>
 							<ion-option value="Martillo">Martillo</ion-option>
 							<ion-option value="Puntilla">Puntilla</ion-option>
 							<ion-option value="Destornillador">Destornillador</ion-option>
@@ -67,13 +68,13 @@
 				</ion-list>
 				<ion-item>
 					<ion-label>Cantidad</ion-label>
-					<ion-input [(ngModel)]="cantidad" name="cantidad" type="number"></ion-input>
+					<ion-input [disabled]="!formCotizacion.form.valid" [(ngModel)]="cantidad" name="cantidad" type="number"></ion-input>
 				</ion-item>
 			</form>
 			<button (click)="agregar()" ion-button block color="dark"><ion-icon name="cart" margin-right></ion-icon>AGREGAR A CARRITO</button>
 			<hr>
-			<h3>Lista de compra</h3>
-			<ion-row class="row-head row-table">
+			<h3 *ngIf="lista.length > 0">Lista de compra</h3>
+			<ion-row *ngIf="lista.length > 0" class="row-head row-table">
 				<ion-col col-3 class="col-body">Cantidad</ion-col>
 				<ion-col col-9 class="col-body">Producto</ion-col>
 			</ion-row>
@@ -88,7 +89,7 @@
 					</ion-item>
 					<ion-item-options side="right">
 						<button ion-button color="danger">
-							<ion-icon name="close"></ion-icon>
+							<ion-icon (click)="deleteItem(item)" name="close"></ion-icon>
 						</button>
 					</ion-item-options>
 				</ion-item-sliding>

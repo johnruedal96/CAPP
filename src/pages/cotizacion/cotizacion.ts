@@ -22,6 +22,7 @@ export class CotizacionPage {
 	public empresa: any;
 	// variable que agrega todos los productos
 	public lista: any;
+	public id: number = 0;
 	// llega del modal lista-empresas variable que guarda los empresas (empresas)
 	public empresas = [];
 	// variable que indica si se va a cotizar una o muchas empresas
@@ -30,6 +31,7 @@ export class CotizacionPage {
 	public tabsCotizacion: string = 'productoTab';
 	public tipoEmpresaId: number;
 	public imagen: string;
+	public selectOptions: any;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController) {
 		this.lista = [];
@@ -39,6 +41,12 @@ export class CotizacionPage {
 			this.addEmpresa = false;
 		}
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
+		this.selectOptions = {
+			data: 'Pizza Toppings',
+			opts: {
+				showBackdrop: false
+			}
+		};
 	}
 
 	ionViewDidLoad() {
@@ -55,11 +63,11 @@ export class CotizacionPage {
 				this.empresas = data.seleccion;
 			});
 			profileModal.present();
-		}else{
+		} else {
 			let alert = this.alertCtrl.create({
-				title:'Error',
+				title: 'Error',
 				subTitle: 'Seleccione primero el tipo de empresa',
-				buttons:['cerrar']
+				buttons: ['cerrar']
 			});
 			alert.present();
 		}
@@ -67,16 +75,35 @@ export class CotizacionPage {
 
 	agregar() {
 		let item = {
+			id: this.id,
 			cantidad: this.cantidad,
 			producto: this.product
 		}
+		this.id++;
 		this.lista.push(item);
 		this.product = '';
 		this.cantidad = '';
 	}
 
-	goToEmpresa(empresa){
-		this.navCtrl.push('EmpresaPage', empresa);
+	deleteItem(item) {
+		this.lista.find((element, index) => {
+			if (element == item) {
+				this.lista.splice(index, 1);
+			}
+		});
+		// function isBigEnough(element){
+		// 	if(element == item){
+		// 		console.log(element);
+		// 	}
+		// }
+	}
+
+	// isBigEnough(element) {
+	// 	// return element.id = item.id
+	// }
+
+	goToEmpresa(empresa) {
+		this.navCtrl.push('EmpresaPage', { empresa: empresa });
 	}
 
 }

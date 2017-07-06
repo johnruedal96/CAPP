@@ -23,7 +23,7 @@
 	<form #formSelect="ngForm">
 		<ion-item>
 			<ion-label>Filtro</ion-label>
-			<ion-select [disabled]="!formSelect.form.valid" (ngModelChange)="filtrar($event)" okText="Seleccionar" cancelText="Cerrar" [(ngModel)]="filtro" name="filtro">
+			<ion-select interface="popover" (ngModelChange)="filtrar($event)" okText="Seleccionar" cancelText="Cerrar" [(ngModel)]="filtro" name="filtro">
 				<ion-option value="1">Todas</ion-option>
 				<ion-option value="2">Seleccionadas</ion-option>
 			</ion-select>
