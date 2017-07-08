@@ -21,11 +21,7 @@ export class LoginPage {
 
   public token: string;
 
-  public email: any;
-  public password: any;
-  public passwordShow: boolean = false;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuController: MenuController, public auth: AuthProvider, public app: MyApp, public alertCtrl: AlertController ) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuController: MenuController, public auth: AuthProvider, public app: MyApp, public alertCtrl: AlertController) {
     menuController.enable(false);
   }
 
@@ -45,16 +41,18 @@ export class LoginPage {
     respuesta.post
       .subscribe(
       (data) => {
-        if (this.auth.isLogged()) {
-          let user = JSON.parse(window.localStorage.getItem('user'));
-          // Dispositivos moviles
-          this.app.user = JSON.parse(user);
-          // // Pruebas computador
-          // this.app.user = user;
-
-          this.navCtrl.setRoot(TabsPage);
-          this.app.login = true;
-        }
+        this.auth.isLogged(this.navCtrl).subscribe(user => {
+          //movil
+          if (user.text() != '') {
+            this.navCtrl.setRoot(TabsPage);
+            this.auth.user = JSON.parse(user.text());
+            this.app.login = true;
+          }
+          // pc
+          // if (user.text() == '') {
+          //   this.navCtrl.setRoot(TabsPage);
+          // }
+        });
       },
       (err) => {
         respuesta.loader.dismiss();

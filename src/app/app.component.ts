@@ -12,50 +12,72 @@ import { AuthProvider } from '../providers/auth/auth';
 })
 export class MyApp {
   @ViewChild('NAV') nav: Nav;
-  rootPage:any;
+  rootPage: any;
 
-  public pages: Array<{title:string, componet:any, icon:string}>;
-  public user:any;
-  public login:boolean = false;
-  public urlImagen:string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
+  public pages: Array<{ title: string, componet: any, icon: string }>;
+  public login: boolean = false;
+  public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, auth: AuthProvider) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider) {
 
     this.pages = [
-      {title: 'Empresas', componet: TabsPage, icon:'construct'},
-      {title: 'Mi Perfil', componet:'PerfilPage', icon:'person'},
-      {title: 'Datos de envio', componet:'FerreteriaPage', icon:'send'},
-      {title: 'Contactenos', componet:'FerreteriaPage', icon:'mail'},
-      {title: 'Nosotros', componet:'FerreteriaPage', icon:'information-circle'},
-      {title: 'Cerrar sesion', componet:'LoginPage', icon:'power'}
+      { title: 'Empresas', componet: TabsPage, icon: 'construct' },
+      { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person' },
+      { title: 'Datos de envio', componet: 'FerreteriaPage', icon: 'send' },
+      { title: 'Contactenos', componet: 'FerreteriaPage', icon: 'mail' },
+      { title: 'Nosotros', componet: 'FerreteriaPage', icon: 'information-circle' },
+      { title: 'Cerrar sesion', componet: 'LoginPage', icon: 'power' }
     ];
 
-    if(window.localStorage.getItem('token') != null){
-      this.rootPage = TabsPage;
-      let user = JSON.parse(window.localStorage.getItem('user'));
-      // dispositivos moviles
-      this.user = JSON.parse(user);
-      // // Pruebas computador
-      // this.user = user;
-
-      this.login = true;
-    }else{
-      this.rootPage = 'LoginPage';
-    }
-
     platform.ready().then(() => {
+      this.isLogged();
+      // this.pc();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       statusBar.backgroundColorByHexString("#333");
       // splashScreen.hide();
-      setTimeout(()=>{
+      setTimeout(() => {
         splashScreen.hide();
-      },1000)
+      }, 1000)
     });
   }
 
-  goToPage(page){
+  goToPage(page) {
     this.nav.push(page);
+  }
+
+  isLogged() {
+    this.auth.isLogged(this.nav).subscribe(user => {
+      if (user.text() == '') {
+        this.nav.setRoot('LoginPage');
+      } else {
+        this.auth.user = JSON.parse(user.text());
+        this.login = true;
+        this.nav.setRoot(TabsPage);
+      }
+    });
+  }
+
+  pc() {
+    this.auth.isLogged(this.nav).subscribe(user => {
+      if (user.text() != '') {
+        this.nav.setRoot('LoginPage');
+      } else {
+        let user = {
+          "id": 3,
+          "nombre": "John Rueda",
+          "email": "johnruedal96@gmail.com",
+          "estado": 1,
+          "foto": 'usuario_3.jpg',
+          "created_at": "2017-06-27 14:26:55",
+          "updated_at": "2017-06-29 11:20:24",
+          "id_perfil": 2
+        }
+        this.auth.user = user;
+        this.login = true;
+        this.nav.setRoot(TabsPage);
+      }
+    });
   }
 }

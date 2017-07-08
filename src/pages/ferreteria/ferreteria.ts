@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Searchbar, LoadingController } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
-
+import { AuthProvider } from '../../providers/auth/auth';
 import { Keyboard } from '@ionic-native/keyboard';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -41,7 +41,7 @@ export class FerreteriaPage {
 
 	public refresher;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public auth: AuthProvider) {
 		this.ferreterias = [];
 		this.ferreteriaLoad = [];
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";

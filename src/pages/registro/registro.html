@@ -11,32 +11,31 @@
 	<!-- form -->
 	<ion-list>
 
-		<ion-item>
-			<ion-input placeholder="Nombre" type="text" value=""></ion-input>
-		</ion-item>
+		<form #formRegister="ngForm">
+			<ion-input [ngModel]="formRegister.token" name="_token" type="hidden" value="{{token}}"></ion-input>
 
-		<ion-item>
-			<ion-input placeholder="Apellido" type="text" value=""></ion-input>
-		</ion-item>
+			<ion-item>
+				<ion-input [(ngModel)]="formRegister.nombre" name="nombre" placeholder="Nombre" type="text" required></ion-input>
+			</ion-item>
 
-		<ion-item>
-			<ion-input placeholder="Usuario" type="text" value=""></ion-input>
-		</ion-item>
+			<ion-item>
+				<ion-input [(ngModel)]="formRegister.email" name="email" placeholder="Email" type="email" required email></ion-input>
+			</ion-item>
 
-		<ion-item>
-			<ion-input placeholder="Contraseña" type="password"></ion-input>
-		</ion-item>
+			<ion-item>
+				<ion-input [(ngModel)]="formRegister.password" name="password" placeholder="Contraseña" type="password" required clearOnEdit="false" #password="ngModel"></ion-input>
+			</ion-item>
 
-		<ion-item>
-			<ion-input placeholder="Repita la Contraseña" type="password"></ion-input>
-		</ion-item>
+			<ion-item>
+				<ion-input [(ngModel)]="formRegister.confirmPassword" name="confirmPassword" placeholder="Repita la Contraseña" type="password" required clearOnEdit="false"></ion-input>
+			</ion-item>
+		</form>
 
 		<a class="button-registro" (click)="goToPage(true)">Ya tengo cuenta</a>
 
 	</ion-list>
 
 	<!-- buttons -->
-	<button ion-button block color="dark" (click)="goToPage()">REGISTRARME</button>
-	
-</ion-content>
+	<button ion-button block color="dark" (click)="register(formRegister)" [disabled]="!formRegister.form.valid">REGISTRARME</button>
 
+</ion-content>
