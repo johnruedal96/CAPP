@@ -24,6 +24,7 @@
 
 
 <ion-content>
+	
 	<form class="select-tipo" #formTipoEmpresa="ngForm">
 		<ion-list>
 			<ion-item>
@@ -55,14 +56,18 @@
 			<form #formCotizacion="ngForm">
 				<ion-list>
 					<ion-item>
+						<ion-buttons>
+							<button ion-button full color="light" (click)="listarProductos()">
+								<label style="color:#a1a1a1">Selecciona el tipo de empresa</label>
+								<ion-icon style="color:#a1a1a1" name="arrow-dropright-circle" class="icon-button"></ion-icon>
+							</button>
+						</ion-buttons>
+					</ion-item>
+					<ion-item>
 						<ion-label>Producto</ion-label>
-						<ion-select [selectOptions]="selectOptions" interface="popover" okText="Agregar" cancelText="Cerrar" [(ngModel)]="product"
-						 name="product" [disabled]="!formTipoEmpresa.form.valid" required>
-							<ion-option value="Martillo">Martillo</ion-option>
-							<ion-option value="Puntilla">Puntilla</ion-option>
-							<ion-option value="Destornillador">Destornillador</ion-option>
-							<ion-option value="Taladro">Taladro</ion-option>
-							<ion-option value="Gravilla">Gravilla</ion-option>
+						<ion-select [selectOptions]="selectOptions" interface="popover" okText="Agregar" cancelText="Cerrar" [(ngModel)]="product" name="product" [disabled]="!formTipoEmpresa.form.valid" required>
+						<!--<ion-select [selectOptions]="selectOptions" [(ngModel)]="product" name="product" [disabled]="!formTipoEmpresa.form.valid" required>-->
+							<ion-option *ngFor="let producto of productos" value="{{producto.nombre}}">{{producto.nombre}}</ion-option>
 						</ion-select>
 					</ion-item>
 				</ion-list>

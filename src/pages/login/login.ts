@@ -27,8 +27,6 @@ export class LoginPage {
 
   ionViewDidLoad() {
 
-    this.auth.logOut();
-
     this.auth.getToken()
       .subscribe(token => {
         this.token = token.text();
@@ -48,10 +46,6 @@ export class LoginPage {
             this.auth.user = JSON.parse(user.text());
             this.app.login = true;
           }
-          // pc
-          // if (user.text() == '') {
-          //   this.navCtrl.setRoot(TabsPage);
-          // }
         });
       },
       (err) => {

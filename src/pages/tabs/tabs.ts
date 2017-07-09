@@ -14,6 +14,7 @@ export class TabsPage {
 
 	constructor(public element: ElementRef, public renderer: Renderer, public menuController: MenuController, public auth: AuthProvider, public navCtrl: NavController) {
 		menuController.enable(true);
+		// this.navCtrl.push(TabsPage);
 	}
 
 	isAuth() {
@@ -21,13 +22,9 @@ export class TabsPage {
 			// Movil
 			if (user.text() == '') {
 				this.navCtrl.setRoot('LoginPage');
-			}else{
+			} else {
 				this.auth.user = JSON.parse(user.text());
 			}
-			// // pc
-			// if (user.text() != '') {
-			// 	this.navCtrl.setRoot('LoginPage');
-			// }
 		});
 	}
 

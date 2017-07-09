@@ -18,15 +18,13 @@ export class MyApp {
   public login: boolean = false;
   public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider) {
+  constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider) {
 
     this.pages = [
       { title: 'Empresas', componet: TabsPage, icon: 'construct' },
       { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person' },
       { title: 'Datos de envio', componet: 'FerreteriaPage', icon: 'send' },
-      { title: 'Contactenos', componet: 'FerreteriaPage', icon: 'mail' },
-      { title: 'Nosotros', componet: 'FerreteriaPage', icon: 'information-circle' },
-      { title: 'Cerrar sesion', componet: 'LoginPage', icon: 'power' }
+      { title: 'Contactenos', componet: 'ContactenosPage', icon: 'mail' }
     ];
 
     platform.ready().then(() => {
@@ -48,36 +46,37 @@ export class MyApp {
   }
 
   isLogged() {
-    this.auth.isLogged(this.nav).subscribe(user => {
-      if (user.text() == '') {
-        this.nav.setRoot('LoginPage');
-      } else {
-        this.auth.user = JSON.parse(user.text());
-        this.login = true;
-        this.nav.setRoot(TabsPage);
+    this.auth.isLogged(this.nav).subscribe(
+      (user) => {
+        if (user.text() == '') {
+          this.nav.setRoot('LoginPage');
+        } else {
+          this.auth.user = JSON.parse(user.text());
+          this.login = true;
+          this.nav.setRoot(TabsPage);
+        }
+      },
+      (err) => {
+        this.platform.exitApp();
+        // console.log('no hay conexión a internet');
       }
-    });
+    );
   }
 
   pc() {
-    this.auth.isLogged(this.nav).subscribe(user => {
-      if (user.text() != '') {
-        this.nav.setRoot('LoginPage');
-      } else {
-        let user = {
-          "id": 3,
-          "nombre": "John Rueda",
-          "email": "johnruedal96@gmail.com",
-          "estado": 1,
-          "foto": 'usuario_3.jpg',
-          "created_at": "2017-06-27 14:26:55",
-          "updated_at": "2017-06-29 11:20:24",
-          "id_perfil": 2
-        }
-        this.auth.user = user;
-        this.login = true;
-        this.nav.setRoot(TabsPage);
-      }
-    });
+    let user = {
+      "id": 3,
+      "nombre": "John Rueda",
+      "email": "johnruedal96@gmail.com",
+      "estado": 1,
+      "foto": 'usuario_3.jpg',
+      "created_at": "2017-06-27 14:26:55",
+      "updated_at": "2017-06-29 11:20:24",
+      "id_perfil": 2
+    }
+    this.auth.user = user;
+    this.login = true;
+    this.nav.setRoot(TabsPage);
+    // this.nav.setRoot('LoginPage');
   }
 }

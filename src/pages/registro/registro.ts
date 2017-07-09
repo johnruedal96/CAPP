@@ -48,43 +48,42 @@ export class RegistroPage {
 			this.auth.register(formRegister.value)
 				.subscribe(
 				(res) => {
-					this.presentAlert('Usuario Creado', 'ahora puede iniciar sesion', false);
+					let respuesta = this.auth.login(formRegister.value);
+					respuesta.post.subscribe(
+						(data) => {
+							this.auth.isLogged(this.navCtrl).subscribe(user => {
+								//movil
+								if (user.text() != '') {
+									this.navCtrl.setRoot(TabsPage);
+									this.auth.user = JSON.parse(user.text());
+									this.app.login = true;
+								}
+							});
+						},
+						(err) => {
+							respuesta.loader.dismiss();
+							this.presentAlert('Ha ocurrido un error', 'Por favor intente de nuevo');
+						}
+					)
 				},
 				(err) => {
-					this.presentAlert('Ha ocurrido un error', 'Por favor intente de nuevo', true);
+					this.presentAlert('Ha ocurrido un error', 'Por favor intente de nuevo');
 				}
 				)
-		}else{
+		} else {
 			let toas = this.toastCtrl.create({
-				message:'Las contraseñas no coinciden',
+				message: 'Las contraseñas no coinciden',
 				duration: 3000
 			});
 			toas.present();
 		}
 	}
 
-	presentAlert(title, subTitle, error) {
-		let text;
-		let handler;
-		if (error) {
-			text = 'Cerrar';
-			handler = console.log('error al iniciar sesion');
-		} else {
-			text = 'Iniciar Sesion';
-			handler = this.navCtrl.push('LoginPage');
-		}
+	presentAlert(title, subTitle) {
 		let alert = this.alertCtrl.create({
 			title: title,
 			subTitle: subTitle,
-			// buttons: ['cerrar']
-			buttons: [
-				{
-					text: text,
-					handler: data => {
-						handler
-					}
-				}
-			]
+			buttons: ['Cerrar']
 		});
 		alert.present();
 	}

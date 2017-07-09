@@ -12,11 +12,12 @@ import { LoadingController, AlertController } from 'ionic-angular';
   	*/
 @Injectable()
 export class AuthProvider {
-  
-  public user:any;
+
+  public user: any;
 
   public urlToken: string;
   public urlLogin: string;
+  public urlLogout: string;
   public urlRegister: string;
   public token: string;
   public loader;
@@ -24,6 +25,7 @@ export class AuthProvider {
   constructor(public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
     this.urlToken = 'http://www.contactoarquitectonico.com.co/api/csrf';
     this.urlLogin = 'http://www.contactoarquitectonico.com.co/login';
+    this.urlLogout = 'http://www.contactoarquitectonico.com.co/logout';
     this.urlRegister = 'http://www.contactoarquitectonico.com.co/capp_admin/wscapp/register';
   }
 
@@ -43,8 +45,8 @@ export class AuthProvider {
 
     this.token = data._token;
 
-    let params = '_token=' + data._token;
-    params = 'email=' + data.email;
+    // let params = '_token=' + data._token;
+    let params = 'email=' + data.email;
     params += '&password=' + data.password;
 
     let post = this.http.post(this.urlLogin, params, options)
@@ -57,7 +59,6 @@ export class AuthProvider {
 
   extractData(res) {
     if (res.url == 'http://www.contactoarquitectonico.com.co/inicio') {
-      // if (res.url == 'http://www.contactoarquitectonico.com.co/') {
       window.localStorage.setItem('token', this.token);
     } else {
       this.presentAlert('Datos invalidos', 'Por favor intente de nuevo');
@@ -65,18 +66,25 @@ export class AuthProvider {
     this.loader.dismiss();
   }
 
-  // isLogged(nav) {
-  //   return this.getUser()
-  //     .map(user => user);
-  // }
-
-  logOut() {
-    window.localStorage.removeItem('token');
+  logOut(nav) {
+    let loader = this.loadingCtrl.create({
+      content: 'Cerrando Sesion...'
+    });
+    loader.present();
+    this.http.get(this.urlLogout)
+      .subscribe(
+      (res) => {
+        nav.setRoot('LoginPage');
+        loader.dismiss();
+      },
+      (err) => {
+        loader.dismiss();
+      }
+      );
     return true;
   }
 
   register(data) {
-    // this.presentLoading();
     let headers = new Headers({
       'X-CSRF-TOKEN': data._token,
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -87,8 +95,8 @@ export class AuthProvider {
 
     this.token = data._token;
 
-    let params = '_token=' + data._token;
-    params = 'nombre=' + data.nombre;
+    // let params = '_token=' + data._token;
+    let params = 'nombre=' + data.nombre;
     params += '&email=' + data.email;
     params += '&password=' + data.password;
 

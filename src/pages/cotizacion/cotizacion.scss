@@ -7,20 +7,6 @@ page-cotizacion {
 		width: 100%;
 	}
 
-	.tags{
-		background-color: #FF8A65;
-		display: inline-block;
-		font-size: .6em;
-		margin: 2px;
-		padding-left: 10px;
-		width: auto;
-	}
-
-	.tags .item-inner{
-		padding-right: initial !important ;
-		border-bottom: initial !important;
-	}
-
 	.subTitle-empresas{
 		font-weight: bold;
 	}
@@ -29,6 +15,12 @@ page-cotizacion {
 		padding: 0 !important;
 		height: 3rem;
 		min-height: 3rem;
+	}
+
+	// Estilos alerts selects
+	.icon-button {
+    	position: absolute;
+    	right: 10px;
 	}
 
 	// Estilos tabs
@@ -90,4 +82,5 @@ page-cotizacion {
 	.toolbar-ios .div_title img, .toolbar-md .div_title img{
 		width: 30px;
 	}
+
 }

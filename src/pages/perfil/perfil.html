@@ -27,8 +27,8 @@
 <ion-content>
 	<div>
 		<div class="div_img">
-			<img src="{{urlImagen}}logo_casco.png" *ngIf='user.foto == null' />
-			<img src="{{urlImagen}}{{user.foto}}" *ngIf='user.foto != null' />
+			<img src="{{urlImagen}}logo_casco.png" *ngIf='auth.user.foto == null' />
+			<img src="{{urlImagen}}{{auth.user.foto}}" *ngIf='auth.user.foto != null' />
 		</div>
 		<ion-segment [(ngModel)]="myProfile">
 			<ion-segment-button value="profile">
@@ -47,14 +47,14 @@
 		<ion-list *ngSwitchCase="'profile'">
 			<ion-item>
 				<ion-icon name="person" item-start></ion-icon>
-				<ion-input #inputNombre [disabled]="!editarCampos" type="text" value="{{user.nombre}}"></ion-input>
+				<ion-input #inputNombre [disabled]="!editarCampos" type="text" value="{{auth.user.nombre}}"></ion-input>
 				<!--<button ion-button clear item-end>
 					<ion-icon color="black" color="dark" name="create" (click)="editarInputNombre()"></ion-icon>
 				</button>-->
 			</ion-item>
 			<ion-item>
 				<ion-icon name="mail" item-start></ion-icon>
-				<ion-input #inputEmail [disabled]="!editarCampos" type="text" value="{{user.email}}"></ion-input>
+				<ion-input #inputEmail [disabled]="!editarCampos" type="text" value="{{auth.user.email}}"></ion-input>
 				<!--<button ion-button clear item-end>
 					<ion-icon color="black" color="dark" name="create" (click)="editarInputEmail()"></ion-icon>
 				</button>-->

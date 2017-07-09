@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { AlertController } from 'ionic-angular';
 /**
  * Generated class for the CotizacionPage page.
@@ -33,8 +34,12 @@ export class CotizacionPage {
 	public imagen: string;
 	public selectOptions: any;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController) {
+	public productos: any;
+	public producto: any;
+
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider) {
 		this.lista = [];
+		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
 		if (this.empresa != undefined) {
 			this.empresas.push(this.empresa);
@@ -42,10 +47,8 @@ export class CotizacionPage {
 		}
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 		this.selectOptions = {
-			data: 'Pizza Toppings',
-			opts: {
-				showBackdrop: false
-			}
+			title: 'Productos',
+			// subTitle: 'Select your toppings',
 		};
 	}
 
@@ -104,6 +107,26 @@ export class CotizacionPage {
 
 	goToEmpresa(empresa) {
 		this.navCtrl.push('EmpresaPage', { empresa: empresa });
+	}
+
+	listarProductos(){
+		if (this.tipoEmpresaId != undefined) {
+			let param = {
+				id: this.tipoEmpresaId,
+			}
+			let productoModal = this.modalCtrl.create('ListaProductosPage', param);
+			productoModal.onDidDismiss(data => {
+				this.producto = data.producto;
+			});
+			productoModal.present();
+		} else {
+			let alert = this.alertCtrl.create({
+				title: 'Error',
+				subTitle: 'Seleccione primero el tipo de empresa',
+				buttons: ['cerrar']
+			});
+			alert.present();
+		}
 	}
 
 }
