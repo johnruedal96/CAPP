@@ -47,10 +47,10 @@
 		<img class="banner" src="assets/banners/banner_servicios.png" alt="">
 	</div>
 
-	<ion-list class="lista">
+	<ion-list>
 		<ion-item *ngFor="let servicio of servicioLoad" class="items" (click)="goToEmpresa(servicio)">
 			<ion-avatar item-start class="avatar">
-				<img class="img-logo" src="{{imagen}}{{servicio.imagen}}">
+				<img src="{{imagen}}{{servicio.imagen}}">
 			</ion-avatar>
 			<h3>{{servicio.nombre}}</h3>
 			<p class="circle-estado"></p>

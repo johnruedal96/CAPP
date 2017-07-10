@@ -17,9 +17,9 @@ export class WebServiceProvider {
 	public urlProductos:string;
 
 	constructor(public http: Http) {
-		this.url = "http://contactoarquitectonico.com.co/capp_admin/wscapp/show/";
-		this.urlSearch = "http://contactoarquitectonico.com.co/capp_admin/wscapp/search/";
-		this.urlSearchProducto = "http://contactoarquitectonico.com.co/capp_admin/wscapp/searchProducto/";
+		this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
+		this.urlSearch = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/search/";
+		this.urlSearchProducto = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/searchProducto/";
 		this.urlProductos = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/productos/";
 	}
 
@@ -33,8 +33,8 @@ export class WebServiceProvider {
 		.map(res => res.json())
 	}
 
-	searchProducto(tipo, name){
-		return this.http.get(this.urlSearchProducto+tipo+'/'+name)
+	searchProducto(tipo, name, offset, limit){
+		return this.http.get(this.urlSearchProducto+tipo+'/'+name+'/'+ offset + '/' + limit)
 		.map(res => res.json())
 	}
 

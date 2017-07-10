@@ -1,8 +1,4 @@
 page-lista-productos {
-    .card{
-		height: 100%
-	}
-
 	.div-banner, .banner{
 		width: 100%;
 	}
@@ -12,17 +8,23 @@ page-lista-productos {
 		background-color: #f8f8f8 !important;
 	}
 
-	// Estilos para ios
-	.toolbar-ios .div_title .text-title{
-		text-align: center; display: inline-block; width: 75%
+		// Estilos para ios
+	.toolbar-ios{
+		.div_title{
+			.text-title{
+				text-align: center; display: inline-block; width: 75%;
+			}
+		}
 	}
 
 	// estilos para android
-	.toolbar-md .title {
-		position: absolute;
-		top: 15px;
-		left: 20%;
-		width: 70%;
+	.toolbar-md {
+		.title {
+			position: absolute;
+			top: 15px;
+			left: 20%;
+			width: 70%;
+		}
 	}
 
 	// estilos ios-android
@@ -31,12 +33,27 @@ page-lista-productos {
 		margin-right: 300px;
 	}
 
-	.toolbar-ios .div_title label, .toolbar-md .div_title label{
-		font-size: 13px;
-		color: white;
+	.toolbar-ios, .toolbar-md{
+		.div_title{
+			label{
+				font-size: 13px;
+				color: white;
+			}
+			label{
+				width: 30px;
+			}
+		}
 	}
 
-	.toolbar-ios .div_title img, .toolbar-md .div_title img{
-		width: 30px;
-	}
+	// otros stilos
+
+	.item{
+        .item-inner{
+            .input-wrapper{
+                .label{
+                    white-space: normal !important;
+                }
+            }
+        }
+    }
 }

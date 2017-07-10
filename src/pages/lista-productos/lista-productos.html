@@ -27,7 +27,7 @@
 
   <ion-navbar calss="search-header" *ngIf=busqueda>
 
-    <ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true" (ionCancel)="closeSearch($event)">
+    <ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode, null)" [(ngModel)]="txtSearch" [showCancelButton]="true" (ionCancel)="closeSearch($event)">
     </ion-searchbar>
 
   </ion-navbar>
@@ -37,11 +37,11 @@
 
 <ion-content>
   <ion-item *ngFor="let producto of productos">
-    <ion-label>{{producto.nombre}}</ion-label>
-    <ion-checkbox [(ngModel)]="producto.id"></ion-checkbox>
+    <ion-label style="white-space: normal !important">{{producto.nombre}}</ion-label>
+    <ion-checkbox (ionChange)="seleccionar($event.value, producto)"></ion-checkbox>
   </ion-item>
 
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="!busqueda">
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando mas datos...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>

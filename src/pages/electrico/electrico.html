@@ -47,10 +47,10 @@
 		<img class="banner" src="assets/banners/banner_ferreelectricos.png" alt="">
 	</div>
 
-	<ion-list class="lista">
+	<ion-list>
 		<ion-item *ngFor="let electrico of electricoLoad" class="items" (click)="goToEmpresa(electrico)">
 			<ion-avatar item-start class="avatar">
-				<img class="img-logo" src="{{imagen}}{{electrico.imagen}}">
+				<img src="{{imagen}}{{electrico.imagen}}">
 			</ion-avatar>
 			<h3>{{electrico.nombre}}</h3>
 			<p class="circle-estado"></p>

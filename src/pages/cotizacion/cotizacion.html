@@ -24,7 +24,7 @@
 
 
 <ion-content>
-	
+
 	<form class="select-tipo" #formTipoEmpresa="ngForm">
 		<ion-list>
 			<ion-item>
@@ -54,29 +54,25 @@
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'productoTab'" padding>
 			<form #formCotizacion="ngForm">
-				<ion-list>
-					<ion-item>
-						<ion-buttons>
-							<button ion-button full color="light" (click)="listarProductos()">
-								<label style="color:#a1a1a1">Selecciona el tipo de empresa</label>
-								<ion-icon style="color:#a1a1a1" name="arrow-dropright-circle" class="icon-button"></ion-icon>
-							</button>
-						</ion-buttons>
-					</ion-item>
-					<ion-item>
-						<ion-label>Producto</ion-label>
-						<ion-select [selectOptions]="selectOptions" interface="popover" okText="Agregar" cancelText="Cerrar" [(ngModel)]="product" name="product" [disabled]="!formTipoEmpresa.form.valid" required>
-						<!--<ion-select [selectOptions]="selectOptions" [(ngModel)]="product" name="product" [disabled]="!formTipoEmpresa.form.valid" required>-->
-							<ion-option *ngFor="let producto of productos" value="{{producto.nombre}}">{{producto.nombre}}</ion-option>
-						</ion-select>
-					</ion-item>
-				</ion-list>
+				<!--<ion-list>-->
 				<ion-item>
-					<ion-label>Cantidad</ion-label>
-					<ion-input [disabled]="!formCotizacion.form.valid" [(ngModel)]="cantidad" name="cantidad" type="number"></ion-input>
+					<label for="">Producto</label>
+					<ion-buttons>
+						<button ion-button full color="light" (click)="listarProductos()">
+								<label *ngIf="producto == null" style="color:#a1a1a1">Selecciona el producto</label>
+								<label *ngIf="producto != null" style="color:#a1a1a1">{{producto.nombre}}</label>
+								<!--<ion-icon style="color:#a1a1a1" name="arrow-dropright-circle" class="icon-button"></ion-icon>-->
+							</button>
+					</ion-buttons>
+				</ion-item>
+				<!--</ion-list>-->
+				<!--producto == null && -->
+				<ion-item>
+					<ion-label floating>Cantidad</ion-label>
+					<ion-input [(ngModel)]="cantidad" name="cantidad" type="number" required=""></ion-input>
 				</ion-item>
 			</form>
-			<button (click)="agregar()" ion-button block color="dark"><ion-icon name="cart" margin-right></ion-icon>AGREGAR A CARRITO</button>
+			<button [disabled]="producto == null || !formCotizacion.form.valid" (click)="agregar()" ion-button block color="dark"><ion-icon name="cart" margin-right></ion-icon>AGREGAR A CARRITO</button>
 			<hr>
 			<h3 *ngIf="lista.length > 0">Lista de compra</h3>
 			<ion-row *ngIf="lista.length > 0" class="row-head row-table">
@@ -89,7 +85,9 @@
 					<ion-item class="item-table">
 						<ion-row class="row-table">
 							<ion-col col-3 text-center>{{item.cantidad}}</ion-col>
-							<ion-col col-9 text-center>{{item.producto}}</ion-col>
+							<ion-col col-9 text-center>
+								<label style="white-space: normal !important">{{item.producto.nombre}}</label>
+							</ion-col>
 						</ion-row>
 					</ion-item>
 					<ion-item-options side="right">

@@ -1,8 +1,4 @@
 page-ferreteria {
-	.card{
-		height: 100%
-	}
-
 	.div-banner, .banner{
 		width: 100%;
 	}
@@ -12,11 +8,10 @@ page-ferreteria {
 		height: 100px;
 		width: 100%;
 		text-align: center;
-	}
-
-	.noEmpresas p{
-		display: table-cell;
-		vertical-align: middle;
+		p {
+			display: table-cell;
+			vertical-align: middle;
+		}
 	}
 
 	.searchbar-input{
@@ -24,69 +19,52 @@ page-ferreteria {
 		background-color: #f8f8f8 !important;
 	}
 
-	// Nuevos estilos
-	.item-ios, .item-md{
-		padding: 0 !important;
-	}
-
-	.img-logo{
-		border-radius: 10% !important;
-		box-shadow: 1px 1px 10px 0 !important;
-		height: 60px !important;
-		width: 60px !important;
-	}
-
-	.item-block{
-		align-items: initial !important;
-	}
-
-	.avatar{
-		margin: 0 !important;
-		margin-right: 8px !important;
-	}
-
 	.items{
-		// border-top-left-radius: 5% !important;
-		// border-bottom-left-radius: 5% !important;
-		border-bottom: 1px solid #dedede !important;
-		margin-bottom: 5px;
-		box-shadow: 1px 1px 10px 0px;
-	}
+		background-color: #f8f8f8;
+		.avatar{
+			img{
+				border-radius: 10% !important;
+				width: 60px !important;
+				height: 60px !important;
+			}
+		}
 
-	.circle-estado {
-		display: inline-block;
-		width: 10px;
-		height: 10px;
-		background-color: #09b509;
-		border-radius: 50%;
-	}
+		.circle-estado {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			background-color: #09b509;
+			border-radius: 50%;
+		}
 
-	.txt-estado {
-		display: inline-block;
-	}
+		.label{
+			white-space: initial !important;
+		}
 
-	.lista{
-		    margin: -2px 5px 16px;
-	}
 
-	.item-inner{
-		border-bottom: none !important;
-		display: initial !important;
-		height: 60px;
+		.txt-estado {
+			display: inline-block;
+		}
 	}
 
 	// Estilos para ios
-	.toolbar-ios .div_title .text-title{
-		text-align: center; display: inline-block; width: 75%
+	.toolbar-ios{
+		.div_title{
+			.text-title{
+				text-align: center; display: inline-block; width: 75%;
+			}
+		}
 	}
 
 	// estilos para android
-	.toolbar-md .title {
-		position: absolute;
-		top: 15px;
-		left: 20%;
-		text-align: center;
-		width: 70%;
+	.toolbar-md {
+		.title {
+			position: absolute;
+			top: 15px;
+			left: 20%;
+			text-align: center;
+			width: 70%;
+		}
 	}
 
 	// estilos ios-android
@@ -95,12 +73,16 @@ page-ferreteria {
 		margin-right: 300px;
 	}
 
-	.toolbar-ios .div_title label, .toolbar-md .div_title label{
-		font-size: 13px;
-		color: white;
-	}
-
-	.toolbar-ios .div_title img, .toolbar-md .div_title img{
-		width: 30px;
+	.toolbar-ios, .toolbar-md{
+		.div_title{
+			label{
+				font-size: 13px;
+				color: white;
+				width: 30px;
+			}
+			img{
+				width: 33.36px;
+			}
+		}
 	}
 }

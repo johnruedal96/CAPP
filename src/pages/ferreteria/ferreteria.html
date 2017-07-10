@@ -47,21 +47,19 @@
 		<img class="banner" src="assets/banners/banner_ferreterias.png" alt="">
 	</div>
 
-	<ion-list class="lista">
+	<ion-list>
 		<ion-item *ngFor="let ferreteria of ferreteriaLoad" class="items" (click)="goToEmpresa(ferreteria)">
 			<ion-avatar item-start class="avatar">
-				<img class="img-logo" src="{{imagen}}{{ferreteria.imagen}}">
+				<img src="{{imagen}}{{ferreteria.imagen}}">
 			</ion-avatar>
 			<h3>{{ferreteria.nombre}}</h3>
 			<p class="circle-estado"></p>
-			<p class="txt-estado">abierto</p>
+			<p class="txt-estado">Abierto</p>
 		</ion-item>
 	</ion-list>
 
 	<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="enabledInfinite">
-		<ion-infinite-scroll-content 
-			loadingSpinner="crescent"
-			loadingText="Cargando mas datos...">
+		<ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando mas datos...">
 		</ion-infinite-scroll-content>
 	</ion-infinite-scroll>
 

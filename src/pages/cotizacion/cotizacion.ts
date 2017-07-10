@@ -80,11 +80,11 @@ export class CotizacionPage {
 		let item = {
 			id: this.id,
 			cantidad: this.cantidad,
-			producto: this.product
+			producto: this.producto
 		}
 		this.id++;
 		this.lista.push(item);
-		this.product = '';
+		this.producto = null;
 		this.cantidad = '';
 	}
 

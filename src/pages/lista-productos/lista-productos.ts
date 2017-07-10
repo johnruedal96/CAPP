@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Searchbar, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Searchbar, LoadingController, Content } from 'ionic-angular';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { Keyboard } from '@ionic-native/keyboard';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,7 +18,9 @@ import { Subscription } from 'rxjs/Subscription';
 export class ListaProductosPage {
   public id: number;
   public productos: any;
-  public tamaño: number = 20;
+  public tamaño: number = 50;
+  public tamañoBusqueda: number = 50;
+  public rango: number = 50;
   public busqueda: boolean = false;
   // indica cuando se realizo una busqueda
   public loadListSearch: boolean = false;
@@ -28,12 +30,13 @@ export class ListaProductosPage {
   public txtSearch: string;
 
   @ViewChild('searchbar') searchInput: Searchbar;
+  @ViewChild(Content) content: Content;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController) {
     this.id = this.navParams.get('id');
     this.productos = [];
-    this.cargarLista(this.tamaño - 20, this.tamaño, null);
-    this.tamaño += 20;
+    this.cargarLista(this.tamaño - this.rango, this.tamaño, null);
+    this.tamaño += this.rango;
   }
 
   ionViewDidLoad() {
@@ -41,16 +44,28 @@ export class ListaProductosPage {
   }
 
   cargarLista(offset, limit, scroll) {
+    this.loadListSearch = false;
+    if (scroll == null) {
+      this.productos = [];
+    }
     this.ws.getProductos(this.id + '/' + offset + '/' + limit)
       .subscribe(res => {
         let datos = res.json().data;
-        for (var i = 0; i < 20; i++) {
-          this.productos.push(datos[i]);
-        }
+        this.llenarArray(datos);
         if (scroll != null) {
           scroll.complete();
         }
       });
+  }
+
+  llenarArray(datos) {
+    let tamano = this.rango;
+    if (datos.length < this.rango) {
+      tamano = datos.length;
+    }
+    for (var i = 0; i < tamano; i++) {
+      this.productos.push(datos[i]);
+    }
   }
 
   dismiss() {
@@ -58,22 +73,17 @@ export class ListaProductosPage {
     //   'seleccion': this.seleccion,
     //   'id': this.id
     // };
-    this.viewCtrl.dismiss('asdasdasd');
+    this.viewCtrl.dismiss({ producto: null });
   }
 
   doInfinite(event) {
-    if (!this.busqueda) {
-      this.cargarLista(this.tamaño - 20, this.tamaño, event);
-      this.tamaño += 20;
+    if (!this.loadListSearch) {
+      this.cargarLista(this.tamaño - this.rango, this.tamaño, event);
+      this.tamaño += this.rango;
+    } else {
+      this.tamañoBusqueda += this.rango;
+      this.search(13, event);
     }
-  }
-
-  inputSearch() {
-    this.busqueda = true;
-    setTimeout(() => {
-      this.searchInput.setFocus();
-    }, 300);
-
   }
 
   closeKeyboard() {
@@ -82,41 +92,62 @@ export class ListaProductosPage {
     }
   }
 
-  closeSearch() {
-    // si ya se realizo una busqueda, pone el texto del input en blanco
-    // oculta la barra de busqueda
-    // y carga todas las empresas
-    if (this.loadListSearch) {
-      this.txtSearch = '';
-      this.busqueda = false;
-      this.loadListSearch = false;
+  search(event, scroll) {
+    let loader;
+    if (event == 13) {
+
+      if (this.txtSearch == '' || this.txtSearch == undefined) {
+        this.loadListSearch = false;
+        this.tamaño = 50;
+        this.cargarLista(this.tamaño - this.rango, this.tamaño, null);
+      }
+
+      if (this.txtSearch != '' && this.txtSearch != undefined) {
+        this.loadListSearch = true;
+        if (scroll == null) {
+          this.content.scrollToTop();
+          this.tamañoBusqueda = this.rango;
+          loader = this.loadingCtrl.create({
+            content: "Cargando",
+          });
+          loader.present();
+        }
+        this.ws.searchProducto(this.id, this.txtSearch, this.tamañoBusqueda - this.rango, this.tamañoBusqueda)
+          .subscribe(
+          (res) => {
+            if (scroll == null) {
+              this.productos = [];
+            }
+            this.llenarArray(res.data);
+            if (scroll == null) {
+              loader.dismiss();
+            } else {
+              scroll.complete();
+            }
+          },
+          (err) => {
+            if (scroll == null) {
+              this.productos = [];
+              loader.dismiss();
+            } else {
+              scroll.complete();
+            }
+          }
+          )
+      }
     }
   }
 
-  search(event) {
-    if (event == 13) {
-      let loader = this.loadingCtrl.create({
-        content: "Cargando",
-      });
-      loader.present();
+  seleccionar(event, producto) {
+    this.viewCtrl.dismiss({ producto: producto });
+  }
 
-      if (this.txtSearch != '') {
-        this.busqueda = true;
-      } else {
-        this.busqueda = false;
-      }
-      this.ws.searchProducto(this.id, this.txtSearch)
-        .subscribe(
-        (res) => {
-          this.productos = res.data;
-          loader.dismiss();
-        },
-        (err) => {
-          this.productos = [];
-          loader.dismiss();
-        }
-        )
-    }
+   inputSearch() {
+    this.busqueda = true;
+    setTimeout(() => {
+      this.searchInput.setFocus();
+    }, 300);
+
   }
 
 }

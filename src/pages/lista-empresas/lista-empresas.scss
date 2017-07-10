@@ -1,3 +1,11 @@
 page-lista-empresas {
-
+    .item{
+        .item-inner{
+            .input-wrapper{
+                .label{
+                    white-space: normal !important;
+                }
+            }
+        }
+    }
 }
