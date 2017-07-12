@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
-import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { AlertController } from 'ionic-angular';
+
+// providers
+import { AuthProvider } from '../../providers/auth/auth';
+import { WebServiceProvider } from '../../providers/web-service/web-service';
 /**
  * Generated class for the CotizacionPage page.
  *
@@ -37,7 +40,7 @@ export class CotizacionPage {
 	public productos: any;
 	public producto: any;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider) {
 		this.lista = [];
 		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
@@ -94,22 +97,13 @@ export class CotizacionPage {
 				this.lista.splice(index, 1);
 			}
 		});
-		// function isBigEnough(element){
-		// 	if(element == item){
-		// 		console.log(element);
-		// 	}
-		// }
 	}
-
-	// isBigEnough(element) {
-	// 	// return element.id = item.id
-	// }
 
 	goToEmpresa(empresa) {
 		this.navCtrl.push('EmpresaPage', { empresa: empresa });
 	}
 
-	listarProductos(){
+	listarProductos() {
 		if (this.tipoEmpresaId != undefined) {
 			let param = {
 				id: this.tipoEmpresaId,
@@ -127,6 +121,59 @@ export class CotizacionPage {
 			});
 			alert.present();
 		}
+	}
+
+	alertCotizacion() {
+		if (this.empresas.length > 0) {
+			let alert = this.alertCtrl.create({
+				title: 'Comfirmar envio',
+				message: 'El tiempo de entrega y el valor del domicilio para cada zona es responsabilidad de la ferreteria. <br><br> <b>CAPP</b> es totalmente gratuito no cobra por el servicio',
+				buttons: [
+					{
+						text: 'Cancelar',
+						role: 'cancel',
+					},
+					{
+						text: 'Enviar',
+						handler: () => {
+							this.enviarCotizacion();
+						}
+					}
+				]
+			});
+			alert.present();
+		} else {
+			let alert = this.alertCtrl.create({
+				title: 'Error',
+				message: 'Seleccione minimo una empresa',
+				buttons: [
+					{
+						text: 'Cancelar',
+						role: 'cancel',
+					},
+					{
+						text: 'Enviar',
+						handler: () => {
+							this.enviarCotizacion();
+						}
+					}
+				]
+			});
+			alert.present();
+		}
+	}
+
+	enviarCotizacion() {
+		this.auth.getToken()
+			.subscribe(token => {
+				let data = {
+					usuario: this.auth.user,
+					lista: this.lista,
+					empresas: this.empresas,
+					_token: token.text()
+				}
+				this.ws.sendCotizacion(data);
+			})
 	}
 
 }

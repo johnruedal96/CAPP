@@ -59,8 +59,8 @@
 					<label for="">Producto</label>
 					<ion-buttons>
 						<button ion-button full color="light" (click)="listarProductos()">
-								<label *ngIf="producto == null" style="color:#a1a1a1">Selecciona el producto</label>
-								<label *ngIf="producto != null" style="color:#a1a1a1">{{producto.nombre}}</label>
+								<label *ngIf="producto == null" class="labelButtonNoEspace">Selecciona el producto</label>
+								<label *ngIf="producto != null" class="labelButtonNoEspace">{{producto.nombre}}</label>
 								<!--<ion-icon style="color:#a1a1a1" name="arrow-dropright-circle" class="icon-button"></ion-icon>-->
 							</button>
 					</ion-buttons>
@@ -79,6 +79,7 @@
 				<ion-col col-3 class="col-body">Cantidad</ion-col>
 				<ion-col col-9 class="col-body">Producto</ion-col>
 			</ion-row>
+			
 
 			<ion-list>
 				<ion-item-sliding *ngFor="let item of lista">
@@ -98,6 +99,7 @@
 				</ion-item-sliding>
 			</ion-list>
 
+			<button *ngIf="lista.length > 0" ion-button full color="dark" (click)="alertCotizacion()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->

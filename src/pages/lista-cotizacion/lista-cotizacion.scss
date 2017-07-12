@@ -1,9 +1,55 @@
 page-lista-cotizacion {
+	.encabezado{
+		[col-9] label{
+			border-bottom: 1px solid;
+		}
 
-	.icon{
-		font-size: 1em;
-		font-family: "Roboto", "Helvetica Neue", sans-serif;
-		min-height: initial;
+		[col-3] label {
+			font-weight: bold;
+		}
 	}
+
+	.table{
+		margin-top: 15px;
+		.table-head{
+			background-color: black;
+			color: white;
+			text-align: center;
+		}
+
+		.table-body{
+			border-bottom: 1px solid;
+		}
+	}
+
+	// Estilos para ios
+	.toolbar-ios .div_title .text-title{
+		text-align: center; display: inline-block; width: 75%
+	}
+
+	// estilos para android
+	.toolbar-md .title {
+		position: absolute;
+		top: 15px;
+		left: 20%;
+		text-align: center;
+		width: 70%;
+	}
+
+	// estilos ios-android
+	.toolbar-ios .div_title, .toolbar-md .div_title{
+		display: inline-block;
+		margin-right: 300px;
+	}
+
+	.toolbar-ios .div_title label, .toolbar-md .div_title label{
+		font-size: 13px;
+		color: white;
+	}
+
+	.toolbar-ios .div_title img, .toolbar-md .div_title img{
+		width: 30px;
+	}
+	
 
 }

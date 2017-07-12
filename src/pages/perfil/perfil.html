@@ -30,7 +30,7 @@
 			<img src="{{urlImagen}}logo_casco.png" *ngIf='auth.user.foto == null' />
 			<img src="{{urlImagen}}{{auth.user.foto}}" *ngIf='auth.user.foto != null' />
 		</div>
-		<ion-segment [(ngModel)]="myProfile">
+		<ion-segment [(ngModel)]="myProfile" color="dark" (ionChange)="segmentChanged($event)">
 			<ion-segment-button value="profile">
 				Perfil
 			</ion-segment-button>
@@ -40,8 +40,30 @@
 		</ion-segment>
 	</div>
 
-	<div [ngSwitch]="myProfile">
+	<div [ngSwitch]="myProfile" (ionChange)="cargar($event)">
 		<ion-list *ngSwitchCase="'buys'">
+			<ion-row class="encabezado">
+				<ion-col col-4>
+					<label>Fecha</label>
+				</ion-col>
+				<ion-col col-4>
+					<label>Empresa</label>
+				</ion-col>
+				<ion-col col-4>
+					<label>Estado</label>
+				</ion-col>
+			</ion-row>
+			<ion-row *ngFor="let compra of compras" class="item-list" (click)="verCotizacion(compra)">
+				<ion-col col-4 class="row-estado-{{compra.estadoid}}">
+					<p style="white-space: normal">{{compra.fecha}}</p>
+				</ion-col>
+				<ion-col col-4 class="row-estado-{{compra.estadoid}}">
+					<p style="white-space: normal">{{compra.cliente}}</p>
+				</ion-col>
+				<ion-col col-4 class="row-estado-{{compra.estadoid}}">
+					<p style="white-space: normal">{{compra.estado}}</p>
+				</ion-col>
+			</ion-row>
 		</ion-list>
 
 		<ion-list *ngSwitchCase="'profile'">

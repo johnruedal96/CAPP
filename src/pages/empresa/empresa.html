@@ -20,14 +20,6 @@
 
 	</ion-navbar>
 
-	<ion-navbar calss="search-header" *ngIf=busqueda>
-
-		<ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true"
-		 (ionCancel)="closeSearch($event)">
-		</ion-searchbar>
-
-	</ion-navbar>
-
 </ion-header>
 
 
@@ -44,17 +36,17 @@
 
 		<div class="section">
 			<h2 class="sub-title">Descripción</h2>
-			<p text-justify>{{empresa.descripcion}}</p>
+			<p text-justify text-lowercase>{{empresa.descripcion}}</p>
 		</div>
 
 		<div class="section">
 			<h2 class="sub-title">Servicio</h2>
-			<p text-justify>{{empresa.servicios}}</p>
+			<p text-justify text-lowercase>{{empresa.servicios}}</p>
 		</div>
 
 		<div class="section">
 			<h2 class="sub-title">Horario</h2>
-			<p text-justify>{{empresa.horarios}}</p>
+			<p text-justify text-lowercase>{{empresa.horarios}}</p>
 		</div>
 
 	</ion-card>

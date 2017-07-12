@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
+import { WebServiceProvider } from '../../providers/web-service/web-service';
+
 /**
  * Generated class for the ListaCotizacionPage page.
  *
@@ -14,21 +16,46 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 })
 export class ListaCotizacionPage {
 
+	public id: number;
+	public fecha: string;
+	public empresa: string;
+	public clienteId: number;
+	public estado: string;
+	public estadoId: number;
 	public lista: any;
-	public empresas: any;
+	public total:number = 0;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {
-		this.lista = navParams.get('lista');
-		this.empresas = navParams.get('empresas');
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider) {
+		this.id = navParams.get('id');
+		this.fecha = navParams.get('fecha');
+		this.empresa = navParams.get('empresa');
+		this.estado = navParams.get('estado');
+		this.estadoId = navParams.get('estadoId');
+		this.clienteId = navParams.get('clienteId');
+		this.cargarLista();
 	}
 
 	ionViewDidLoad() {
 
 	}
 
-	dismiss() {
-		let data = { 'foo': 'bar' };
-		this.viewCtrl.dismiss(data);
+	cargarLista(){
+		this.ws.getCotizacion(this.id, this.estadoId, this.clienteId)
+		.subscribe(
+			(res)=>{
+				this.lista = res.json();
+				for(let item of this.lista){
+					this.total += item.precio;
+				}
+			},
+			(err)=>{
+				console.log(err);
+			}
+		)
+	}
+
+	aca(event){
+		console.log(event);
 	}
 
 }

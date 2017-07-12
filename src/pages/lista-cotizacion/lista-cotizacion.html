@@ -7,42 +7,85 @@
 <ion-header>
 
 	<ion-navbar color="orange">
-		<ion-buttons end>
-			<button ion-button clear outline (click)="dismiss()">
-				Cerrar
-			</button>
-		</ion-buttons>
-		<ion-title>Lista Cotizacion</ion-title>
+
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<div class="div_title">
+			<img src="assets/icon_casco.png">
+			<label>CAPP</label>
+		</div>
+		<ion-title>
+			Cotización
+		</ion-title>
+
 	</ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-	<ion-list>
-		<ion-item>
-			<ion-row>
-				<ion-col col-3>
-					Cantidad
-				</ion-col>
-				<ion-col col-9>
-					Productos
-				</ion-col>
-			</ion-row>
-		</ion-item>
+	<div class="encabezado">
+		<ion-row>
+			<ion-col col-3>
+				<label>Fecha:</label>
+			</ion-col>
+			<ion-col col-9>
+				<label>{{fecha}}</label>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col col-3>
+				<label>Empresa:</label>
+			</ion-col>
+			<ion-col col-9>
+				<label>{{empresa}}</label>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col col-3>
+				<label>Estado:</label>
+			</ion-col>
+			<ion-col col-9>
+				<label>{{estado}}</label>
+			</ion-col>
+		</ion-row>
+	</div>
 
-		<ion-item *ngFor="let item of lista">
-			<ion-row>
-				<ion-col col-3>
-					{{item.cantidad}}
-				</ion-col>
-				<ion-col col-9>
-					{{item.producto}}
-				</ion-col>
-			</ion-row>
-		</ion-item>
-	</ion-list>
-
-	<button ion-button full color="dark" [disabled]="lista.length == 0 || empresas.length == 0">Enviar</button>
+	<div class="table">
+		<ion-row class="table-head">
+			<ion-col col-3>
+				<label>Cantidad</label>
+			</ion-col>
+			<ion-col col-9 *ngIf="estadoId == 1">
+				<label>Producto</label>
+			</ion-col>
+			<ion-col col-5 *ngIf="estadoId == 2">
+				<label>Producto</label>
+			</ion-col>
+			<ion-col col-4 *ngIf="estadoId == 2">
+				<label>Precio</label>
+			</ion-col>
+		</ion-row>
+		<ion-row *ngFor="let item of lista" class="table-body">
+			<ion-col col-3 text-center>
+				{{item.cantidad}}
+			</ion-col>
+			<ion-col col-9 *ngIf="estadoId == 1">
+				{{item.nombre}}
+			</ion-col>
+			<ion-col col-5 *ngIf="estadoId == 2">
+				{{item.nombre}}
+			</ion-col>
+			<ion-col col-4 text-center *ngIf="estadoId == 2">
+				{{item.precio.toLocaleString()}}
+			</ion-col>
+		</ion-row>
+		<ion-row *ngIf="estadoId == 2" style="background-color: black; color: white">
+			<ion-col offset-8 col-4 text-center>
+				{{total.toLocaleString()}}
+			</ion-col>				
+		</ion-row>
+	</div>
 
 </ion-content>
