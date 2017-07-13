@@ -1,0 +1,21 @@
+page-no-internet {
+    .table{
+        display: table;
+        height: 100%;
+        div{
+            display: table-cell;
+            vertical-align: middle;
+
+            .icon{
+                width: 100%;
+                height: 180px;
+            }
+
+            button{
+                circle{
+                    stroke: white !important;
+                }
+            }
+        }
+    }
+}

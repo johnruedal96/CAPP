@@ -57,7 +57,7 @@ export class MyApp {
         }
       },
       (err) => {
-        this.platform.exitApp();
+        this.rootPage = 'NoInternetPage';
         // console.log('no hay conexión a internet');
       }
     );

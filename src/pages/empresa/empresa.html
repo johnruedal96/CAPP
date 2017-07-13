@@ -32,7 +32,7 @@
 
 		<img src="{{imagen}}{{empresa.imagen}}">
 
-		<button ion-button full color="dark" (click)="cotizar()">Cotizar<ion-icon name="cart"></ion-icon></button>
+		<button *ngIf="viewBtnCotizacion" ion-button full color="dark" (click)="cotizar()">Cotizar<ion-icon margin-left name="cart"></ion-icon></button>
 
 		<div class="section">
 			<h2 class="sub-title">Descripción</h2>

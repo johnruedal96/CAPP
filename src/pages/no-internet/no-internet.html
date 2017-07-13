@@ -1,0 +1,20 @@
+<!--
+  Generated template for the NoInternetPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content padding>
+  <div class="table">
+    <div>
+      <h1 text-uppercase text-center>No hay conexión a internet</h1>
+      <ion-icon name="custom-wifi"></ion-icon>
+       <p>Compruebe que el dispositivo esté conectado a internet e intente de nuevo</p> 
+      <button ion-button full color="dark" (click)="reconectar()">
+            <p *ngIf="!showSpiner">Reconectar</p>
+            <p *ngIf="showSpiner">Conectando</p>
+            <ion-spinner class="spinnerCargando" name="crescent" margin-left *ngIf="showSpiner"></ion-spinner>
+        </button>
+    </div>
+  </div>
+</ion-content>

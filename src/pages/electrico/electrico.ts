@@ -2,8 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Searchbar, LoadingController } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
-
 import { Keyboard } from '@ionic-native/keyboard';
+import { MyApp } from '../../app/app.component';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -34,11 +34,11 @@ export class ElectricoPage {
 	// suscripcion a los metodos del teclado
 	private onHideSubscription: Subscription;
 	public showSpinner: boolean = true;
-	public enabledInfinite:boolean = true;
+	public enabledInfinite: boolean = true;
 
 	public refresher;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public app: MyApp) {
 		this.electricos = [];
 		this.electricoLoad = [];
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
@@ -70,6 +70,10 @@ export class ElectricoPage {
 					this.showSpinner = false;
 				} else {
 					this.refresher.complete();
+				}
+
+				if (err.status == 0) {
+					this.app.rootPage = 'NoInternetPage';
 				}
 			}
 			);
@@ -147,6 +151,10 @@ export class ElectricoPage {
 					this.electricoLoad = [];
 					this.keyboard.close();
 					this.cargarVista(20, false);
+
+					if (err.status == 0) {
+						this.app.rootPage = 'NoInternetPage';
+					}
 				}
 				);
 		}
@@ -178,7 +186,7 @@ export class ElectricoPage {
 			}
 
 			infiniteScroll.complete();
-			if(tamano == this.electricos.length){
+			if (tamano == this.electricos.length) {
 				this.enabledInfinite = false;
 			}
 		}, 500);

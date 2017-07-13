@@ -39,6 +39,7 @@ export class CotizacionPage {
 
 	public productos: any;
 	public producto: any;
+	public tipoEmpresa:boolean = false;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider) {
 		this.lista = [];
@@ -47,6 +48,8 @@ export class CotizacionPage {
 		if (this.empresa != undefined) {
 			this.empresas.push(this.empresa);
 			this.addEmpresa = false;
+			this.tipoEmpresa = true;
+			this.tipoEmpresaId = this.empresa.tipo;
 		}
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 		this.selectOptions = {
@@ -100,7 +103,11 @@ export class CotizacionPage {
 	}
 
 	goToEmpresa(empresa) {
-		this.navCtrl.push('EmpresaPage', { empresa: empresa });
+		let params = {
+			empresa:empresa,
+			viewBtnCotizacion: false
+		}
+		this.navCtrl.push('EmpresaPage', params );
 	}
 
 	listarProductos() {

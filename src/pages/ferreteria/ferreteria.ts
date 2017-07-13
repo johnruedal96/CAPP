@@ -2,8 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Searchbar, LoadingController } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
-import { AuthProvider } from '../../providers/auth/auth';
 import { Keyboard } from '@ionic-native/keyboard';
+import { MyApp } from '../../app/app.component';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -39,7 +39,7 @@ export class FerreteriaPage {
 
 	public refresher;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public auth: AuthProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public app: MyApp) {
 		this.ferreterias = [];
 		this.ferreteriaLoad = [];
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
@@ -74,6 +74,10 @@ export class FerreteriaPage {
 				} else {
 					this.refresher.complete();
 				}
+
+				if(err.status == 0){
+					this.app.rootPage = 'NoInternetPage';
+				}
 			}
 			);
 	}
@@ -88,6 +92,7 @@ export class FerreteriaPage {
 		for (var i = 0; i < num; ++i) {
 			this.ferreteriaLoad.push(this.ferreterias[i]);
 		}
+
 		if (refresh) {
 			this.refresher.complete();
 			this.txtSearch = '';
@@ -96,7 +101,6 @@ export class FerreteriaPage {
 		} else {
 			// oculta el 'cargando' de la vista
 			this.showSpinner = false;
-			// this.loader.dismiss();
 		}
 	}
 
@@ -147,10 +151,18 @@ export class FerreteriaPage {
 					this.keyboard.close();
 				},
 				(err) => {
-					this.ferreterias = [];
-					this.ferreteriaLoad = [];
-					this.cargarVista(20, false);
-					this.keyboard.close();
+					// si no hay empresas para mostrar
+					if (err.status == 400) {
+						this.ferreterias = [];
+						this.ferreteriaLoad = [];
+						this.cargarVista(20, false);
+						this.keyboard.close();
+					}
+					// si el dispositivo no tiene internet muestra la pagina de no internet
+					if (err.status == 0) {
+						this.showSpinner = false;
+						this.app.rootPage = 'NoInternetPage';
+					}
 				}
 				);
 		}

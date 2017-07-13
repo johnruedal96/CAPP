@@ -2,8 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Searchbar, LoadingController } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service'
-
 import { Keyboard } from '@ionic-native/keyboard';
+import { MyApp } from '../../app/app.component';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -34,11 +34,11 @@ export class ServicioPage {
 	// suscripcion a los metodos del teclado
 	private onHideSubscription: Subscription;
 	public showSpinner: boolean = true;
-	public enabledInfinite:boolean = true;
+	public enabledInfinite: boolean = true;
 
 	public refresher;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public app: MyApp) {
 		this.servicios = [];
 		this.servicioLoad = [];
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
@@ -71,6 +71,10 @@ export class ServicioPage {
 					this.showSpinner = false;
 				} else {
 					this.refresher.complete();
+				}
+
+				if (err.status == 0) {
+					this.app.rootPage = 'NoInternetPage';
 				}
 			}
 			);
@@ -148,6 +152,10 @@ export class ServicioPage {
 					this.servicioLoad = [];
 					this.cargarVista(20, false);
 					this.keyboard.close();
+
+					if (err.status == 0) {
+						this.app.rootPage = 'NoInternetPage';
+					}
 				}
 				);
 		}
@@ -179,7 +187,7 @@ export class ServicioPage {
 			}
 
 			infiniteScroll.complete();
-			if(tamano == this.servicios.length){
+			if (tamano == this.servicios.length) {
 				this.enabledInfinite = false;
 			}
 		}, 500);
