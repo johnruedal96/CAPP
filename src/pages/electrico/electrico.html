@@ -65,7 +65,12 @@
 		</ion-infinite-scroll-content>
 	</ion-infinite-scroll>
 
-	<div class="noEmpresas" *ngIf="electricoLoad.length == 0">
+	<div class="spinnerCargando" *ngIf="showSpinner">
+		<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
+		<p text-center>Cargando...</p>
+	</div>
+
+	<div class="noEmpresas" *ngIf="electricoLoad.length == 0 && !showSpinner">
 		<p>No hay empresas para mostrar</p>
 	</div>
 

@@ -111,6 +111,7 @@ export class CotizacionPage {
 			let productoModal = this.modalCtrl.create('ListaProductosPage', param);
 			productoModal.onDidDismiss(data => {
 				this.producto = data.producto;
+				this.verificarProducto();
 			});
 			productoModal.present();
 		} else {
@@ -174,6 +175,28 @@ export class CotizacionPage {
 				}
 				this.ws.sendCotizacion(data);
 			})
+	}
+
+	verificarProducto() {
+		if (this.producto != null) {
+			this.lista.find((element, index) => {
+				if (element.producto.id == this.producto.id) {
+					let alert = this.alertCtrl.create({
+						title: 'Error',
+						subTitle: 'El producto ya fue agregado a la lista',
+						buttons: [
+							{
+								text: 'Aceptar',
+								handler: () => {
+									this.listarProductos();
+								}
+							}
+						]
+					});
+					alert.present();
+				}
+			})
+		}
 	}
 
 }

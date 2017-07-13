@@ -47,6 +47,16 @@ page-ferreteria {
 		}
 	}
 
+	.spinnerCargando{
+		height: 50px;
+		width: 100%;
+	}
+
+	// color del spinner
+	circle{
+		stroke: #F57C00 !important;
+	}
+
 	// Estilos para ios
 	.toolbar-ios{
 		.div_title{

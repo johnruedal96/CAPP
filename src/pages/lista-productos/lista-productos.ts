@@ -28,6 +28,7 @@ export class ListaProductosPage {
   private onHideSubscription: Subscription;
   // guarda lo escrito en el input de busqueda
   public txtSearch: string;
+  public showSpinner: boolean = true;
 
   @ViewChild('searchbar') searchInput: Searchbar;
   @ViewChild(Content) content: Content;
@@ -46,16 +47,22 @@ export class ListaProductosPage {
   cargarLista(offset, limit, scroll) {
     this.loadListSearch = false;
     if (scroll == null) {
+      this.showSpinner = true;
       this.productos = [];
     }
     this.ws.getProductos(this.id + '/' + offset + '/' + limit)
-      .subscribe(res => {
+      .subscribe(
+        (res) => {
         let datos = res.json().data;
         this.llenarArray(datos);
         if (scroll != null) {
           scroll.complete();
         }
-      });
+      },
+      (err)=>{
+        this.showSpinner = false;
+      }
+    );
   }
 
   llenarArray(datos) {
@@ -66,13 +73,10 @@ export class ListaProductosPage {
     for (var i = 0; i < tamano; i++) {
       this.productos.push(datos[i]);
     }
+    this.showSpinner = false;
   }
 
   dismiss() {
-    // let data = {
-    //   'seleccion': this.seleccion,
-    //   'id': this.id
-    // };
     this.viewCtrl.dismiss({ producto: null });
   }
 
@@ -93,13 +97,10 @@ export class ListaProductosPage {
   }
 
   search(event, scroll) {
-    let loader;
     if (event == 13) {
 
       if (this.txtSearch == '' || this.txtSearch == undefined) {
-        this.loadListSearch = false;
-        this.tamaño = 50;
-        this.cargarLista(this.tamaño - this.rango, this.tamaño, null);
+        this.closeSearch(null);
       }
 
       if (this.txtSearch != '' && this.txtSearch != undefined) {
@@ -107,10 +108,8 @@ export class ListaProductosPage {
         if (scroll == null) {
           this.content.scrollToTop();
           this.tamañoBusqueda = this.rango;
-          loader = this.loadingCtrl.create({
-            content: "Cargando",
-          });
-          loader.present();
+          this.productos = [];
+          this.showSpinner = true;
         }
         this.ws.searchProducto(this.id, this.txtSearch, this.tamañoBusqueda - this.rango, this.tamañoBusqueda)
           .subscribe(
@@ -120,15 +119,16 @@ export class ListaProductosPage {
             }
             this.llenarArray(res.data);
             if (scroll == null) {
-              loader.dismiss();
+              this.showSpinner = false;
             } else {
               scroll.complete();
             }
           },
           (err) => {
+            console.log('error');
             if (scroll == null) {
               this.productos = [];
-              loader.dismiss();
+              this.showSpinner = false;
             } else {
               scroll.complete();
             }
@@ -142,12 +142,19 @@ export class ListaProductosPage {
     this.viewCtrl.dismiss({ producto: producto });
   }
 
-   inputSearch() {
+  inputSearch() {
     this.busqueda = true;
     setTimeout(() => {
       this.searchInput.setFocus();
     }, 300);
 
+  }
+
+  closeSearch(event) {
+    this.busqueda = false;
+    this.loadListSearch = false;
+    this.tamaño = 50;
+    this.cargarLista(this.tamaño - this.rango, this.tamaño, null);
   }
 
 }

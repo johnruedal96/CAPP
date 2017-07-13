@@ -33,10 +33,8 @@ export class ElectricoPage {
 	public loadListSearch: boolean = false;
 	// suscripcion a los metodos del teclado
 	private onHideSubscription: Subscription;
-
+	public showSpinner: boolean = true;
 	public enabledInfinite:boolean = true;
-
-	public loader;
 
 	public refresher;
 
@@ -58,7 +56,6 @@ export class ElectricoPage {
 		// muestra el 'Cargando' en la vista
 		// se la pagina se refresca con el efecto de estirar no se muestra el 'cargando'
 		if (!refresh) {
-			this.presentLoading();
 		}
 		// carga la informacion del web service
 		this.ws.getEmpresas(2)
@@ -70,7 +67,7 @@ export class ElectricoPage {
 			},
 			(err) => {
 				if (!refresh) {
-					this.loader.dismiss();
+					this.showSpinner = false;
 				} else {
 					this.refresher.complete();
 				}
@@ -95,16 +92,8 @@ export class ElectricoPage {
 			this.loadListSearch = false;
 		} else {
 			// oculta el 'cargando' de la vista
-			this.loader.dismiss();
+			this.showSpinner = false;
 		}
-	}
-
-	// ejecuta el scroll infinito
-	presentLoading() {
-		this.loader = this.loadingCtrl.create({
-			content: "Cargando",
-		});
-		this.loader.present();
 	}
 
 	// navega a las diferentes empresas
@@ -142,7 +131,7 @@ export class ElectricoPage {
 	loadSearch() {
 		if (this.txtSearch != '' && this.txtSearch != undefined) {
 			// mustra el 'cargando' en la vista
-			this.presentLoading();
+			this.showSpinner = true;
 			// realiza la busqueda y la muestra en pantalla
 			this.loadListSearch = true;
 			this.ws.search(2, this.txtSearch)

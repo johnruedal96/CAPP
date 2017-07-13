@@ -34,10 +34,8 @@ export class FerreteriaPage {
 	public loadListSearch: boolean = false;
 	// suscripcion a los metodos del teclado
 	private onHideSubscription: Subscription;
-
-	public enabledInfinite:boolean = true;
-
-	public loader;
+	public showSpinner: boolean = true;
+	public enabledInfinite: boolean = true;
 
 	public refresher;
 
@@ -59,7 +57,7 @@ export class FerreteriaPage {
 		// muestra el 'Cargando' en la vista
 		// se la pagina se refresca con el efecto de estirar no se muestra el 'cargando'
 		if (!refresh) {
-			this.presentLoading();
+			this.showSpinner = true;
 		}
 		// carga la informacion del web service
 		this.ws.getEmpresas(1)
@@ -71,8 +69,9 @@ export class FerreteriaPage {
 			},
 			(err) => {
 				if (!refresh) {
-					this.loader.dismiss();
-				}else{
+					// this.loader.dismiss();
+					this.showSpinner = false;
+				} else {
 					this.refresher.complete();
 				}
 			}
@@ -96,16 +95,9 @@ export class FerreteriaPage {
 			this.loadListSearch = false;
 		} else {
 			// oculta el 'cargando' de la vista
-			this.loader.dismiss();
+			this.showSpinner = false;
+			// this.loader.dismiss();
 		}
-	}
-
-	// Presenta le ventana 'Cargando'
-	presentLoading() {
-		this.loader = this.loadingCtrl.create({
-			content: "Cargando",
-		});
-		this.loader.present();
 	}
 
 	// navega a las diferentes empresas
@@ -143,7 +135,7 @@ export class FerreteriaPage {
 	loadSearch() {
 		if (this.txtSearch != '' && this.txtSearch != undefined) {
 			// mustra el 'cargando' en la vista
-			this.presentLoading();
+			this.showSpinner = true;
 			// realiza la busqueda y la muestra en pantalla
 			this.loadListSearch = true;
 			this.ws.search(1, this.txtSearch)
@@ -168,6 +160,7 @@ export class FerreteriaPage {
 	search(event) {
 		// si se presiona el boton de buscar (teclado) se ejecuta la funciona
 		if (event == 13) {
+			this.ferreteriaLoad = [];
 			this.loadSearch();
 		}
 	}
@@ -190,7 +183,7 @@ export class FerreteriaPage {
 			}
 
 			infiniteScroll.complete();
-			if(tamano == this.ferreterias.length){
+			if (tamano == this.ferreterias.length) {
 				this.enabledInfinite = false;
 			}
 		}, 500);

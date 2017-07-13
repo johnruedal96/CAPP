@@ -8,7 +8,17 @@ page-lista-productos {
 		background-color: #f8f8f8 !important;
 	}
 
-		// Estilos para ios
+	.spinnerCargando{
+		height: 50px;
+		width: 100%;
+	}
+
+	// color del spinner
+	circle{
+		stroke: #F57C00 !important;
+	}
+
+	// Estilos para ios
 	.toolbar-ios{
 		.div_title{
 			.text-title{
