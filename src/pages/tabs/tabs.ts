@@ -17,14 +17,14 @@ export class TabsPage {
 	}
 
 	isAuth() {
-		this.auth.isLogged(this.navCtrl).subscribe(user => {
-			// Movil
-			if (user.text() == '') {
-				this.navCtrl.setRoot('LoginPage');
-			} else {
-				this.auth.user = JSON.parse(user.text());
-			}
-		});
+		// this.auth.isLogged(this.navCtrl).subscribe(user => {
+		// 	// Movil
+		// 	if (user.text() == '') {
+		// 		this.navCtrl.setRoot('LoginPage');
+		// 	} else {
+		// 		this.auth.user = JSON.parse(user.text());
+		// 	}
+		// });
 	}
 
 

@@ -34,12 +34,14 @@ export class CotizacionPage {
 
 	public tabsCotizacion: string = 'productoTab';
 	public tipoEmpresaId: number;
+	public tipoEmpresaIdAntigua: number;
+	public time: number = 0;
 	public imagen: string;
 	public selectOptions: any;
 
 	public productos: any;
 	public producto: any;
-	public tipoEmpresa:boolean = false;
+	public tipoEmpresa: boolean = false;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider) {
 		this.lista = [];
@@ -52,10 +54,6 @@ export class CotizacionPage {
 			this.tipoEmpresaId = this.empresa.tipo;
 		}
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
-		this.selectOptions = {
-			title: 'Productos',
-			// subTitle: 'Select your toppings',
-		};
 	}
 
 	ionViewDidLoad() {
@@ -104,10 +102,10 @@ export class CotizacionPage {
 
 	goToEmpresa(empresa) {
 		let params = {
-			empresa:empresa,
+			empresa: empresa,
 			viewBtnCotizacion: false
 		}
-		this.navCtrl.push('EmpresaPage', params );
+		this.navCtrl.push('EmpresaPage', params);
 	}
 
 	listarProductos() {
@@ -173,7 +171,8 @@ export class CotizacionPage {
 
 	enviarCotizacion() {
 		this.auth.getToken()
-			.subscribe(token => {
+			.subscribe(
+			(token) => {
 				let data = {
 					usuario: this.auth.user,
 					lista: this.lista,
@@ -181,7 +180,16 @@ export class CotizacionPage {
 					_token: token.text()
 				}
 				this.ws.sendCotizacion(data);
-			})
+			},
+			(err) => {
+				let alert = this.alertCtrl.create({
+					title: 'Error',
+					subTitle: 'La cotización no se ha enviado',
+					buttons: ['Aceptar']
+				});
+				alert.present();
+			}
+			)
 	}
 
 	verificarProducto() {
@@ -203,6 +211,38 @@ export class CotizacionPage {
 					alert.present();
 				}
 			})
+		}
+	}
+
+	changeTipo(event) {
+		if (this.time > 0) {
+
+			let alert = this.alertCtrl.create({
+				title: '¿Desa continuar?',
+				subTitle: 'Se borraran los productos agregados a la lista y las empresas seleccionadas',
+				buttons: [
+					{
+						text: 'No',
+						role: 'cancel',
+						handler: () => {
+							this.tipoEmpresaId = this.tipoEmpresaIdAntigua;
+							this.time = 0;
+						}
+					},
+					{
+						text: 'Si',
+						handler: () => {
+							this.lista = [];
+							this.empresas = [];
+							this.tipoEmpresaIdAntigua = event;
+						}
+					}
+				]
+			})
+			alert.present();
+		} else {
+			this.tipoEmpresaIdAntigua = event;
+			this.time++;
 		}
 	}
 

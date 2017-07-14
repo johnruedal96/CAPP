@@ -29,7 +29,7 @@
 		<ion-list>
 			<ion-item>
 				<ion-label>Tipo Empresa</ion-label>
-				<ion-select [disabled]="tipoEmpresa" interface="popover" okText="Agregar" cancelText="Cerrar" [(ngModel)]="tipoEmpresaId" name="tipoEmpresaId" required>
+				<ion-select [disabled]="tipoEmpresa" interface="popover" [(ngModel)]="tipoEmpresaId" (ionChange)="changeTipo($event)" name="tipoEmpresaId" required>
 					<ion-option value="1">Ferreterias</ion-option>
 					<ion-option value="2">Electricos</ion-option>
 					<ion-option value="3">Servicios</ion-option>
