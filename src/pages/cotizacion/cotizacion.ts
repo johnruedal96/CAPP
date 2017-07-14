@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
-import { AlertController } from 'ionic-angular';
+import { AlertController, LoadingController } from 'ionic-angular';
 
 // providers
 import { AuthProvider } from '../../providers/auth/auth';
@@ -42,8 +42,13 @@ export class CotizacionPage {
 	public productos: any;
 	public producto: any;
 	public tipoEmpresa: boolean = false;
+	public loader: any;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider) {
+	public nroRequest: number;
+	public nroRequestOk: number;
+	public disabledButtonEnviar: boolean = false;
+
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController) {
 		this.lista = [];
 		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
@@ -130,6 +135,7 @@ export class CotizacionPage {
 	}
 
 	alertCotizacion() {
+		this.disabledButtonEnviar = true;
 		if (this.empresas.length > 0) {
 			let alert = this.alertCtrl.create({
 				title: 'Comfirmar envio',
@@ -149,19 +155,14 @@ export class CotizacionPage {
 			});
 			alert.present();
 		} else {
+			this.disabledButtonEnviar = false;
 			let alert = this.alertCtrl.create({
 				title: 'Error',
 				message: 'Seleccione minimo una empresa',
 				buttons: [
 					{
-						text: 'Cancelar',
+						text: 'Aceptar',
 						role: 'cancel',
-					},
-					{
-						text: 'Enviar',
-						handler: () => {
-							this.enviarCotizacion();
-						}
 					}
 				]
 			});
@@ -177,9 +178,10 @@ export class CotizacionPage {
 					usuario: this.auth.user,
 					lista: this.lista,
 					empresas: this.empresas,
-					_token: token.text()
 				}
-				this.ws.sendCotizacion(data);
+				this.nroRequestOk = 0;
+				this.nroRequest = this.lista.length + this.empresas.length;
+				this.sendCotizacionWs(data, token.text());
 			},
 			(err) => {
 				let alert = this.alertCtrl.create({
@@ -188,6 +190,89 @@ export class CotizacionPage {
 					buttons: ['Aceptar']
 				});
 				alert.present();
+			}
+			)
+	}
+
+	sendCotizacionWs(data, token) {
+		this.loader = this.loadingCtrl.create({
+			content: 'Enviando Cotización'
+		});
+
+		this.loader.present();
+		this.ws.sendCotizacion(data, token)
+			.subscribe(
+			(res) => {
+				let cotizacion = res.json();
+				let params;
+				for (var i = 0; i < data.lista.length; i++) {
+					params = 'cantidad=' + data.lista[i].cantidad;
+					params += '&idProducto=' + data.lista[i].producto.id;
+					params += '&idCotizacion=' + cotizacion.id;
+					this.saveCotizacionProducto(params, token);
+				}
+
+				for (var i = 0; i < data.empresas.length; i++) {
+					params = 'idCliente=' + data.empresas[i].id;
+					params += '&idCotizacion=' + cotizacion.id;
+					this.saveCotizacionCliente(params, token);
+				}
+			},
+			(err) => {
+				this.showAlert();
+			}
+			)
+	}
+
+	showAlert() {
+		let alert = this.alertCtrl.create({
+			title: 'Error',
+			subTitle: 'La cotización no se ha enviado',
+			buttons: [{
+				text: 'OK',
+				role: 'cancel',
+				handler: () => {
+					this.loader.dismiss();
+				}
+			}]
+		});
+		alert.present();
+	}
+
+	saveCotizacionProducto(params, token) {
+		this.ws.saveCotizacionProducto(params, token)
+			.subscribe(
+			(res) => {
+				this.nroRequestOk++;
+				if (this.nroRequest == this.nroRequestOk) {
+					let title = 'Cotización enviada';
+					let subTitle = '';
+					this.showAlertCotizacionEnviada(title, subTitle);
+				}
+			},
+			(err) => {
+				let title = 'Cotización enviada con errores';
+				let subTitle = 'Ha ocurrido un error en el proceso de envio, la cotización se ha enviado incompleta';
+				this.showAlertCotizacionEnviada(title, subTitle);
+			}
+			)
+	}
+
+	saveCotizacionCliente(params, token) {
+		this.ws.saveCotizacionCliente(params, token)
+			.subscribe(
+			(res) => {
+				this.nroRequestOk++;
+				if (this.nroRequest == this.nroRequestOk) {
+					let title = 'Cotización enviada';
+					let subTitle = '';
+					this.showAlertCotizacionEnviada(title, subTitle);
+				}
+			},
+			(err) => {
+				let title = 'Cotización enviada con errores';
+				let subTitle = 'Ha ocurrido un error en el proceso de envio, la cotización se ha enviado incompleta';
+				this.showAlertCotizacionEnviada(title, subTitle);
 			}
 			)
 	}
@@ -216,34 +301,49 @@ export class CotizacionPage {
 
 	changeTipo(event) {
 		if (this.time > 0) {
-
-			let alert = this.alertCtrl.create({
-				title: '¿Desa continuar?',
-				subTitle: 'Se borraran los productos agregados a la lista y las empresas seleccionadas',
-				buttons: [
-					{
-						text: 'No',
-						role: 'cancel',
-						handler: () => {
-							this.tipoEmpresaId = this.tipoEmpresaIdAntigua;
-							this.time = 0;
+			if (this.lista.length > 0 || this.empresas.length > 0) {
+				let alert = this.alertCtrl.create({
+					title: '¿Desa continuar?',
+					subTitle: 'Se borraran los productos agregados a la lista y las empresas seleccionadas',
+					buttons: [
+						{
+							text: 'No',
+							role: 'cancel',
+							handler: () => {
+								this.tipoEmpresaId = this.tipoEmpresaIdAntigua;
+								this.time = 0;
+							}
+						},
+						{
+							text: 'Si',
+							handler: () => {
+								this.lista = [];
+								this.empresas = [];
+								this.tipoEmpresaIdAntigua = event;
+							}
 						}
-					},
-					{
-						text: 'Si',
-						handler: () => {
-							this.lista = [];
-							this.empresas = [];
-							this.tipoEmpresaIdAntigua = event;
-						}
-					}
-				]
-			})
-			alert.present();
+					]
+				})
+				alert.present();
+			}
 		} else {
 			this.tipoEmpresaIdAntigua = event;
 			this.time++;
 		}
+	}
+
+	showAlertCotizacionEnviada(title, subTitle) {
+		this.loader.dismiss();
+		let alert = this.alertCtrl.create({
+			title: title,
+			subTitle: subTitle,
+			buttons: ['Aceptar']
+		});
+		alert.present();
+		this.lista = [];
+		this.empresas = [];
+		this.time = 0;
+		this.disabledButtonEnviar = false;
 	}
 
 }

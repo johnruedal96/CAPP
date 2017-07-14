@@ -19,11 +19,12 @@ export class ListaCotizacionPage {
 	public id: number;
 	public fecha: string;
 	public empresa: string;
+	public fecha_respuesta: string;
 	public clienteId: number;
 	public estado: string;
 	public estadoId: number;
 	public lista: any;
-	public total:number = 0;
+	public total: number = 0;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider) {
 		this.id = navParams.get('id');
@@ -39,22 +40,23 @@ export class ListaCotizacionPage {
 
 	}
 
-	cargarLista(){
+	cargarLista() {
 		this.ws.getCotizacion(this.id, this.estadoId, this.clienteId)
-		.subscribe(
-			(res)=>{
+			.subscribe(
+			(res) => {
 				this.lista = res.json();
-				for(let item of this.lista){
+				for (let item of this.lista) {
+					this.fecha_respuesta = item.fecha_respuesta;
 					this.total += item.precio;
 				}
 			},
-			(err)=>{
+			(err) => {
 				console.log(err);
 			}
-		)
+			)
 	}
 
-	aca(event){
+	aca(event) {
 		console.log(event);
 	}
 

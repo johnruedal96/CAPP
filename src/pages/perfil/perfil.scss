@@ -43,6 +43,24 @@ page-perfil {
 		}
 	}
 
+	.button-refresh{
+		color: white !important;
+		float: right !important;
+		height: auto !important;
+		padding: 0 !important;
+		width: 20px !important;
+	}
+
+	.spinnerCargando{
+		height: 50px;
+		width: 100%;
+	}
+
+	// color del spinner
+	circle{
+		stroke: #F57C00 !important;
+	}
+
 	// Estilos para ios
 	.toolbar-ios .div_title .text-title{
 		text-align: center; display: inline-block; width: 75%

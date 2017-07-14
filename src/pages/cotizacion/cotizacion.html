@@ -99,7 +99,7 @@
 				</ion-item-sliding>
 			</ion-list>
 
-			<button *ngIf="lista.length > 0" ion-button full color="dark" (click)="alertCotizacion()">Enviar Cotización</button>
+			<button *ngIf="lista.length > 0" [disabled]="disabledButtonEnviar" ion-button full color="dark" (click)="alertCotizacion()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->

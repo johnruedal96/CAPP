@@ -19,10 +19,9 @@ export class PerfilPage {
 
 	public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
 	public myProfile: string = 'profile';
-
 	public compras: any;
-
 	public editarCampos: boolean = false;
+	public showSpinner: boolean;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController) {
 		this.compras = [];
@@ -49,10 +48,13 @@ export class PerfilPage {
 	}
 
 	searchCotizacion() {
+		this.showSpinner = true;
+		this.compras = [];
 		this.ws.searchCotizacionUsuario(this.auth.user.id)
 			.subscribe(
 			(res) => {
 				this.compras = res.json();
+				this.showSpinner = false;
 			},
 			(err) => {
 				console.log(err);

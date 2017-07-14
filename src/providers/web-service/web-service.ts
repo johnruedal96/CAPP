@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
-import { LoadingController, AlertController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 
 /*
@@ -22,11 +21,7 @@ export class WebServiceProvider {
 	public urlSearchCotizacionUsuario: string;
 	public urlGetCotizacion: string;
 
-	public nroRequest: number;
-	public nroRequestOk: number;
-	public loader: any;
-
-	constructor(public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
+	constructor(public http: Http) {
 		this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
 		this.urlSearch = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/search/";
 		this.urlSearchProducto = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/searchProducto/";
@@ -58,103 +53,35 @@ export class WebServiceProvider {
 			.map(res => res);
 	}
 
-	sendCotizacion(data) {
-		this.nroRequestOk = 0;
-		this.nroRequest = data.lista.length + data.empresas.length;
-		this.loader = this.loadingCtrl.create({
-			content: 'Enviando Cotización'
-		});
-
-		this.loader.present();
+	getHeader(token){
 		let headers = new Headers({
-			'X-CSRF-TOKEN': data._token,
+			'X-CSRF-TOKEN': token,
 			'Content-Type': 'application/x-www-form-urlencoded',
 		});
 
-		let options = new RequestOptions({
+		return new RequestOptions({
 			headers: headers
 		});
+	}
 
+	sendCotizacion(data, token) {
 		let params = 'usuario=' + data.usuario.id;
 
-		this.http.post(this.urlSendCotizacion, params, options)
-			.subscribe(
-			(res) => {
-				let cotizacion = res.json();
-				for (var i = 0; i < data.lista.length; i++) {
-					params = 'cantidad=' + data.lista[i].cantidad;
-					params += '&idProducto=' + data.lista[i].producto.id;
-					params += '&idCotizacion=' + cotizacion.id;
-					this.saveCotizacionProducto(params, options);
-				}
-
-				for (var i = 0; i < data.empresas.length; i++) {
-					params = 'idCliente=' + data.empresas[i].id;
-					params += '&idCotizacion=' + cotizacion.id;
-					this.saveCotizacionCliente(params, options);
-				}
-			},
-			(err) => {
-				this.showAlert();
-			}
-			)
+		let options = this.getHeader(token);
+		return this.http.post(this.urlSendCotizacion, params, options)
+			.map(res => res)
 	}
 
-	saveCotizacionProducto(data, options) {
-		this.http.post(this.urlSendCotizacionProducto, data, options)
-			.subscribe(
-			(res) => {
-				this.nroRequestOk++;
-				if (this.nroRequest == this.nroRequestOk) {
-					this.loader.dismiss();
-					let alert = this.alertCtrl.create({
-						title: 'Cotización enviada',
-						buttons: ['Aceptar']
-					});
-					alert.present();
-				}
-			},
-			(err) => {
-				this.loader.dismiss();
-				console.log('error');
-			}
-			)
+	saveCotizacionProducto(data, token) {
+		let options = this.getHeader(token);
+		return this.http.post(this.urlSendCotizacionProducto, data, options)
+			.map(res=>res)
 	}
 
-	saveCotizacionCliente(data, options) {
-		this.http.post(this.urlSendCotizacionCliente, data, options)
-			.subscribe(
-			(res) => {
-				this.nroRequestOk++;
-				if (this.nroRequest == this.nroRequestOk) {
-					this.loader.dismiss();
-					let alert = this.alertCtrl.create({
-						title: 'Cotización enviada',
-						buttons: ['Aceptar']
-					});
-					alert.present();
-				}
-			},
-			(err) => {
-				this.loader.dismiss();
-				console.log('error');
-			}
-			)
-	}
-
-	showAlert() {
-		let alert = this.alertCtrl.create({
-			title: 'Error',
-			subTitle: 'La cotización no se ha enviado',
-			buttons: [{
-				text: 'OK',
-				role: 'cancel',
-				handler: () => {
-					this.loader.dismiss();
-				}
-			}]
-		});
-		alert.present();
+	saveCotizacionCliente(data, token) {
+		let options = this.getHeader(token);
+		return this.http.post(this.urlSendCotizacionCliente, data, options)
+			.map(res=>res);
 	}
 
 	searchCotizacionUsuario(usuario) {

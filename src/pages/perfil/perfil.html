@@ -41,6 +41,7 @@
 	</div>
 
 	<div [ngSwitch]="myProfile" (ionChange)="cargar($event)">
+
 		<ion-list *ngSwitchCase="'buys'">
 			<ion-row class="encabezado">
 				<ion-col col-4>
@@ -51,8 +52,15 @@
 				</ion-col>
 				<ion-col col-4>
 					<label>Estado</label>
+					<button ion-button round clear class="button-refresh" (click)="searchCotizacion()">
+						<ion-icon name="refresh"></ion-icon>
+					</button>
 				</ion-col>
 			</ion-row>
+			<div class="spinnerCargando" *ngIf="showSpinner">
+				<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
+				<p text-center>Cargando...</p>
+			</div>
 			<ion-row *ngFor="let compra of compras" class="item-list" (click)="verCotizacion(compra)">
 				<ion-col col-4 class="row-estado-{{compra.estadoid}}">
 					<p style="white-space: normal">{{compra.fecha}}</p>
@@ -70,16 +78,10 @@
 			<ion-item>
 				<ion-icon name="person" item-start></ion-icon>
 				<ion-input #inputNombre [disabled]="!editarCampos" type="text" value="{{auth.user.nombre}}"></ion-input>
-				<!--<button ion-button clear item-end>
-					<ion-icon color="black" color="dark" name="create" (click)="editarInputNombre()"></ion-icon>
-				</button>-->
 			</ion-item>
 			<ion-item>
 				<ion-icon name="mail" item-start></ion-icon>
 				<ion-input #inputEmail [disabled]="!editarCampos" type="text" value="{{auth.user.email}}"></ion-input>
-				<!--<button ion-button clear item-end>
-					<ion-icon color="black" color="dark" name="create" (click)="editarInputEmail()"></ion-icon>
-				</button>-->
 			</ion-item>
 			<button ion-button color="dark" block (click)="editar()">
 				<label *ngIf="!editarCampos">Editar</label>
