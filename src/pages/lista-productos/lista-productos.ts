@@ -77,7 +77,7 @@ export class ListaProductosPage {
   }
 
   dismiss() {
-    this.viewCtrl.dismiss({ producto: null });
+    this.viewCtrl.dismiss();
   }
 
   doInfinite(event) {

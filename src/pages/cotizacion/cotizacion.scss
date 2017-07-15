@@ -19,6 +19,17 @@ page-cotizacion {
 		white-space: normal;
 	}
 
+	.btn-eliminar{
+		padding: 0;
+		button{
+			height: 25px;
+			width: 25px;
+			padding: 0;
+			background-color: rgba(255, 255, 255, 0);
+			color: red;
+		}
+	}
+
 	// Estilos alerts selects
 	.icon-button {
     	position: absolute;

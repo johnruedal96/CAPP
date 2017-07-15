@@ -29,7 +29,8 @@
 		<ion-list>
 			<ion-item>
 				<ion-label>Tipo Empresa</ion-label>
-				<ion-select [disabled]="tipoEmpresa" interface="popover" [(ngModel)]="tipoEmpresaId" (ionChange)="changeTipo($event)" name="tipoEmpresaId" required>
+				<ion-select [disabled]="tipoEmpresa" interface="popover" [(ngModel)]="tipoEmpresaId" (ionChange)="changeTipo($event)" name="tipoEmpresaId"
+				 required>
 					<ion-option value="1">Ferreterias</ion-option>
 					<ion-option value="2">Electricos</ion-option>
 					<ion-option value="3">Servicios</ion-option>
@@ -39,7 +40,7 @@
 	</form>
 
 	<div>
-		<ion-segment [(ngModel)]="tabsCotizacion" color="dark">
+		<ion-segment [(ngModel)]="tabsCotizacion" color="darkCapp">
 			<ion-segment-button value="productoTab">
 				Productos
 			</ion-segment-button>
@@ -56,7 +57,7 @@
 			<form #formCotizacion="ngForm">
 				<!--<ion-list>-->
 				<ion-item>
-					<label for="">Producto</label>
+					<label>Producto</label>
 					<ion-buttons>
 						<button ion-button full color="light" (click)="listarProductos()">
 								<label *ngIf="producto == null" class="labelButtonNoEspace">Selecciona el producto</label>
@@ -65,41 +66,32 @@
 							</button>
 					</ion-buttons>
 				</ion-item>
-				<!--</ion-list>-->
-				<!--producto == null && -->
-				<ion-item>
-					<ion-label floating>Cantidad</ion-label>
-					<ion-input [(ngModel)]="cantidad" name="cantidad" type="number" required=""></ion-input>
-				</ion-item>
 			</form>
-			<button [disabled]="producto == null || !formCotizacion.form.valid" (click)="agregar()" ion-button block color="dark"><ion-icon name="cart" margin-right></ion-icon>AGREGAR A CARRITO</button>
+			<button [disabled]="producto == null || !formCotizacion.form.valid" (click)="agregar()" ion-button block color="darkCapp"><ion-icon name="cart" margin-right></ion-icon>AGREGAR A CARRITO</button>
 			<hr>
 			<h3 *ngIf="lista.length > 0">Lista de compra</h3>
 			<ion-row *ngIf="lista.length > 0" class="row-head row-table">
-				<ion-col col-3 class="col-body">Cantidad</ion-col>
-				<ion-col col-9 class="col-body">Producto</ion-col>
+				<ion-col col-11 class="col-body">Producto</ion-col>
+				<ion-col col-1 class="col-body"></ion-col>
 			</ion-row>
-			
+
 
 			<ion-list>
-				<ion-item-sliding *ngFor="let item of lista">
-					<ion-item class="item-table">
-						<ion-row class="row-table">
-							<ion-col col-3 text-center>{{item.cantidad}}</ion-col>
-							<ion-col col-9 text-center>
-								<label style="white-space: normal !important">{{item.producto.nombre}}</label>
-							</ion-col>
-						</ion-row>
-					</ion-item>
-					<ion-item-options side="right">
-						<button ion-button color="danger">
-							<ion-icon (click)="deleteItem(item)" name="close"></ion-icon>
-						</button>
-					</ion-item-options>
-				</ion-item-sliding>
+				<ion-item class="item-table" *ngFor="let item of lista">
+					<ion-row class="row-table">
+						<ion-col col-11 text-center>
+							<label style="white-space: normal !important">{{item.producto.nombre}}</label>
+						</ion-col>
+						<ion-col col-1 text-center class="btn-eliminar">
+							<button ion-button clear>
+									<ion-icon (click)="deleteItem(item)" name="close"></ion-icon>
+								</button>
+						</ion-col>
+					</ion-row>
+				</ion-item>
 			</ion-list>
 
-			<button *ngIf="lista.length > 0" [disabled]="disabledButtonEnviar" ion-button full color="dark" (click)="alertCotizacion()">Enviar Cotización</button>
+			<button *ngIf="lista.length > 0" [disabled]="disabledButtonEnviar" ion-button full color="darkCapp" (click)="alertCotizacion()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->

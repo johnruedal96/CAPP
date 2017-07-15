@@ -11,7 +11,7 @@
 			<button ion-button clear outline (click)="dismiss()">
 				Cerrar
 			</button>
-		</ion-buttons> 
+		</ion-buttons>
 		<ion-title>Empresas</ion-title>
 	</ion-navbar>
 
@@ -23,7 +23,8 @@
 	<form #formSelect="ngForm">
 		<ion-item>
 			<ion-label>Filtro</ion-label>
-			<ion-select interface="popover" (ngModelChange)="filtrar($event)" okText="Seleccionar" cancelText="Cerrar" [(ngModel)]="filtro" name="filtro">
+			<ion-select interface="popover" (ngModelChange)="filtrar($event)" okText="Seleccionar" cancelText="Cerrar" [(ngModel)]="filtro"
+			 name="filtro">
 				<ion-option value="1">Todas</ion-option>
 				<ion-option value="2">Seleccionadas</ion-option>
 			</ion-select>
@@ -34,7 +35,7 @@
 
 		<ion-item *ngFor="let empresa of empresas">
 			<ion-label>{{empresa.nombre}}</ion-label>
-			<ion-checkbox [checked]="empresa.check" (ionChange)="seleccionar($event.value, empresa)"></ion-checkbox>
+			<ion-checkbox color="darkCapp" [disabled]="disabledCheck && !empresa.check" [checked]="empresa.check" (ionChange)="seleccionar($event.value, empresa)"></ion-checkbox>
 		</ion-item>
 
 	</ion-list>

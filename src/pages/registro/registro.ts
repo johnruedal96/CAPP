@@ -51,7 +51,7 @@ export class RegistroPage {
 					let respuesta = this.auth.login(formRegister.value);
 					respuesta.post.subscribe(
 						(data) => {
-							this.auth.isLogged(this.navCtrl).subscribe(user => {
+							this.auth.isLogged().subscribe(user => {
 								//movil
 								if (user.text() != '') {
 									this.navCtrl.setRoot(TabsPage);

@@ -27,73 +27,107 @@
 <ion-content padding>
 	<div class="encabezado">
 		<ion-row>
-			<ion-col col-3>
-				<label>Fecha:</label>
+			<ion-col col-12 class="cabecera">Envío</ion-col>
+			<ion-col col-4>
+				<label><b>Fecha:</b></label>
 			</ion-col>
-			<ion-col col-9>
-				<label>{{fecha}}</label>
-			</ion-col>
-		</ion-row>
-		<ion-row>
-			<ion-col col-3>
-				<label>Empresa:</label>
-			</ion-col>
-			<ion-col col-9>
-				<label>{{empresa}}</label>
+			<ion-col col-8>
+				<label><u>{{fecha}}</u></label>
 			</ion-col>
 		</ion-row>
 		<ion-row>
-			<ion-col col-3>
-				<label>Estado:</label>
+			<ion-col col-4>
+				<label><b>Hora:</b></label>
 			</ion-col>
-			<ion-col col-9>
-				<label>{{estado}}</label>
+			<ion-col col-8>
+				<label><u>{{hora}}</u></label>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col col-4>
+				<label><b>Empresa:</b></label>
+			</ion-col>
+			<ion-col col-8>
+				<label><u>{{empresa}}</u></label>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col col-4>
+				<label><b>Estado:</b></label>
+			</ion-col>
+			<ion-col col-8>
+				<label><u>{{estado}}</u></label>
 			</ion-col>
 		</ion-row>
 		<ion-row *ngIf="estadoId == 2">
-			<ion-col col-3>
-				<label>Fecha Respuesta:</label>
+			<ion-col col-12 class="cabecera">Respuesta</ion-col>
+			<ion-col col-4>
+				<label><b>Fecha</b></label>
 			</ion-col>
-			<ion-col col-9>
-				<label>{{fecha_respuesta}}</label>
+			<ion-col col-8>
+				<label><u>{{fecha_respuesta}}</u></label>
+			</ion-col>
+			<ion-col col-4>
+				<label><b>Hora</b></label>
+			</ion-col>
+			<ion-col col-8>
+				<label><u>{{hora_respuesta}}</u></label>
 			</ion-col>
 		</ion-row>
 	</div>
 
 	<div class="table">
-		<ion-row class="table-head">
-			<ion-col col-3>
-				<label>Cantidad</label>
-			</ion-col>
-			<ion-col col-9 *ngIf="estadoId == 1">
+		<ion-row color="darkCapp" class="table-head">
+			<ion-col col-12 *ngIf="estadoId == 1">
 				<label>Producto</label>
 			</ion-col>
-			<ion-col col-5 *ngIf="estadoId == 2">
+			<ion-col col-8 *ngIf="estadoId == 2">
 				<label>Producto</label>
 			</ion-col>
 			<ion-col col-4 *ngIf="estadoId == 2">
-				<label>Precio</label>
+				<label>Cantidad</label>
 			</ion-col>
 		</ion-row>
 		<ion-row *ngFor="let item of lista" class="table-body">
-			<ion-col col-3 text-center>
-				{{item.cantidad}}
+			<ion-col col-12 *ngIf="estadoId == 1">
+				<div class="divLabel"><label>{{item.nombre}}</label></div>
 			</ion-col>
-			<ion-col col-9 *ngIf="estadoId == 1">
-				{{item.nombre}}
+			<ion-col col-8 *ngIf="estadoId == 2">
+				<div class="divLabel"><label>{{item.nombre}}</label></div>
 			</ion-col>
-			<ion-col col-5 *ngIf="estadoId == 2">
-				{{item.nombre}}
-			</ion-col>
-			<ion-col col-4 text-center *ngIf="estadoId == 2">
-				{{item.precio.toLocaleString()}}
+			<ion-col col-4 text-center *ngIf="estadoId == 2" class="col-cantidad">
+				<ion-row>
+					<ion-col col-4>
+						<button ion-button (click)="addCantidad(item)">
+							<ion-icon name="add"></ion-icon>
+						</button>
+					</ion-col>
+					<ion-col col-4>
+						<div class="divLabel cantidad">
+							<label>{{item.cantidad}}</label>
+						</div>
+					</ion-col>
+					<ion-col col-4>
+						<button color="danger" ion-button (click)="rmCantidad(item)">
+							<ion-icon name="remove"></ion-icon>
+						</button>
+					</ion-col>
+				</ion-row>
+				<label *ngIf="item.precioTotal == undefined" style="color: green">{{item.precio.toLocaleString()}}</label>
+				<label *ngIf="item.precioTotal != undefined" style="color: green">{{item.precioTotal.toLocaleString()}}</label>
 			</ion-col>
 		</ion-row>
-		<ion-row *ngIf="estadoId == 2" style="background-color: black; color: white">
-			<ion-col offset-8 col-4 text-center>
+		<ion-row *ngIf="estadoId == 2" style="background-color: #333; color: white">
+			<ion-col col-8 text-right>
+				Total:
+			</ion-col>
+			<ion-col col-4 text-center>
 				{{total.toLocaleString()}}
-			</ion-col>				
+			</ion-col>
 		</ion-row>
 	</div>
+
+
+	<button (click)="comprar()" *ngIf="estadoId == 2" [disabled]="total == 0" color="darkCapp" ion-button full>Comprar</button>
 
 </ion-content>

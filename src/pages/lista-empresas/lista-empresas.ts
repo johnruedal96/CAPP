@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 
@@ -27,8 +27,9 @@ export class ListaEmpresasPage {
 	// guarda el tipo de filtro (todos = 1, seleccionados = 2)
 	public filtro: number = 1;
 	public aplicoFiltro: boolean = false;
+	public disabledCheck:boolean = false;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public alertCtrl: AlertController) {
 
 		// si ecuentra el parametro, ejecuta la busqueda por el tipo de empresa (combo)
 		this.id = navParams.get('id');
@@ -37,6 +38,10 @@ export class ListaEmpresasPage {
 		this.seleccion = navParams.get('empresas');
 		if (this.seleccion == undefined) {
 			this.seleccion = [];
+		}
+
+		if(this.seleccion.length == 5){
+			this.disabledCheck = true;
 		}
 
 	}
@@ -91,6 +96,16 @@ export class ListaEmpresasPage {
 					this.seleccion.splice(i, 1);
 				}
 			}
+			this.disabledCheck = false;
+		}
+		if(this.seleccion.length == 5){
+			let alert = this.alertCtrl.create({
+				title: 'Limite de empresas',
+				subTitle: 'Seleccione solo <b>5</b> empresas',
+				buttons: ['Aceptar']
+			});
+			alert.present();
+			this.disabledCheck = true;
 		}
 	}
 

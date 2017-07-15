@@ -20,6 +20,10 @@ export class WebServiceProvider {
 	public urlSendCotizacionCliente: string;
 	public urlSearchCotizacionUsuario: string;
 	public urlGetCotizacion: string;
+	public urlSendCompra: string;
+	public urlSendCompraProducto: string;
+	public urlGetCompras: string;
+	public urlGetCompra: string;
 
 	constructor(public http: Http) {
 		this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
@@ -31,6 +35,10 @@ export class WebServiceProvider {
 		this.urlSendCotizacionCliente = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/cotizacionCliente";
 		this.urlSearchCotizacionUsuario = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/buscarCotizacionUsuario/";
 		this.urlGetCotizacion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getCotizacion/";
+		this.urlSendCompra = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/compra";
+		this.urlSendCompraProducto = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/compraProducto";
+		this.urlGetCompras = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getComprasUsuario/";
+		this.urlGetCompra = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getCompra/";
 	}
 
 	getEmpresas(tipo) {
@@ -53,7 +61,7 @@ export class WebServiceProvider {
 			.map(res => res);
 	}
 
-	getHeader(token){
+	getHeader(token) {
 		let headers = new Headers({
 			'X-CSRF-TOKEN': token,
 			'Content-Type': 'application/x-www-form-urlencoded',
@@ -75,13 +83,13 @@ export class WebServiceProvider {
 	saveCotizacionProducto(data, token) {
 		let options = this.getHeader(token);
 		return this.http.post(this.urlSendCotizacionProducto, data, options)
-			.map(res=>res)
+			.map(res => res)
 	}
 
 	saveCotizacionCliente(data, token) {
 		let options = this.getHeader(token);
 		return this.http.post(this.urlSendCotizacionCliente, data, options)
-			.map(res=>res);
+			.map(res => res);
 	}
 
 	searchCotizacionUsuario(usuario) {
@@ -92,6 +100,28 @@ export class WebServiceProvider {
 	getCotizacion(id, estado, cliente) {
 		return this.http.get(this.urlGetCotizacion + id + '/' + estado + '/' + cliente)
 			.map(res => res)
+	}
+
+	sendCompra(data, token) {
+		let options = this.getHeader(token);
+		return this.http.post(this.urlSendCompra, data, options)
+			.map(res => res);
+	}
+
+	sendCompraProducto(data, token) {
+		let options = this.getHeader(token);
+		return this.http.post(this.urlSendCompraProducto, data, options)
+			.map(res => res);
+	}
+
+	getCompras(usuario) {
+		return this.http.get(this.urlGetCompras+usuario)
+			.map(res => res);
+	}
+
+	getCompra(compra) {
+		return this.http.get(this.urlGetCompra+compra)
+			.map(res => res);
 	}
 
 }

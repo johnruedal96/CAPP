@@ -46,7 +46,7 @@ export class MyApp {
   }
 
   isLogged() {
-    this.auth.isLogged(this.nav).subscribe(
+    this.auth.isLogged().subscribe(
       (user) => {
         if (user.text() == '') {
           this.nav.setRoot('LoginPage');

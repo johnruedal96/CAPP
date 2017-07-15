@@ -17,8 +17,7 @@ export class TabsPage {
 	}
 
 	isAuth() {
-		this.auth.isLogged(this.navCtrl).subscribe(user => {
-			// Movil
+		this.auth.isLogged().subscribe(user => {
 			if (user.text() == '') {
 				this.navCtrl.setRoot('LoginPage');
 			} else {

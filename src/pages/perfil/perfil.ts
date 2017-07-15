@@ -18,17 +18,20 @@ import { WebServiceProvider } from '../../providers/web-service/web-service';
 export class PerfilPage {
 
 	public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
-	public myProfile: string = 'profile';
+	public myProfile: string = 'perfil';
+	public cotizaciones: any;
 	public compras: any;
 	public editarCampos: boolean = false;
 	public showSpinner: boolean;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController) {
+		this.cotizaciones = [];
 		this.compras = [];
 	}
 
 	ionViewDidLoad() {
 		this.searchCotizacion();
+		this.getCompras();
 	}
 
 	editar() {
@@ -49,11 +52,11 @@ export class PerfilPage {
 
 	searchCotizacion() {
 		this.showSpinner = true;
-		this.compras = [];
+		this.cotizaciones = [];
 		this.ws.searchCotizacionUsuario(this.auth.user.id)
 			.subscribe(
 			(res) => {
-				this.compras = res.json();
+				this.cotizaciones = this.formatDate(res.json());
 				this.showSpinner = false;
 			},
 			(err) => {
@@ -66,6 +69,25 @@ export class PerfilPage {
 
 	}
 
+	formatDate(array) {
+		let lista = array;
+		let options = { weekday: "short", year: "numeric", month: "long", day: "numeric" };
+		for (let item of lista) {
+			let fecha = new Date(item.fecha);
+			item.fechaFormat = fecha.toLocaleDateString('es-ES', options);
+		}
+		return lista;
+	}
+
+	getCompras() {
+		this.ws.getCompras(this.auth.user.id)
+			.subscribe(
+			(res) => {
+				this.compras = this.formatDate(res.json());
+			}
+			)
+	}
+
 	verCotizacion(cotizacion) {
 		let params = {
 			id: cotizacion.cotizacion,
@@ -76,5 +98,10 @@ export class PerfilPage {
 			clienteId: cotizacion.clienteid
 		}
 		this.navCtrl.push('ListaCotizacionPage', params);
+	}
+
+	verCompra(compra) {
+		console.log(compra);
+		this.navCtrl.push('ListaCompraPage', compra);
 	}
 }

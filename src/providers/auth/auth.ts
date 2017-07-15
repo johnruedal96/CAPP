@@ -103,7 +103,7 @@ export class AuthProvider {
     return this.http.post(this.urlRegister, params, options);
   }
 
-  isLogged(nav) {
+  isLogged() {
     return this.http.get('http://www.contactoarquitectonico.com.co/api/user')
       .map(user => user);
   }

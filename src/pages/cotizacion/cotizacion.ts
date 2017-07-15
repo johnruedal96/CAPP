@@ -120,7 +120,11 @@ export class CotizacionPage {
 			}
 			let productoModal = this.modalCtrl.create('ListaProductosPage', param);
 			productoModal.onDidDismiss(data => {
-				this.producto = data.producto;
+				let producto = null;
+				if (data != null) {
+					producto = data.producto;
+				}
+				this.producto = producto;
 				this.verificarProducto();
 			});
 			productoModal.present();
