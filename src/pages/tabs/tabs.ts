@@ -17,13 +17,13 @@ export class TabsPage {
 	}
 
 	isAuth() {
-		this.auth.isLogged().subscribe(user => {
-			if (user.text() == '') {
-				this.navCtrl.setRoot('LoginPage');
-			} else {
-				this.auth.user = JSON.parse(user.text());
-			}
-		});
+		// this.auth.isLogged().subscribe(user => {
+		// 	if (user.text() == '') {
+		// 		this.navCtrl.setRoot('LoginPage');
+		// 	} else {
+		// 		this.auth.user = JSON.parse(user.text());
+		// 	}
+		// });
 	}
 
 

@@ -124,6 +124,9 @@ export class CotizacionPage {
 				if (data != null) {
 					producto = data.producto;
 				}
+				if(data == null && this.producto != null){
+					producto = this.producto;
+				}
 				this.producto = producto;
 				this.verificarProducto();
 			});

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -28,8 +28,9 @@ export class ListaCotizacionPage {
 	public estadoId: number;
 	public lista: any;
 	public total: number = 0;
+	public direccion: number;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public auth: AuthProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public auth: AuthProvider, public alertCtrl: AlertController) {
 		this.id = navParams.get('id');
 		this.fecha = this.formatDate(navParams.get('fecha'));
 		this.hora = this.formatHora(navParams.get('fecha'));
@@ -50,8 +51,8 @@ export class ListaCotizacionPage {
 		return fecha.toLocaleDateString('es-ES', options);
 	}
 
-	formatHora(date){
-		let options = {	hour:'numeric',minute:'numeric', hour12:true }
+	formatHora(date) {
+		let options = { hour: 'numeric', minute: 'numeric', hour12: true }
 		let hora = new Date(date);
 		return hora.toLocaleTimeString('es-ES', options);
 	}
@@ -110,14 +111,21 @@ export class ListaCotizacionPage {
 		})
 	}
 
+	siguiente(){
+		let params = {
+			cliente: this.clienteId,
+			lista: this.lista,
+			total: this.total,
+			cotizacion: this.id
+		}
+		this.navCtrl.push('DatosCompraPage', params);
+	}
+
 	comprar() {
-		this.auth.getToken()
+		this.ws.getDireccion(this.auth.user.id)
 			.subscribe(
 			(res) => {
-				this.sendCompra(res.text());
-			},
-			(err) => {
-				console.log(err);
+				this.showPrompt(res.json());
 			}
 			)
 	}
@@ -134,9 +142,10 @@ export class ListaCotizacionPage {
 			});
 	}
 
-	sendCompra(token) {
+	sendCompra(token, direccion) {
 		let data = 'usuario=' + this.auth.user.id;
 		data += '&cliente=' + this.clienteId;
+		data += '&direccion=' + direccion;
 		this.ws.sendCompra(data, token)
 			.subscribe(
 			(res) => {
@@ -162,12 +171,51 @@ export class ListaCotizacionPage {
 				this.ws.sendCompraProducto(data, token)
 					.subscribe(
 					(res) => {
-						console.log(res);
+						// this.navCtrl
 					}
 					)
 
 			}
 		}
+	}
+
+	showPrompt(data) {
+		let alert = this.alertCtrl.create();
+		alert.setTitle('Seleccione una dirección');
+
+		for (let i of data) {
+			let checked = false;
+			if (i.id == this.direccion) {
+				checked = true;
+			}
+			let radio = {
+				type: 'radio',
+				label: i.direccion,
+				value: i.id,
+				checked: checked
+			};
+			alert.addInput(radio);
+		}
+
+		alert.addButton('Cancel');
+		alert.addButton({
+			text: 'OK',
+			handler: data => {
+				this.direccion = data;
+				if (this.direccion != undefined) {
+					this.auth.getToken()
+						.subscribe(
+						(res) => {
+							this.sendCompra(res.text(), this.direccion);
+						},
+						(err) => {
+							console.log(err);
+						}
+						)
+				}
+			}
+		});
+		alert.present();
 	}
 
 }

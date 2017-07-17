@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
 
 import { AuthProvider } from '../../providers/auth/auth';
@@ -18,15 +18,21 @@ import { WebServiceProvider } from '../../providers/web-service/web-service';
 export class PerfilPage {
 
 	public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
-	public myProfile: string = 'perfil';
+	public myProfile: string;
+	public seleccionCompra: number;
 	public cotizaciones: any;
 	public compras: any;
 	public editarCampos: boolean = false;
 	public showSpinner: boolean;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer) {
 		this.cotizaciones = [];
 		this.compras = [];
+		this.myProfile = this.navParams.get('tab');
+		if (this.myProfile == null) {
+			this.myProfile = 'perfil';
+		}
+		this.seleccionCompra = this.navParams.get('compra');
 	}
 
 	ionViewDidLoad() {
@@ -84,6 +90,9 @@ export class PerfilPage {
 			.subscribe(
 			(res) => {
 				this.compras = this.formatDate(res.json());
+				// if (this.seleccionCompra != null) {
+					this.aplicarColor();
+				// }
 			}
 			)
 	}
@@ -101,7 +110,29 @@ export class PerfilPage {
 	}
 
 	verCompra(compra) {
-		console.log(compra);
 		this.navCtrl.push('ListaCompraPage', compra);
+	}
+
+	aplicarColor() {
+		// let seleccionCompra = this.seleccionCompra.toLocaleString();
+		let seleccionCompra = '15';
+		let content;
+		setTimeout(() => {
+			content = document.getElementById(seleccionCompra);
+			let coors = content.getBoundingClientRect();
+			window.scrollTo(coors.top, 0);
+			if (content != null) {
+				content.style.setProperty('transition', 'background-color 2s');
+				content.style.setProperty('background-color', 'red');
+			}
+		}, 750);
+
+		setTimeout(() => {
+			if (content != null) {
+				content.style.setProperty('transition', 'background-color 2s');
+				content.style.setProperty('background-color', 'white');
+				this.seleccionCompra = null;
+			}
+		}, 5000);
 	}
 }

@@ -24,6 +24,8 @@ export class WebServiceProvider {
 	public urlSendCompraProducto: string;
 	public urlGetCompras: string;
 	public urlGetCompra: string;
+	public urlGetDireccion: string;
+	public urlGetFormasPago: string;
 
 	constructor(public http: Http) {
 		this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
@@ -39,6 +41,8 @@ export class WebServiceProvider {
 		this.urlSendCompraProducto = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/compraProducto";
 		this.urlGetCompras = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getComprasUsuario/";
 		this.urlGetCompra = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getCompra/";
+		this.urlGetDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getDireccion/";
+		this.urlGetFormasPago = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getFormasPago/";
 	}
 
 	getEmpresas(tipo) {
@@ -115,12 +119,22 @@ export class WebServiceProvider {
 	}
 
 	getCompras(usuario) {
-		return this.http.get(this.urlGetCompras+usuario)
+		return this.http.get(this.urlGetCompras + usuario)
 			.map(res => res);
 	}
 
 	getCompra(compra) {
-		return this.http.get(this.urlGetCompra+compra)
+		return this.http.get(this.urlGetCompra + compra)
+			.map(res => res);
+	}
+
+	getDireccion(usuario) {
+		return this.http.get(this.urlGetDireccion + usuario)
+			.map(res => res);
+	}
+
+	getFormasPago() {
+		return this.http.get(this.urlGetFormasPago)
 			.map(res => res);
 	}
 

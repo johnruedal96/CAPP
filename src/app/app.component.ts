@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav } from 'ionic-angular';
+import { Platform, Nav, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -17,19 +17,20 @@ export class MyApp {
   public pages: Array<{ title: string, componet: any, icon: string }>;
   public login: boolean = false;
   public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
+  public alert;
 
-  constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider) {
+  constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider, public alertCtrl: AlertController) {
 
     this.pages = [
       { title: 'Empresas', componet: TabsPage, icon: 'construct' },
       { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person' },
-      { title: 'Datos de envio', componet: 'FerreteriaPage', icon: 'send' },
+      { title: 'Datos de envio', componet: 'DireccionPage', icon: 'send' },
       { title: 'Contactenos', componet: 'ContactenosPage', icon: 'mail' }
     ];
 
     platform.ready().then(() => {
-      this.isLogged();
-      // this.pc();
+      // this.isLogged();
+      this.pc();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
@@ -38,11 +39,44 @@ export class MyApp {
       setTimeout(() => {
         splashScreen.hide();
       }, 1000)
+
+      platform.registerBackButtonAction(() => {
+        if (this.nav.canGoBack()) {
+          this.nav.pop();
+        } else {
+          if (this.alert) {
+            this.alert.dismiss();
+            this.alert = null;
+          } else {
+            this.showAlert();
+          }
+        }
+      });
     });
   }
 
+  showAlert() {
+    this.alert = this.alertCtrl.create({
+      title: 'CAPP se cerrará',
+      subTitle: '¿Desea permanecer en la aplicacón?',
+      buttons: [
+        {
+          text: 'salir',
+          handler: data => {
+            this.platform.exitApp();
+          }
+        },
+        {
+          text: 'No salir',
+          role: 'cancel',
+        }
+      ]
+    });
+    this.alert.present();
+  }
+
   goToPage(page) {
-    this.nav.push(page);
+    this.nav.setRoot(page);
   }
 
   isLogged() {

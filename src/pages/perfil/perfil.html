@@ -117,7 +117,7 @@
 				<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
 				<p text-center>Cargando...</p>
 			</div>
-			<ion-row *ngFor="let compra of compras" class="item-list" (click)="verCompra(compra)">
+			<ion-row *ngFor="let compra of compras" class="item-list" (click)="verCompra(compra)" id="{{compra.idCompra}}">
 				<ion-col col-3>
 					<div class="div-container">
 						<p style="white-space: normal">{{compra.fechaFormat}}</p>

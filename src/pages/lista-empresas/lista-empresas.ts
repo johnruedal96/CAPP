@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 
@@ -27,9 +27,9 @@ export class ListaEmpresasPage {
 	// guarda el tipo de filtro (todos = 1, seleccionados = 2)
 	public filtro: number = 1;
 	public aplicoFiltro: boolean = false;
-	public disabledCheck:boolean = false;
+	public disabledCheck: boolean = false;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public alertCtrl: AlertController) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public toastCtrl: ToastController) {
 
 		// si ecuentra el parametro, ejecuta la busqueda por el tipo de empresa (combo)
 		this.id = navParams.get('id');
@@ -40,7 +40,7 @@ export class ListaEmpresasPage {
 			this.seleccion = [];
 		}
 
-		if(this.seleccion.length == 5){
+		if (this.seleccion.length == 5) {
 			this.disabledCheck = true;
 		}
 
@@ -94,15 +94,16 @@ export class ListaEmpresasPage {
 			for (var i = 0; i < this.seleccion.length; ++i) {
 				if (empresa.id == this.seleccion[i].id) {
 					this.seleccion.splice(i, 1);
+					empresa.check = false;
 				}
 			}
 			this.disabledCheck = false;
 		}
-		if(this.seleccion.length == 5){
-			let alert = this.alertCtrl.create({
-				title: 'Limite de empresas',
-				subTitle: 'Seleccione solo <b>5</b> empresas',
-				buttons: ['Aceptar']
+		if (this.seleccion.length == 5) {
+			let alert = this.toastCtrl.create({
+				message: 'Ha seleccionado el máximo de empresas',
+				duration: 3000,
+				position: 'bottom'
 			});
 			alert.present();
 			this.disabledCheck = true;

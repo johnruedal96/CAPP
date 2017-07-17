@@ -1,0 +1,107 @@
+<!--
+  Generated template for the ConfirmarCompraPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="orange">
+
+    <button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+    <div class="div_title">
+      <img src="assets/icon_casco.png">
+      <label>CAPP</label>
+    </div>
+    <ion-title>
+      Confirmar Compra
+    </ion-title>
+
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item-group>
+      <ion-item-divider color="light">
+        <ion-icon name="cart" margin-right></ion-icon>
+        Compra
+      </ion-item-divider>
+      <ion-item>
+        <div class="table">
+          <ion-row color="darkCapp" class="table-head">
+            <ion-col col-2>
+              <label>Cant</label>
+            </ion-col>
+            <ion-col col-7>
+              <label>Producto</label>
+            </ion-col>
+            <ion-col col-3>
+              <label>Precio</label>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngFor="let item of productos" class="table-body">
+            <ion-col col-2>
+              <div class="divLabel"><label text-center>{{item.cantidad}}</label></div>
+            </ion-col>
+            <ion-col col-7>
+              <div class="divLabel"><label>{{item.nombre}}</label></div>
+            </ion-col>
+            <ion-col col-3 text-center class="col-cantidad">
+              <label>{{item.precioTotal.toLocaleString()}}</label>
+            </ion-col>
+          </ion-row>
+          <ion-row style="background-color: #333; color: white">
+            <ion-col col-8 text-right>
+              Total:
+            </ion-col>
+            <ion-col col-4 text-center>
+              {{total.toLocaleString()}}
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">
+        <ion-icon name="pin" margin-right></ion-icon>
+        Dirección
+      </ion-item-divider>
+      <ion-item>
+        <ion-row>
+          <ion-col col-4 class="subTitle">
+            Dirección:
+          </ion-col>
+          <ion-col col-8>
+            {{direccionNombre}}
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">
+        <ion-icon name="cart" margin-right></ion-icon>
+        Forma de pago
+      </ion-item-divider>
+      <ion-item>
+        <ion-row>
+          <ion-col col-4 class="subTitle">
+            Forma de pago:
+          </ion-col>
+          <ion-col col-8>
+            {{formaPagoNombre}}
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+  <ion-item padding>
+    <button ion-button full color="darkCapp" (click)="comprar()">Comprar</button>
+  </ion-item>
+</ion-content>
