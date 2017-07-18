@@ -1,5 +1,6 @@
-import { Component, ElementRef, Renderer } from '@angular/core';
+import { Component, ElementRef, Renderer, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
+import { Content } from 'ionic-angular';
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
@@ -24,6 +25,7 @@ export class PerfilPage {
 	public compras: any;
 	public editarCampos: boolean = false;
 	public showSpinner: boolean;
+	@ViewChild(Content) content: Content;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer) {
 		this.cotizaciones = [];
@@ -90,9 +92,9 @@ export class PerfilPage {
 			.subscribe(
 			(res) => {
 				this.compras = this.formatDate(res.json());
-				// if (this.seleccionCompra != null) {
+				if (this.seleccionCompra != null) {
 					this.aplicarColor();
-				// }
+				}
 			}
 			)
 	}
@@ -114,13 +116,14 @@ export class PerfilPage {
 	}
 
 	aplicarColor() {
-		// let seleccionCompra = this.seleccionCompra.toLocaleString();
-		let seleccionCompra = '15';
+		let seleccionCompra = this.seleccionCompra.toLocaleString();
+		this.myProfile = 'compras';
 		let content;
 		setTimeout(() => {
 			content = document.getElementById(seleccionCompra);
 			let coors = content.getBoundingClientRect();
-			window.scrollTo(coors.top, 0);
+			this.content.scrollTo(coors.top, coors.top)
+			// window.scrollTo(coors.top, 0);
 			if (content != null) {
 				content.style.setProperty('transition', 'background-color 2s');
 				content.style.setProperty('background-color', 'red');
