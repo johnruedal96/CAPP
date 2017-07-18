@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { SuperTabsController } from 'ionic2-super-tabs';
+import { MyApp } from '../../app/app.component';
+
 
 /**
  * Generated class for the EmpresaPage page.
@@ -18,7 +21,7 @@ export class EmpresaPage {
 	public empresa: string;
 	public viewBtnCotizacion:boolean = true;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp) {
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 		this.empresa = navParams.get('empresa');
 		this.viewBtnCotizacion = navParams.get('viewBtnCotizacion');
@@ -28,7 +31,7 @@ export class EmpresaPage {
 	}
 
 	ionViewDidLoad() {
-
+		// this.superTabsCtrl.showToolbar(false);
 	}
 
 	cotizar() {

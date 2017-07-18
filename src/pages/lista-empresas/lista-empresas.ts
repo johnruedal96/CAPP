@@ -47,7 +47,7 @@ export class ListaEmpresasPage {
 	}
 
 	ionViewDidLoad() {
-
+		
 	}
 
 	dismiss() {

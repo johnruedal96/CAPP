@@ -1,7 +1,15 @@
-<ion-tabs color="orange" tabsHighlight="true" (ionChange)="isAuth()">
-  <!--quitar el 'custom-'  -->
+<!--quitar el 'custom-'  -->
+ <!-- <ion-tabs color="orange" tabsHighlight="true" (ionChange)="isAuth()">
   <ion-tab [root]="tab1Root" tabsHideOnSubPages="true" tabTitle="Ferreterias" tabIcon="custom-ferreteria"></ion-tab>
   <ion-tab [root]="tab2Root" tabsHideOnSubPages="true" tabTitle="Electricos" tabIcon="custom-electrico"></ion-tab>
   <ion-tab [root]="tab3Root" tabsHideOnSubPages="true" tabTitle="Servicios" tabIcon="custom-servicio"></ion-tab>
   <ion-tab [root]="tab4Root" tabsHideOnSubPages="true" tabTitle="Cotizacion" tabIcon="cart"></ion-tab>
-</ion-tabs>
+</ion-tabs>  -->
+
+<super-tabs height="100%" toolbarColor="light" toolbarBackground="orange" indicatorColor="light" badgeColor="light" 
+[config]="{ sideMenu: 'left'}">
+  <super-tab [root]="tab1Root" title="Ferreterias" icon="custom-ferreteria"></super-tab>
+  <super-tab [root]="tab2Root" title="Electricos" icon="custom-electrico"></super-tab>
+  <super-tab [root]="tab3Root" title="Servicios" icon="custom-servicio"></super-tab>
+  <super-tab [root]="tab4Root" title="Cotizacion" icon="cart"></super-tab>
+</super-tabs>

@@ -29,8 +29,8 @@ export class MyApp {
     ];
 
     platform.ready().then(() => {
-      // this.isLogged();
-      this.pc();
+      this.isLogged();
+      // this.pc();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
@@ -41,6 +41,7 @@ export class MyApp {
       }, 1000)
 
       platform.registerBackButtonAction(() => {
+        console.log(this.nav.canGoBack());
         if (this.nav.canGoBack()) {
           this.nav.pop();
         } else {

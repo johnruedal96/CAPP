@@ -18,6 +18,8 @@ import { Camera } from '@ionic-native/camera';
 import { WebServiceProvider } from '../providers/web-service/web-service';
 import { AuthProvider } from '../providers/auth/auth';
 
+import { SuperTabsModule } from 'ionic2-super-tabs';
+import { SuperTabsController } from 'ionic2-super-tabs';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { AuthProvider } from '../providers/auth/auth';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    HttpModule
+    HttpModule,
+    SuperTabsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -42,7 +45,8 @@ import { AuthProvider } from '../providers/auth/auth';
     AuthProvider,
     Keyboard,
     HeaderColor,
-    Camera
+    Camera,
+    SuperTabsController
   ]
 })
 export class AppModule {}

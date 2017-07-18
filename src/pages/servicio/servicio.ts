@@ -103,7 +103,7 @@ export class ServicioPage {
 
 	// navega a las diferentes empresas
 	goToEmpresa(empresa) {
-		this.navCtrl.push('EmpresaPage', { empresa: empresa });
+		this.app.nav.push('EmpresaPage', { empresa: empresa });
 	}
 
 	// muestra el input de busqueda y le pone el foco
