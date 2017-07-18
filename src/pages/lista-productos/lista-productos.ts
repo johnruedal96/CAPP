@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController, Searchbar, Loading
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { Keyboard } from '@ionic-native/keyboard';
 import { Subscription } from 'rxjs/Subscription';
+import { Platform } from 'ionic-angular';
 
 /**
  * Generated class for the ListaProductosPage page.
@@ -33,7 +34,7 @@ export class ListaProductosPage {
   @ViewChild('searchbar') searchInput: Searchbar;
   @ViewChild(Content) content: Content;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public platform: Platform) {
     this.id = this.navParams.get('id');
     this.productos = [];
     this.cargarLista(this.tamaño - this.rango, this.tamaño, null);
@@ -42,6 +43,9 @@ export class ListaProductosPage {
 
   ionViewDidLoad() {
     this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
+    this.platform.registerBackButtonAction(() => {
+			this.dismiss();
+		})
   }
 
   cargarLista(offset, limit, scroll) {

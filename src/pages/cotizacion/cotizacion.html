@@ -100,13 +100,28 @@
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'empresaTab'">
 			<ion-list class="lista">
-				<ion-item *ngFor="let empresa of empresas" class="items" (click)="goToEmpresa(empresa)">
+				<ion-row *ngFor="let empresa of empresas">
+					<ion-col col-11 class="items" (click)="goToEmpresa(empresa)">
+						<ion-item>
+							<ion-avatar item-start class="avatar">
+								<img class="img-logo" src="{{imagen}}{{empresa.imagen}}">
+							</ion-avatar>
+							<h3>{{empresa.nombre}}</h3>
+							<p class="circle-estado"></p>
+						</ion-item>
+					</ion-col>
+					<ion-col col-1>
+						<button class="delete" ion-button clear (click)="eliminarSeleccion(empresa)"><ion-icon name="close" color="danger"></ion-icon></button>
+					</ion-col>
+				</ion-row>
+				<!-- <ion-item *ngFor="let empresa of empresas" class="items" (click)="goToEmpresa(empresa)">
 					<ion-avatar item-start class="avatar">
 						<img class="img-logo" src="{{imagen}}{{empresa.imagen}}">
 					</ion-avatar>
 					<h3>{{empresa.nombre}}</h3>
 					<p class="circle-estado"></p>
-				</ion-item>
+					<button class="delete" ion-button clear><ion-icon name="close" color="danger"></ion-icon></button>
+				</ion-item> -->
 			</ion-list>
 
 			<ion-fab bottom right *ngIf="addEmpresa" class="button-fab">
@@ -118,5 +133,4 @@
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 	</div>
-
 </ion-content>

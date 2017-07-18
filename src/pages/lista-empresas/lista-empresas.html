@@ -6,13 +6,31 @@
 -->
 <ion-header>
 
-	<ion-navbar color="orange">
+	<ion-navbar color="orange" *ngIf=!busqueda>
+
+		<div margin-left class="div_title">
+			<img src="assets/icon_casco.png">
+			<label>CAPP</label>
+		</div>
+
+		<ion-title>Empresas</ion-title>
+
 		<ion-buttons end>
 			<button ion-button clear outline (click)="dismiss()">
 				Cerrar
 			</button>
+			<button ion-button icon-only (click)="inputSearch()">
+				<ion-icon name="search"></ion-icon>
+			</button>
 		</ion-buttons>
-		<ion-title>Empresas</ion-title>
+	</ion-navbar>
+
+	<ion-navbar calss="search-header" *ngIf=busqueda>
+
+		<ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode, null)" [(ngModel)]="txtSearch" [showCancelButton]="true"
+		 (ionCancel)="closeSearch($event)">
+		</ion-searchbar>
+
 	</ion-navbar>
 
 </ion-header>
@@ -33,11 +51,21 @@
 
 	<ion-list>
 
-		<ion-item *ngFor="let empresa of empresas">
+		<ion-item *ngFor="let empresa of empresaLoad">
 			<ion-label>{{empresa.nombre}}</ion-label>
 			<ion-checkbox color="darkCapp" [disabled]="disabledCheck && !empresa.check" [checked]="empresa.check" (ionChange)="seleccionar($event.value, empresa)"></ion-checkbox>
 		</ion-item>
 
 	</ion-list>
+
+	<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+		<ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando mas datos...">
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
+	<div class="spinnerCargando" *ngIf="showSpinner">
+		<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
+		<p text-center>Cargando...</p>
+	</div>
 
 </ion-content>

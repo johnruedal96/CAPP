@@ -5,6 +5,7 @@ import { AlertController, LoadingController } from 'ionic-angular';
 // providers
 import { AuthProvider } from '../../providers/auth/auth';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 /**
  * Generated class for the CotizacionPage page.
  *
@@ -28,7 +29,7 @@ export class CotizacionPage {
 	public lista: any;
 	public id: number = 0;
 	// llega del modal lista-empresas variable que guarda los empresas (empresas)
-	public empresas = [];
+	public empresas: any = [];
 	// variable que indica si se va a cotizar una o muchas empresas
 	public addEmpresa: boolean = true;
 
@@ -48,20 +49,47 @@ export class CotizacionPage {
 	public nroRequestOk: number;
 	public disabledButtonEnviar: boolean = false;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider) {
 		this.lista = [];
 		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
+		let mantenerProductos = this.navParams.get('mantener');
 		if (this.empresa != undefined) {
 			this.empresas.push(this.empresa);
 			this.addEmpresa = false;
 			this.tipoEmpresa = true;
 			this.tipoEmpresaId = this.empresa.tipo;
+			window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.empresas));
+			if (mantenerProductos) {
+				this.lista = JSON.parse(window.localStorage.getItem('CotizacionLista'));
+			} else {
+				window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
+			}
+			window.localStorage.setItem('cotizacionTipoEmpresa', this.tipoEmpresaId.toLocaleString());
 		}
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 	}
 
 	ionViewDidLoad() {
+		this.obtenerCotizacionGuardada();
+	}
+
+	obtenerCotizacionGuardada() {
+		let tipoEmpresaId = window.localStorage.getItem('cotizacionTipoEmpresa');
+		if (tipoEmpresaId != null) {
+			this.tipoEmpresaId = Number(tipoEmpresaId);
+			this.time++;
+		}
+
+		let lista = window.localStorage.getItem('CotizacionLista');
+		if (lista != null) {
+			this.lista = JSON.parse(lista);
+		}
+
+		let empresas = window.localStorage.getItem('CotizacionEmpresas');
+		if (empresas != null) {
+			this.empresas = JSON.parse(empresas);
+		}
 	}
 
 	presentEmpresaModal() {
@@ -73,6 +101,7 @@ export class CotizacionPage {
 			let profileModal = this.modalCtrl.create('ListaEmpresasPage', param);
 			profileModal.onDidDismiss(data => {
 				this.empresas = data.seleccion;
+				window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.empresas));
 			});
 			profileModal.present();
 		} else {
@@ -95,6 +124,7 @@ export class CotizacionPage {
 		this.lista.push(item);
 		this.producto = null;
 		this.cantidad = '';
+		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
 	}
 
 	deleteItem(item) {
@@ -103,6 +133,7 @@ export class CotizacionPage {
 				this.lista.splice(index, 1);
 			}
 		});
+		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
 	}
 
 	goToEmpresa(empresa) {
@@ -124,7 +155,7 @@ export class CotizacionPage {
 				if (data != null) {
 					producto = data.producto;
 				}
-				if(data == null && this.producto != null){
+				if (data == null && this.producto != null) {
 					producto = this.producto;
 				}
 				this.producto = producto;
@@ -326,6 +357,8 @@ export class CotizacionPage {
 							handler: () => {
 								this.lista = [];
 								this.empresas = [];
+								localStorage.removeItem('CotizacionLista');
+								localStorage.removeItem('CotizacionEmpresas');
 								this.tipoEmpresaIdAntigua = event;
 							}
 						}
@@ -337,6 +370,7 @@ export class CotizacionPage {
 			this.tipoEmpresaIdAntigua = event;
 			this.time++;
 		}
+		window.localStorage.setItem('cotizacionTipoEmpresa', this.tipoEmpresaId.toLocaleString());
 	}
 
 	showAlertCotizacionEnviada(title, subTitle) {
@@ -351,6 +385,15 @@ export class CotizacionPage {
 		this.empresas = [];
 		this.time = 0;
 		this.disabledButtonEnviar = false;
+	}
+
+	eliminarSeleccion(empresa) {
+		this.empresas.find((item, index) => {
+			if (item == empresa) {
+				this.empresas.splice(index, 1);
+				window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.empresas));
+			}
+		})
 	}
 
 }

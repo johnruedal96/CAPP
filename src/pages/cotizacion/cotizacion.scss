@@ -1,4 +1,12 @@
 page-cotizacion {
+	.delete{
+		padding: 0 !important;
+	}
+
+	.list{
+		margin: 0 !important;
+	}
+
 	.div-banner, .banner{
 		width: 100%;
 	}
@@ -30,6 +38,15 @@ page-cotizacion {
 		}
 	}
 
+	.items{
+		padding: 0;
+		ion-item{
+			ion-label{
+				white-space: normal !important;
+			}
+		}
+	}
+
 	// Estilos alerts selects
 	.icon-button {
     	position: absolute;
@@ -43,7 +60,6 @@ page-cotizacion {
 
 	.button-fab{
 		position: fixed;
-		bottom: 70px;
 	}
 
 	.col-body{

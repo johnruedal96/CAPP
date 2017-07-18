@@ -20,6 +20,7 @@ import { AuthProvider } from '../providers/auth/auth';
 
 import { SuperTabsModule } from 'ionic2-super-tabs';
 import { SuperTabsController } from 'ionic2-super-tabs';
+import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { SuperTabsController } from 'ionic2-super-tabs';
     Keyboard,
     HeaderColor,
     Camera,
-    SuperTabsController
+    SuperTabsController,
+    LocalStorageProvider
   ]
 })
 export class AppModule {}

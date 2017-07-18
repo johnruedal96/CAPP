@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
-
+import { Platform, Searchbar } from 'ionic-angular';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
+
+import { Subscription } from 'rxjs/Subscription';
+import { Keyboard } from '@ionic-native/keyboard';
 
 /**
  * Generated class for the ListaEmpresasPage page.
@@ -29,11 +32,29 @@ export class ListaEmpresasPage {
 	public aplicoFiltro: boolean = false;
 	public disabledCheck: boolean = false;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public toastCtrl: ToastController) {
+	// Busquedas
+	// indica cuando se realizo una busqueda
+	public loadListSearch: boolean = false;
+	// suscripcion a los metodos del teclado
+	private onHideSubscription: Subscription;
+	// muestra/oculta la barra de busqueda en el encabezado
+	public busqueda: boolean;
+	// array elemtos scroll infinite
+	public empresaLoad: any;
+	// guarda lo escrito en el input de busqueda
+	public txtSearch: string;
+	public showSpinner: boolean = true;
+	public enabledInfinite: boolean = true;
+
+	public refresher;
+
+	@ViewChild('searchbar') searchInput: Searchbar;
+
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public toastCtrl: ToastController, public platform: Platform, public keyboard: Keyboard) {
 
 		// si ecuentra el parametro, ejecuta la busqueda por el tipo de empresa (combo)
 		this.id = navParams.get('id');
-		this.buscar(this.id);
+		this.buscar(false);
 		// si no encuentra el parametro asigna un array vacio a seleccion 
 		this.seleccion = navParams.get('empresas');
 		if (this.seleccion == undefined) {
@@ -43,11 +64,19 @@ export class ListaEmpresasPage {
 		if (this.seleccion.length == 5) {
 			this.disabledCheck = true;
 		}
-
 	}
 
 	ionViewDidLoad() {
-		
+		this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
+		this.platform.registerBackButtonAction(() => {
+			this.dismiss();
+		});
+	}
+
+	closeKeyboard() {
+		if (!this.loadListSearch) {
+			this.busqueda = false;
+		}
 	}
 
 	dismiss() {
@@ -59,14 +88,36 @@ export class ListaEmpresasPage {
 		this.viewCtrl.dismiss(data);
 	}
 
-	buscar(id) {
+	buscar(refresh) {
 		// busca las empresas segun el id seleccionado
-		this.id = id;
-		this.seleccion = [];
-		this.ws.getEmpresas(id)
-			.subscribe(empresas => {
-				this.loadList(empresas.data);
-			})
+		this.enabledInfinite = true;
+		// muestra el 'Cargando' en la vista
+		// se la pagina se refresca con el efecto de estirar no se muestra el 'cargando'
+		if (!refresh) {
+			this.showSpinner = true;
+		}
+		// carga la informacion del web service
+		this.ws.getEmpresas(this.id)
+			.subscribe(
+			(res) => {
+				this.empresas = res.data;
+				this.empresaLoad = [];
+				this.seleccionView();
+				this.cargarVista(20, refresh);
+			},
+			(err) => {
+				if (!refresh) {
+					// this.loader.dismiss();
+					this.showSpinner = false;
+				} else {
+					this.refresher.complete();
+				}
+
+				if (err.status == 0) {
+					this.navCtrl.setRoot('NoInternetPage');
+				}
+			}
+			);
 	}
 
 	loadList(empresas) {
@@ -132,15 +183,133 @@ export class ListaEmpresasPage {
 					}
 				}
 
-				this.empresas = this.empresasAntiguas;
+				this.empresaLoad = this.empresasAntiguas;
 			}
 			// seleccionadas = 2
 			if (event == 2) {
 				this.aplicoFiltro = true;
 				this.empresasAntiguas = this.empresas;
-				this.empresas = this.seleccion;
+				this.empresaLoad = this.seleccion;
 			}
 		}
+	}
+
+	// muestra el input de busqueda y le pone el foco
+	inputSearch() {
+		this.busqueda = true;
+		setTimeout(() => {
+			this.searchInput.setFocus();
+		}, 300);
+	}
+
+	search(event) {
+		// si se presiona el boton de buscar (teclado) se ejecuta la funciona
+		if (event == 13) {
+			this.empresaLoad = [];
+			this.loadSearch();
+		}
+	}
+
+	loadSearch() {
+		if (this.txtSearch == '' || this.txtSearch == undefined) {
+			this.closeSearch();
+		}
+		if (this.txtSearch != '' && this.txtSearch != undefined) {
+			// mustra el 'cargando' en la vista
+			this.showSpinner = true;
+			// realiza la busqueda y la muestra en pantalla
+			this.loadListSearch = true;
+			this.ws.search(this.id, this.txtSearch)
+				.subscribe(
+				(search) => {
+					this.empresas = search.data;
+					this.seleccionView();
+					this.cargarVista(20, false);
+					this.keyboard.close();
+				},
+				(err) => {
+					// si no hay empresas para mostrar
+					if (err.status == 400) {
+						this.empresas = [];
+						this.cargarVista(20, false);
+						this.keyboard.close();
+					}
+					// si el dispositivo no tiene internet muestra la pagina de no internet
+					if (err.status == 0) {
+						this.showSpinner = false;
+						this.navCtrl.setRoot('NoInternetPage');
+					}
+				}
+				);
+		}
+
+	}
+
+	seleccionView() {
+		for (var i = 0; i < this.empresas.length; i++) {
+			for (var j = 0; j < this.seleccion.length; j++) {
+				if (this.seleccion[j].id == this.empresas[i].id) {
+					this.empresas[i].check = true;
+				}
+			}
+		}
+	}
+	// Cargar los elementos en la lista
+	// numElemtos = numero de elementos a mostrar
+	cargarVista(numElemetos, refresh) {
+		let num = numElemetos;
+		if (this.empresas.length <= num) {
+			num = this.empresas.length
+		}
+		for (var i = 0; i < num; ++i) {
+			this.empresaLoad.push(this.empresas[i]);
+		}
+
+		if (refresh) {
+			this.refresher.complete();
+			this.txtSearch = '';
+			this.busqueda = false;
+			this.loadListSearch = false;
+		} else {
+			// oculta el 'cargando' de la vista
+			this.showSpinner = false;
+		}
+	}
+
+	closeSearch() {
+		// si ya se realizo una busqueda, pone el texto del input en blanco
+		// oculta la barra de busqueda
+		// y carga todas las empresas
+		if (this.loadListSearch) {
+			this.txtSearch = '';
+			this.busqueda = false;
+			this.buscar(false);
+			this.loadListSearch = false;
+		}
+	}
+
+	doInfinite(infiniteScroll) {
+
+		setTimeout(() => {
+			// numero de elementos cargados en la vista
+			let position = this.empresaLoad.length;
+			// numero de elementos a agregar en la vista (20)
+			let tamano = position + 20;
+			// si tamaño es mañor que el array de elementos, tamaño es igual al tamaño del array
+			if (tamano > this.empresas.length) {
+				tamano = this.empresas.length;
+			}
+
+			// agregar elementos al array que muestra la informacion el pantalla
+			for (let i = position; i < tamano; i++) {
+				this.empresaLoad.push(this.empresas[i]);
+			}
+
+			infiniteScroll.complete();
+			if (tamano == this.empresas.length) {
+				this.enabledInfinite = false;
+			}
+		}, 500);
 	}
 
 }
