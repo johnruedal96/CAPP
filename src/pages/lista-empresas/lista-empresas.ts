@@ -45,6 +45,7 @@ export class ListaEmpresasPage {
 	public txtSearch: string;
 	public showSpinner: boolean = true;
 	public enabledInfinite: boolean = true;
+	public app;
 
 	public refresher;
 
@@ -54,6 +55,7 @@ export class ListaEmpresasPage {
 
 		// si ecuentra el parametro, ejecuta la busqueda por el tipo de empresa (combo)
 		this.id = navParams.get('id');
+		this.app = navParams.get('app');
 		this.buscar(false);
 		// si no encuentra el parametro asigna un array vacio a seleccion 
 		this.seleccion = navParams.get('empresas');
@@ -70,6 +72,7 @@ export class ListaEmpresasPage {
 		this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
 		this.platform.registerBackButtonAction(() => {
 			this.dismiss();
+			this.app.buttomBack();
 		});
 	}
 

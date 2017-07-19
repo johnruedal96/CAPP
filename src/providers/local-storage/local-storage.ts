@@ -11,15 +11,16 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class LocalStorageProvider {
 
-//   window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.empresas));
-// window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
-// window.localStorage.setItem('cotizacionTipoEmpresa', this.tipoEmpresaId.toLocaleString());
-public empresas:any;
-public productos:any;
-public empresaId:any;
+  //   window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.empresas));
+  // window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
+  // window.localStorage.setItem('cotizacionTipoEmpresa', this.tipoEmpresaId.toLocaleString());
+  // Cotizacion
+  public empresas:any = [];
+  public productos:any = [];
+  public empresaId:any;
 
   constructor(public http: Http) {
-    
+
   }
 
 }

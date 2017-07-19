@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { AlertController, LoadingController } from 'ionic-angular';
+import { MyApp } from '../../app/app.component';
 
 // providers
 import { AuthProvider } from '../../providers/auth/auth';
@@ -25,16 +26,12 @@ export class CotizacionPage {
 	public cantidad: any;
 	// variable que llega de la ventana modal
 	public empresa: any;
-	// variable que agrega todos los productos
-	public lista: any;
 	public id: number = 0;
 	// llega del modal lista-empresas variable que guarda los empresas (empresas)
 	public empresas: any = [];
 	// variable que indica si se va a cotizar una o muchas empresas
 	public addEmpresa: boolean = true;
-
 	public tabsCotizacion: string = 'productoTab';
-	public tipoEmpresaId: number;
 	public tipoEmpresaIdAntigua: number;
 	public time: number = 0;
 	public imagen: string;
@@ -49,23 +46,24 @@ export class CotizacionPage {
 	public nroRequestOk: number;
 	public disabledButtonEnviar: boolean = false;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider) {
-		this.lista = [];
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp) {
+		this.storage.productos = [];
 		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
 		let mantenerProductos = this.navParams.get('mantener');
 		if (this.empresa != undefined) {
-			this.empresas.push(this.empresa);
+			this.storage.empresas = [];
+			this.storage.empresas.push(this.empresa);
 			this.addEmpresa = false;
 			this.tipoEmpresa = true;
-			this.tipoEmpresaId = this.empresa.tipo;
-			window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.empresas));
+			this.storage.empresaId= this.empresa.tipo;
+			window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.storage.empresas));
 			if (mantenerProductos) {
-				this.lista = JSON.parse(window.localStorage.getItem('CotizacionLista'));
+				this.storage.productos = JSON.parse(window.localStorage.getItem('CotizacionLista'));
 			} else {
-				window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
+				window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 			}
-			window.localStorage.setItem('cotizacionTipoEmpresa', this.tipoEmpresaId.toLocaleString());
+			window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
 		}
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 	}
@@ -75,33 +73,34 @@ export class CotizacionPage {
 	}
 
 	obtenerCotizacionGuardada() {
-		let tipoEmpresaId = window.localStorage.getItem('cotizacionTipoEmpresa');
-		if (tipoEmpresaId != null) {
-			this.tipoEmpresaId = Number(tipoEmpresaId);
+		let tipoEmpresaId= window.localStorage.getItem('cotizacionTipoEmpresa');
+		if (tipoEmpresaId!= null) {
+			this.storage.empresaId= Number(tipoEmpresaId);
 			this.time++;
 		}
 
 		let lista = window.localStorage.getItem('CotizacionLista');
 		if (lista != null) {
-			this.lista = JSON.parse(lista);
+			this.storage.productos = JSON.parse(lista);
 		}
 
 		let empresas = window.localStorage.getItem('CotizacionEmpresas');
 		if (empresas != null) {
-			this.empresas = JSON.parse(empresas);
+			this.storage.empresas = JSON.parse(empresas);
 		}
 	}
 
 	presentEmpresaModal() {
-		if (this.tipoEmpresaId != undefined) {
+		if (this.storage.empresaId!= undefined) {
 			let param = {
-				empresas: this.empresas,
-				id: this.tipoEmpresaId,
+				empresas: this.storage.empresas,
+				id: this.storage.empresaId,
+				app: this.app
 			}
 			let profileModal = this.modalCtrl.create('ListaEmpresasPage', param);
 			profileModal.onDidDismiss(data => {
-				this.empresas = data.seleccion;
-				window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.empresas));
+				this.storage.empresas = data.seleccion;
+				window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.storage.empresas));
 			});
 			profileModal.present();
 		} else {
@@ -121,19 +120,19 @@ export class CotizacionPage {
 			producto: this.producto
 		}
 		this.id++;
-		this.lista.push(item);
+		this.storage.productos.push(item);
 		this.producto = null;
 		this.cantidad = '';
-		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
+		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 	}
 
 	deleteItem(item) {
-		this.lista.find((element, index) => {
+		this.storage.productos.find((element, index) => {
 			if (element == item) {
-				this.lista.splice(index, 1);
+				this.storage.productos.splice(index, 1);
 			}
 		});
-		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
+		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 	}
 
 	goToEmpresa(empresa) {
@@ -145,9 +144,10 @@ export class CotizacionPage {
 	}
 
 	listarProductos() {
-		if (this.tipoEmpresaId != undefined) {
+		if (this.storage.empresaId!= undefined) {
 			let param = {
-				id: this.tipoEmpresaId,
+				id: this.storage.empresaId,
+				app: this.app
 			}
 			let productoModal = this.modalCtrl.create('ListaProductosPage', param);
 			productoModal.onDidDismiss(data => {
@@ -156,7 +156,7 @@ export class CotizacionPage {
 					producto = data.producto;
 				}
 				if (data == null && this.producto != null) {
-					producto = this.producto;
+					// producto = this.producto;
 				}
 				this.producto = producto;
 				this.verificarProducto();
@@ -174,7 +174,7 @@ export class CotizacionPage {
 
 	alertCotizacion() {
 		this.disabledButtonEnviar = true;
-		if (this.empresas.length > 0) {
+		if (this.storage.empresas.length > 0) {
 			let alert = this.alertCtrl.create({
 				title: 'Comfirmar envio',
 				message: 'El tiempo de entrega y el valor del domicilio para cada zona es responsabilidad de la ferreteria. <br><br> <b>CAPP</b> es totalmente gratuito no cobra por el servicio',
@@ -182,6 +182,9 @@ export class CotizacionPage {
 					{
 						text: 'Cancelar',
 						role: 'cancel',
+						handler: ()=>{
+							this.disabledButtonEnviar = false;
+						}
 					},
 					{
 						text: 'Enviar',
@@ -214,11 +217,11 @@ export class CotizacionPage {
 			(token) => {
 				let data = {
 					usuario: this.auth.user,
-					lista: this.lista,
-					empresas: this.empresas,
+					lista: this.storage.productos,
+					empresas: this.storage.empresas,
 				}
 				this.nroRequestOk = 0;
-				this.nroRequest = this.lista.length + this.empresas.length;
+				this.nroRequest = this.storage.productos.length + this.storage.empresas.length;
 				this.sendCotizacionWs(data, token.text());
 			},
 			(err) => {
@@ -317,7 +320,7 @@ export class CotizacionPage {
 
 	verificarProducto() {
 		if (this.producto != null) {
-			this.lista.find((element, index) => {
+			this.storage.productos.find((element, index) => {
 				if (element.producto.id == this.producto.id) {
 					let alert = this.alertCtrl.create({
 						title: 'Error',
@@ -339,7 +342,7 @@ export class CotizacionPage {
 
 	changeTipo(event) {
 		if (this.time > 0) {
-			if (this.lista.length > 0 || this.empresas.length > 0) {
+			if (this.storage.productos.length > 0 || this.storage.empresas.length > 0) {
 				let alert = this.alertCtrl.create({
 					title: '¿Desa continuar?',
 					subTitle: 'Se borraran los productos agregados a la lista y las empresas seleccionadas',
@@ -348,15 +351,15 @@ export class CotizacionPage {
 							text: 'No',
 							role: 'cancel',
 							handler: () => {
-								this.tipoEmpresaId = this.tipoEmpresaIdAntigua;
+								this.storage.empresaId= this.tipoEmpresaIdAntigua;
 								this.time = 0;
 							}
 						},
 						{
 							text: 'Si',
 							handler: () => {
-								this.lista = [];
-								this.empresas = [];
+								this.storage.productos = [];
+								this.storage.empresas = [];
 								localStorage.removeItem('CotizacionLista');
 								localStorage.removeItem('CotizacionEmpresas');
 								this.tipoEmpresaIdAntigua = event;
@@ -370,7 +373,7 @@ export class CotizacionPage {
 			this.tipoEmpresaIdAntigua = event;
 			this.time++;
 		}
-		window.localStorage.setItem('cotizacionTipoEmpresa', this.tipoEmpresaId.toLocaleString());
+		window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
 	}
 
 	showAlertCotizacionEnviada(title, subTitle) {
@@ -381,17 +384,19 @@ export class CotizacionPage {
 			buttons: ['Aceptar']
 		});
 		alert.present();
-		this.lista = [];
-		this.empresas = [];
+		this.storage.productos = [];
+		this.storage.empresas = [];
+		window.localStorage.removeItem('CotizacionLista');
+		window.localStorage.removeItem('CotizacionEmpresas');
 		this.time = 0;
 		this.disabledButtonEnviar = false;
 	}
 
 	eliminarSeleccion(empresa) {
-		this.empresas.find((item, index) => {
+		this.storage.empresas.find((item, index) => {
 			if (item == empresa) {
-				this.empresas.splice(index, 1);
-				window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.empresas));
+				this.storage.empresas.splice(index, 1);
+				window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.storage.empresas));
 			}
 		})
 	}

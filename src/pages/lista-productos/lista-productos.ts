@@ -4,7 +4,6 @@ import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { Keyboard } from '@ionic-native/keyboard';
 import { Subscription } from 'rxjs/Subscription';
 import { Platform } from 'ionic-angular';
-
 /**
  * Generated class for the ListaProductosPage page.
  *
@@ -30,12 +29,14 @@ export class ListaProductosPage {
   // guarda lo escrito en el input de busqueda
   public txtSearch: string;
   public showSpinner: boolean = true;
+  public app:any;
 
   @ViewChild('searchbar') searchInput: Searchbar;
   @ViewChild(Content) content: Content;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public platform: Platform) {
     this.id = this.navParams.get('id');
+    this.app = this.navParams.get('app');
     this.productos = [];
     this.cargarLista(this.tamaño - this.rango, this.tamaño, null);
     this.tamaño += this.rango;
@@ -43,9 +44,11 @@ export class ListaProductosPage {
 
   ionViewDidLoad() {
     this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
+    this.platform
     this.platform.registerBackButtonAction(() => {
-			this.dismiss();
-		})
+      this.dismiss();
+      this.app.buttomBack();
+		});
   }
 
   cargarLista(offset, limit, scroll) {

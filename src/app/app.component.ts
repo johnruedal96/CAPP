@@ -29,8 +29,8 @@ export class MyApp {
     ];
 
     platform.ready().then(() => {
-      // this.isLogged();
-      this.pc();
+      this.isLogged();
+      // this.pc();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
@@ -40,18 +40,22 @@ export class MyApp {
         splashScreen.hide();
       }, 1000)
 
-      platform.registerBackButtonAction(() => {
-        if (this.nav.canGoBack()) {
-          this.nav.pop();
+      this.buttomBack();
+    });
+  }
+
+  buttomBack() {
+    this.platform.registerBackButtonAction(() => {
+      if (this.nav.canGoBack()) {
+        this.nav.pop();
+      } else {
+        if (this.alert) {
+          this.alert.dismiss();
+          this.alert = null;
         } else {
-          if (this.alert) {
-            this.alert.dismiss();
-            this.alert = null;
-          } else {
-            this.showAlert();
-          }
+          this.showAlert();
         }
-      });
+      }
     });
   }
 

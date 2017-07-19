@@ -29,7 +29,7 @@
 		<ion-list>
 			<ion-item>
 				<ion-label>Tipo Empresa</ion-label>
-				<ion-select [disabled]="tipoEmpresa" interface="popover" [(ngModel)]="tipoEmpresaId" (ionChange)="changeTipo($event)" name="tipoEmpresaId"
+				<ion-select [disabled]="tipoEmpresa" interface="popover" [(ngModel)]="storage.empresaId" (ionChange)="changeTipo($event)" name="tipoEmpresaId"
 				 required>
 					<ion-option value="1">Ferreterias</ion-option>
 					<ion-option value="2">Electricos</ion-option>
@@ -69,15 +69,15 @@
 			</form>
 			<button [disabled]="producto == null || !formCotizacion.form.valid" (click)="agregar()" ion-button block color="darkCapp"><ion-icon name="cart" margin-right></ion-icon>AGREGAR A CARRITO</button>
 			<hr>
-			<h3 *ngIf="lista.length > 0">Lista de compra</h3>
-			<ion-row *ngIf="lista.length > 0" class="row-head row-table">
+			<h3 *ngIf="storage.productos.length > 0">Lista de compra</h3>
+			<ion-row *ngIf="storage.productos.length > 0" class="row-head row-table">
 				<ion-col col-11 class="col-body">Producto</ion-col>
 				<ion-col col-1 class="col-body"></ion-col>
 			</ion-row>
 
 
 			<ion-list>
-				<ion-item class="item-table" *ngFor="let item of lista">
+				<ion-item class="item-table" *ngFor="let item of storage.productos">
 					<ion-row class="row-table">
 						<ion-col col-11 text-center>
 							<label style="white-space: normal !important">{{item.producto.nombre}}</label>
@@ -91,7 +91,7 @@
 				</ion-item>
 			</ion-list>
 
-			<button *ngIf="lista.length > 0" [disabled]="disabledButtonEnviar" ion-button full color="darkCapp" (click)="alertCotizacion()">Enviar Cotización</button>
+			<button *ngIf="storage.productos.length > 0" [disabled]="disabledButtonEnviar" ion-button full color="darkCapp" (click)="alertCotizacion()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -100,7 +100,7 @@
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'empresaTab'">
 			<ion-list class="lista">
-				<ion-row *ngFor="let empresa of empresas">
+				<ion-row *ngFor="let empresa of storage.empresas">
 					<ion-col col-11 class="items" (click)="goToEmpresa(empresa)">
 						<ion-item>
 							<ion-avatar item-start class="avatar">
