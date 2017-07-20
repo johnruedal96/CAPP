@@ -62,14 +62,8 @@
 
 		<ion-list *ngSwitchCase="'cotizaciones'">
 			<ion-row class="encabezado">
-				<ion-col col-4>
-					<label>Fecha</label>
-				</ion-col>
-				<ion-col col-4>
-					<label>Empresa</label>
-				</ion-col>
-				<ion-col col-4>
-					<label>Estado</label>
+				<ion-col col-12>
+					<label>Lista de Cotizaciones</label>
 					<button ion-button round clear class="button-refresh" (click)="searchCotizacion()">
 						<ion-icon name="refresh"></ion-icon>
 					</button>
@@ -80,40 +74,38 @@
 				<p text-center>Cargando...</p>
 			</div>
 			<div *ngFor="let cotizacion of cotizaciones">
-				<div class="item-list encabezado-item" *ngIf="cotizacion.encabezado" col-12 (click)="showCotizacionList(cotizacion)">
-					Cotización {{cotizacion.contador}}
-				</div>
-				<ion-row *ngIf="cotizacion.cotizacion == idShowCotizacion" class="item-list showEfect" (click)="verCotizacion(cotizacion)">
-					<!-- <div #cambio>{{cotizacionAntigua = cotizacion.cotizacion}}</div> -->
-					<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
-						<div class="div-container">
-							<p style="white-space: normal">{{cotizacion.fechaFormat}}</p>
-						</div>
+				<ion-row class="item-list encabezado-item" *ngIf="cotizacion.encabezado" (click)="showCotizacionList(cotizacion)">
+					<ion-col col-7>
+						{{cotizacion.fechaFormat}}
 					</ion-col>
-					<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
-						<div class="div-container">
-							<p style="white-space: normal">{{cotizacion.cliente}}</p>
-						</div>
-					</ion-col>
-					<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
-						<div class="div-container">
-							<p style="white-space: normal">{{cotizacion.estado}}</p>
-						</div>
-					</ion-col>
+					<ion-col col-5 *ngIf="cotizacion.tipo == 1">Ferreterias</ion-col>
+					<ion-col col-5 *ngIf="cotizacion.tipo == 2">Electricos</ion-col>
+					<ion-col col-5 *ngIf="cotizacion.tipo == 3">Servicios</ion-col>
 				</ion-row>
+				<div *ngIf="cotizacion.cotizacion == idShowCotizacion" style="border-bottom: 1px solid">
+					<div class="item-list-nueva" (click)="verCotizacion(cotizacion)">
+						<div class="item-fecha">
+							{{cotizacion.fechaFormat}}
+						</div>
+						<div class="item-estado-{{cotizacion.estadoid}}">
+							{{cotizacion.estado}}
+						</div>
+						<div>
+							{{cotizacion.cliente}}
+						</div>
+						<div class="item-total">
+							<div *ngIf="cotizacion.total != null">$ {{cotizacion.total.toLocaleString()}}</div>
+							<div *ngIf="cotizacion.total == null">$ 0</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</ion-list>
 
 		<ion-list *ngSwitchCase="'compras'">
 			<ion-row class="encabezado">
-				<ion-col col-3>
-					<label>Fecha</label>
-				</ion-col>
-				<ion-col col-6>
-					<label>Empresa</label>
-				</ion-col>
-				<ion-col col-3>
-					<label>Precio</label>
+				<ion-col col-12>
+					<label>Lista Compras</label>
 					<button ion-button round clear class="button-refresh" (click)="getCompras()">
 						<ion-icon name="refresh"></ion-icon>
 					</button>
@@ -123,23 +115,21 @@
 				<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
 				<p text-center>Cargando...</p>
 			</div>
-			<ion-row *ngFor="let compra of compras" class="item-list" (click)="verCompra(compra)" id="{{compra.idCompra}}">
-				<ion-col col-3>
-					<div class="div-container">
-						<p style="white-space: normal">{{compra.fechaFormat}}</p>
+			<div *ngFor="let compra of compras">
+				<div style="border-bottom: 1px solid" id="{{compra.idCompra}}">
+					<div class="item-list-nueva" (click)="verCotizacion(cotizacion)">
+						<div class="item-fecha">
+							{{compra.fechaFormat}}
+						</div>
+						<div>
+							{{compra.cliente}}
+						</div>
+						<div class="item-total">
+							<div>$ {{compra.total.toLocaleString()}}</div>
+						</div>
 					</div>
-				</ion-col>
-				<ion-col col-6>
-					<div class="div-container">
-						<p style="white-space: normal">{{compra.cliente}}</p>
-					</div>
-				</ion-col>
-				<ion-col col-3>
-					<div class="div-container">
-						<p style="white-space: normal">{{compra.total.toLocaleString()}}</p>
-					</div>
-				</ion-col>
-			</ion-row>
+				</div>
+			</div>
 		</ion-list>
 
 	</div>

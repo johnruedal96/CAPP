@@ -30,7 +30,7 @@ page-perfil {
 	}
 
 	.encabezado{
-		background-color: black;
+		background-color: #333;
 		color: white;
 		text-align: center;
 	}
@@ -40,17 +40,36 @@ page-perfil {
 		margin: 0;
 		padding: 0;
 		text-align: center;
-		.row-estado-1{
-			background-color: #EF5350;
+	}
+
+	.item-list-nueva{
+		margin: 4px 8px;
+		.item-fecha{
+			font-size: 1.2rem;
+			float: right;
 		}
-		.row-estado-2{
-			background-color: #4DB6AC;
+		.item-estado-1{
+			font-size: 1.2rem;
+    		color: #EF5350;
+		}
+		.item-estado-2{
+			font-size: 1.2rem;
+    		color: #4DB6AC;
+		}
+		.item-total{
+			width: 100%;
+			height: 2rem;
+			div{
+				float: right;
+				font-weight: bold;
+			}
 		}
 	}
 
 	.encabezado-item{
 		font-weight: bold;
 		padding: 8px;
+		background-color: #2196F3;
 	}
 
 	.showEfect{

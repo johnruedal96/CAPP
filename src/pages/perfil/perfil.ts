@@ -25,6 +25,7 @@ export class PerfilPage {
 	public compras: any;
 	public editarCampos: boolean = false;
 	public showSpinner: boolean;
+	public showSpinnerCompras: boolean;
 
 	public cotizacionAntigua: any;
 	public contadorCotizaciones: any;
@@ -107,10 +108,13 @@ export class PerfilPage {
 	}
 
 	getCompras() {
+		this.showSpinnerCompras = true;
+		this.compras = [];
 		this.ws.getCompras(this.auth.user.id)
 			.subscribe(
 			(res) => {
 				this.compras = this.formatDate(res.json());
+				this.showSpinnerCompras = false;
 				if (this.seleccionCompra != null) {
 					this.aplicarColor();
 				}
