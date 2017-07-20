@@ -30,7 +30,7 @@
 			<img src="{{urlImagen}}logo_casco.png" *ngIf='auth.user.foto == null' />
 			<img src="{{urlImagen}}{{auth.user.foto}}" *ngIf='auth.user.foto != null' />
 		</div>
-		<ion-segment [(ngModel)]="myProfile" color="dark" (ionChange)="segmentChanged($event)">
+		<ion-segment [(ngModel)]="myProfile" color="dark">
 			<ion-segment-button value="perfil">
 				Perfil
 			</ion-segment-button>
@@ -79,23 +79,29 @@
 				<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
 				<p text-center>Cargando...</p>
 			</div>
-			<ion-row *ngFor="let cotizacion of cotizaciones" class="item-list" (click)="verCotizacion(cotizacion)">
-				<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
-					<div class="div-container">
-						<p style="white-space: normal">{{cotizacion.fechaFormat}}</p>
-					</div>
-				</ion-col>
-				<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
-					<div class="div-container">
-						<p style="white-space: normal">{{cotizacion.cliente}}</p>
-					</div>
-				</ion-col>
-				<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
-					<div class="div-container">
-						<p style="white-space: normal">{{cotizacion.estado}}</p>
-					</div>
-				</ion-col>
-			</ion-row>
+			<div *ngFor="let cotizacion of cotizaciones">
+				<div class="item-list encabezado-item" *ngIf="cotizacion.encabezado" col-12 (click)="showCotizacionList(cotizacion)">
+					Cotización {{cotizacion.contador}}
+				</div>
+				<ion-row *ngIf="cotizacion.cotizacion == idShowCotizacion" class="item-list showEfect" (click)="verCotizacion(cotizacion)">
+					<!-- <div #cambio>{{cotizacionAntigua = cotizacion.cotizacion}}</div> -->
+					<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
+						<div class="div-container">
+							<p style="white-space: normal">{{cotizacion.fechaFormat}}</p>
+						</div>
+					</ion-col>
+					<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
+						<div class="div-container">
+							<p style="white-space: normal">{{cotizacion.cliente}}</p>
+						</div>
+					</ion-col>
+					<ion-col col-4 class="row-estado-{{cotizacion.estadoid}}">
+						<div class="div-container">
+							<p style="white-space: normal">{{cotizacion.estado}}</p>
+						</div>
+					</ion-col>
+				</ion-row>
+			</div>
 		</ion-list>
 
 		<ion-list *ngSwitchCase="'compras'">

@@ -25,6 +25,11 @@ export class PerfilPage {
 	public compras: any;
 	public editarCampos: boolean = false;
 	public showSpinner: boolean;
+
+	public cotizacionAntigua: any;
+	public contadorCotizaciones: any;
+	public idShowCotizacion: any;
+
 	@ViewChild(Content) content: Content;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer) {
@@ -73,14 +78,28 @@ export class PerfilPage {
 			)
 	}
 
-	segmentChanged() {
-
+	showCotizacionList(item) {
+		if (this.idShowCotizacion != item.cotizacion) {
+			this.idShowCotizacion = item.cotizacion;
+		}else{
+			this.idShowCotizacion = 0;
+		}
 	}
 
 	formatDate(array) {
 		let lista = array;
 		let options = { weekday: "short", year: "numeric", month: "long", day: "numeric" };
+		let cotizacionAntigua = 0;
+		let contador = 1;
 		for (let item of lista) {
+			if (item.cotizacion != cotizacionAntigua) {
+				cotizacionAntigua = item.cotizacion;
+				item.encabezado = true;
+				item.contador = contador;
+				contador++;
+			} else {
+				item.encabezado = false;
+			}
 			let fecha = new Date(item.fecha);
 			item.fechaFormat = fecha.toLocaleDateString('es-ES', options);
 		}

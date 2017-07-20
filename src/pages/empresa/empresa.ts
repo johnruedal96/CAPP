@@ -81,7 +81,7 @@ export class EmpresaPage {
 	}
 
 	showAlert(mantenerProductos) {
-		let subtitle = 'Ya estas realizando una cotización, ¿deseas realizar una nueva?';
+		let subtitle = 'Ya se esta realizando una cotización, ¿desea realizar una nueva?';
 		if(mantenerProductos){
 			subtitle += '<br><br><b>NOTA:</b> Los productos agregados a la lista <b>NO</b> se eliminaran';
 		}else{

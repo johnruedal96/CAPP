@@ -14,6 +14,7 @@ export class TabsPage {
 
 	constructor(public element: ElementRef, public renderer: Renderer, public menuController: MenuController, public auth: AuthProvider, public navCtrl: NavController) {
 		menuController.enable(true);
+		this.isAuth();
 	}
 
 	isAuth() {

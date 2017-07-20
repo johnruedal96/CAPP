@@ -48,6 +48,20 @@ page-perfil {
 		}
 	}
 
+	.encabezado-item{
+		font-weight: bold;
+		padding: 8px;
+	}
+
+	.showEfect{
+		background-color: red;
+		transition: display 1s;
+	}
+
+	.showEfect:focus{
+		width: 3px;
+	}
+
 	.button-refresh{
 		color: white !important;
 		float: right !important;

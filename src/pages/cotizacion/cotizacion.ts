@@ -56,7 +56,7 @@ export class CotizacionPage {
 			this.storage.empresas.push(this.empresa);
 			this.addEmpresa = false;
 			this.tipoEmpresa = true;
-			this.storage.empresaId= this.empresa.tipo;
+			this.storage.empresaId = this.empresa.tipo;
 			window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.storage.empresas));
 			if (mantenerProductos) {
 				this.storage.productos = JSON.parse(window.localStorage.getItem('CotizacionLista'));
@@ -73,9 +73,9 @@ export class CotizacionPage {
 	}
 
 	obtenerCotizacionGuardada() {
-		let tipoEmpresaId= window.localStorage.getItem('cotizacionTipoEmpresa');
-		if (tipoEmpresaId!= null) {
-			this.storage.empresaId= Number(tipoEmpresaId);
+		let tipoEmpresaId = window.localStorage.getItem('cotizacionTipoEmpresa');
+		if (tipoEmpresaId != null) {
+			this.storage.empresaId = Number(tipoEmpresaId);
 			this.time++;
 		}
 
@@ -91,7 +91,7 @@ export class CotizacionPage {
 	}
 
 	presentEmpresaModal() {
-		if (this.storage.empresaId!= undefined) {
+		if (this.storage.empresaId != undefined && this.storage.empresaId != 0) {
 			let param = {
 				empresas: this.storage.empresas,
 				id: this.storage.empresaId,
@@ -104,12 +104,56 @@ export class CotizacionPage {
 			});
 			profileModal.present();
 		} else {
-			let alert = this.alertCtrl.create({
-				title: 'Error',
-				subTitle: 'Seleccione primero el tipo de empresa',
-				buttons: ['cerrar']
-			});
-			alert.present();
+			this.showSelectEmpresa(true);
+		}
+	}
+
+	showSelectEmpresa(empresas) {
+		let alert = this.alertCtrl.create({
+			subTitle: 'Seleccione el tipo de empresa',
+			inputs: [
+				{
+					type: 'radio',
+					label: 'Ferreterias',
+					value: '1',
+					handler: (event) => {
+						this.dismisAlert(event, alert, empresas);
+					}
+				},
+				{
+					type: 'radio',
+					label: 'Electricos',
+					value: '2',
+					handler: (event) => {
+						this.dismisAlert(event, alert, empresas);
+					}
+				},
+				{
+					type: 'radio',
+					label: 'Servicios',
+					value: '3',
+					handler: (event) => {
+						this.dismisAlert(event, alert, empresas);
+					}
+				}
+			],
+			buttons: [
+				{
+					text: 'Cancelar',
+					role: 'cancel'
+				}
+			]
+		});
+		alert.present();
+	}
+
+	dismisAlert(event, alert, empresas) {
+		alert.dismiss();
+		this.storage.empresaId = event.value;
+		if(empresas){
+			this.presentEmpresaModal();
+		}else{
+			this.listarProductos();
 		}
 	}
 
@@ -144,7 +188,7 @@ export class CotizacionPage {
 	}
 
 	listarProductos() {
-		if (this.storage.empresaId!= undefined) {
+		if (this.storage.empresaId != undefined && this.storage.empresaId != 0) {
 			let param = {
 				id: this.storage.empresaId,
 				app: this.app
@@ -163,12 +207,7 @@ export class CotizacionPage {
 			});
 			productoModal.present();
 		} else {
-			let alert = this.alertCtrl.create({
-				title: 'Error',
-				subTitle: 'Seleccione primero el tipo de empresa',
-				buttons: ['cerrar']
-			});
-			alert.present();
+			this.showSelectEmpresa(false);
 		}
 	}
 
@@ -182,7 +221,7 @@ export class CotizacionPage {
 					{
 						text: 'Cancelar',
 						role: 'cancel',
-						handler: ()=>{
+						handler: () => {
 							this.disabledButtonEnviar = false;
 						}
 					},
@@ -351,7 +390,7 @@ export class CotizacionPage {
 							text: 'No',
 							role: 'cancel',
 							handler: () => {
-								this.storage.empresaId= this.tipoEmpresaIdAntigua;
+								this.storage.empresaId = this.tipoEmpresaIdAntigua;
 								this.time = 0;
 							}
 						},
@@ -386,8 +425,10 @@ export class CotizacionPage {
 		alert.present();
 		this.storage.productos = [];
 		this.storage.empresas = [];
+		this.storage.empresaId = 0;
 		window.localStorage.removeItem('CotizacionLista');
 		window.localStorage.removeItem('CotizacionEmpresas');
+		window.localStorage.removeItem('cotizacionTipoEmpresa');
 		this.time = 0;
 		this.disabledButtonEnviar = false;
 	}
