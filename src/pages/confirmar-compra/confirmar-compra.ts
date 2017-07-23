@@ -39,7 +39,7 @@ export class ConfirmarCompraPage {
   }
 
   ionViewDidLoad() {
-    // this.isLogged();
+    this.isLogged();
   }
 
   isLogged() {

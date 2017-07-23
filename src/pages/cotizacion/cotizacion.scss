@@ -1,4 +1,8 @@
 page-cotizacion {
+	.alert-icon{
+		background-color: red !important;
+	}
+
 	.delete{
 		padding: 0 !important;
 	}
@@ -17,9 +21,13 @@ page-cotizacion {
 
 	.item-table{
 		padding: 0 !important;
-		height: 4rem;
-		min-height: 4rem;
 		border-bottom: 1px solid;
+		ion-label{
+			margin: 0 !important;
+		}
+		ion-col{
+			padding: 0 !important;
+		}
 	}
 
 	.labelButtonNoEspace{
@@ -36,6 +44,13 @@ page-cotizacion {
 			background-color: rgba(255, 255, 255, 0);
 			color: red;
 		}
+	}
+
+	.btn-add-remove{
+		height: auto;
+		width: auto;
+		padding: 4px 8px;
+		font-size: 1rem;
 	}
 
 	.items{

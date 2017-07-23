@@ -16,7 +16,7 @@
       <label>CAPP</label>
     </div>
     <ion-title>
-       Datos Compra 
+      Datos Compra
     </ion-title>
 
   </ion-navbar>
@@ -33,10 +33,16 @@
         Dirección
       </ion-item-divider>
       <ion-item>
-        <ion-label>Dirección</ion-label>
-        <ion-select interface="popover" [(ngModel)]="direccionSelectedId" name="direccionSelectedId" (ionChange)="changeDireccion($event)" required>
+        <ion-label>Dirección
+          <ion-spinner *ngIf="spinnerDireccion" class="spinnerCargando" name="crescent"></ion-spinner>
+        </ion-label>
+        <ion-select [disabled]="spinnerDireccion" interface="popover" [(ngModel)]="direccionSelectedId" name="direccionSelectedId" (ionChange)="changeDireccion($event)"
+          required>
           <ion-option *ngFor="let direccion of direcciones" [value]="direccion.id">{{direccion.direccion}}</ion-option>
         </ion-select>
+      </ion-item>
+      <ion-item>
+        <button ion-button color="darkCapp" full (click)="showPromptDireccion()">Nueva Dirección</button>
       </ion-item>
       <ion-item>
         <ion-row>
@@ -55,8 +61,11 @@
         Pago
       </ion-item-divider>
       <ion-item>
-        <ion-label>Pago</ion-label>
-        <ion-select interface="popover" [(ngModel)]="formasPagoSelectedId" name="formasPagoSelectedId" (ionChange)="changeFormaPago($event)" required>
+        <ion-label>Pago
+          <ion-spinner *ngIf="spinnerPago" class="spinnerCargando" name="crescent"></ion-spinner>
+        </ion-label>
+        <ion-select [disabled]="spinnerPago" interface="popover" [(ngModel)]="formasPagoSelectedId" name="formasPagoSelectedId" (ionChange)="changeFormaPago($event)"
+          required>
           <ion-option *ngFor="let forma of formasPago" [value]="forma.id">{{forma.nombre}}</ion-option>
         </ion-select>
       </ion-item>
@@ -72,7 +81,8 @@
       </ion-item>
     </ion-item-group>
     <ion-item padding>
-      <button [disabled]="formasPagoSelectedName == null || direccionSelectedName == null" (click)="siguiente()" ion-button full color="darkCapp" padding>Siguiente</button>
+      <button [disabled]="formasPagoSelectedName == null || direccionSelectedName == null" (click)="siguiente()" ion-button full
+        color="darkCapp" padding>Siguiente</button>
     </ion-item>
   </ion-list>
 </ion-content>

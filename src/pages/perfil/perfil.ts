@@ -46,6 +46,18 @@ export class PerfilPage {
 	ionViewDidLoad() {
 		this.searchCotizacion();
 		this.getCompras();
+		this.isLogged();
+	}
+
+	isLogged() {
+		this.auth.isLogged()
+			.subscribe(res => {
+				if (res.text() == '') {
+					this.navCtrl.setRoot('LoginPage');
+				} else {
+					this.auth.user = JSON.parse(res.text());
+				}
+			});
 	}
 
 	editar() {
@@ -82,7 +94,7 @@ export class PerfilPage {
 	showCotizacionList(item) {
 		if (this.idShowCotizacion != item.cotizacion) {
 			this.idShowCotizacion = item.cotizacion;
-		}else{
+		} else {
 			this.idShowCotizacion = 0;
 		}
 	}

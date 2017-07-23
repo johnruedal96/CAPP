@@ -85,7 +85,11 @@
       </ion-item-divider>
       <ion-item *ngFor="let direccion of direcciones">
         {{direccion.direccion}}
+        <button ion-button clear class="btn-eliminar" (click)="eliminarDireccion(direccion)"><ion-icon name="close"></ion-icon></button>
       </ion-item>
     </ion-item-group>
+    <div padding>
+      <button ion-button full color="darkCapp" (click)="showPromptDireccion()">Nueva direccion</button>
+    </div>
   </ion-list>
 </ion-content>

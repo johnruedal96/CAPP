@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { AlertController, LoadingController } from 'ionic-angular';
 import { MyApp } from '../../app/app.component';
 
@@ -46,7 +46,7 @@ export class CotizacionPage {
 	public nroRequestOk: number;
 	public disabledButtonEnviar: boolean = false;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController) {
 		this.storage.productos = [];
 		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
@@ -70,6 +70,28 @@ export class CotizacionPage {
 
 	ionViewDidLoad() {
 		this.obtenerCotizacionGuardada();
+		this.getEmpresas();
+	}
+
+	getEmpresas() {
+		if (this.storage.empresaId >= 1) {
+			this.ws.getEmpresas(this.storage.empresaId)
+				.subscribe(
+				(res) => {
+					this.empresas = res.data;
+					for (let e of this.storage.empresas) {
+						this.empresas.find((element, index) => {
+							if (element.id == e.id) {
+								element.selected = true;
+							}
+						})
+					}
+				},
+				(err) => {
+					console.log(err);
+				}
+				)
+		}
 	}
 
 	obtenerCotizacionGuardada() {
@@ -149,10 +171,12 @@ export class CotizacionPage {
 
 	dismisAlert(event, alert, empresas) {
 		alert.dismiss();
+		this.getEmpresas();
 		this.storage.empresaId = event.value;
-		if(empresas){
+		window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
+		if (empresas) {
 			this.presentEmpresaModal();
-		}else{
+		} else {
 			this.listarProductos();
 		}
 	}
@@ -179,12 +203,29 @@ export class CotizacionPage {
 		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 	}
 
-	goToEmpresa(empresa) {
-		let params = {
-			empresa: empresa,
-			viewBtnCotizacion: false
+	selectEmpresa(empresa) {
+		if (this.storage.empresas.length == 5 && !empresa.selected) {
+			this.toastCtrl.create({
+				message: 'Ha seleccionado el máximo de empresas',
+				duration: 3000
+			}).present();
 		}
-		this.navCtrl.push('EmpresaPage', params);
+
+		if (empresa.selected) {
+			this.storage.empresas.find((element, index) => {
+				if (element.id == empresa.id) {
+					this.storage.empresas.splice(index, 1);
+					empresa.selected = false;
+				}
+			})
+		} else {
+			if (this.storage.empresas.length < 5) {
+				this.storage.empresas.push(empresa);
+				empresa.selected = true;
+			}
+		}
+
+		window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.storage.empresas));
 	}
 
 	listarProductos() {
@@ -195,15 +236,15 @@ export class CotizacionPage {
 			}
 			let productoModal = this.modalCtrl.create('ListaProductosPage', param);
 			productoModal.onDidDismiss(data => {
-				let producto = null;
-				if (data != null) {
-					producto = data.producto;
+				if (data != undefined) {
+					let item = {
+						cantidad: data.cantidad,
+						producto: data.producto,
+						unidad: data.unidad
+					};
+					this.storage.productos.push(item);
+					window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 				}
-				if (data == null && this.producto != null) {
-					// producto = this.producto;
-				}
-				this.producto = producto;
-				this.verificarProducto();
 			});
 			productoModal.present();
 		} else {
@@ -440,6 +481,59 @@ export class CotizacionPage {
 				window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.storage.empresas));
 			}
 		})
+	}
+
+	cancelarCotizacion() {
+		let icon = '<div id="icon-alert"></div> Titulo';
+		let alert = this.alertCtrl.create({
+			title: <any>icon,
+			message: 'Se eliminará la cotización',
+			cssClass: 'alert-icon',
+			buttons: [
+				{
+					text: 'Cancelar',
+					role: 'cancel'
+				},
+				{
+					text: 'Continuar',
+					handler: (event) => {
+						this.storage.empresaId = 0;
+						this.storage.empresas = [];
+						this.storage.productos = [];
+						window.localStorage.removeItem('CotizacionLista');
+						window.localStorage.removeItem('CotizacionEmpresas');
+						window.localStorage.removeItem('cotizacionTipoEmpresa');
+					}
+				}
+			]
+		})
+		alert.present();
+		setTimeout(() => {
+			let hdr = alert.instance.hdrId;
+			let desc = alert.instance.descId;
+			let head = window.document.getElementById(hdr);
+			let msg = window.document.getElementById(desc);
+			head.style.textAlign = 'center';
+			msg.style.textAlign = 'center';
+			head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+		}, 100)
+		// div.
+	}
+
+	changeCantidad(eliminar, item) {
+		this.storage.productos.find((element, index) => {
+			if (element == item) {
+				if (eliminar) {
+					if (element.cantidad > 0) {
+						element.cantidad--;
+					}
+				} else {
+					element.cantidad++;
+				}
+			}
+		});
+
+		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 	}
 
 }

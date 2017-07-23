@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { SuperTabsController } from 'ionic2-super-tabs';
 import { MyApp } from '../../app/app.component';
 
+import { AuthProvider } from '../../providers/auth/auth';
 
 /**
  * Generated class for the EmpresaPage page.
@@ -21,7 +22,7 @@ export class EmpresaPage {
 	public empresa: any;
 	public viewBtnCotizacion: boolean = true;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController, public auth: AuthProvider) {
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 		this.empresa = navParams.get('empresa');
 		this.viewBtnCotizacion = navParams.get('viewBtnCotizacion');
@@ -31,7 +32,18 @@ export class EmpresaPage {
 	}
 
 	ionViewDidLoad() {
+		this.isLogged();
+	}
 
+	isLogged() {
+		this.auth.isLogged()
+			.subscribe(res => {
+				if (res.text() == '') {
+					this.navCtrl.setRoot('LoginPage');
+				} else {
+					this.auth.user = JSON.parse(res.text());
+				}
+			});
 	}
 
 	cotizar() {
@@ -52,11 +64,11 @@ export class EmpresaPage {
 
 		if (cotizacionTipoEmpresa == this.empresa.tipo) {
 			this.enviarCotizacion(empresas, lista, true);
-		}else{
+		} else {
 			this.enviarCotizacion(empresas, lista, false);
 		}
 
-		if(empresas.length == 0 && lista.length == 0){
+		if (empresas.length == 0 && lista.length == 0) {
 			this.navCtrl.push('CotizacionPage', { empresa: this.empresa, mantener: false });
 		}
 
@@ -82,9 +94,9 @@ export class EmpresaPage {
 
 	showAlert(mantenerProductos) {
 		let subtitle = 'Ya se esta realizando una cotización, ¿desea realizar una nueva?';
-		if(mantenerProductos){
+		if (mantenerProductos) {
 			subtitle += '<br><br><b>NOTA:</b> Los productos agregados a la lista <b>NO</b> se eliminaran';
-		}else{
+		} else {
 			subtitle += '<br><br><b>NOTA:</b> Se eliminará la antigua cotización';
 		}
 		let alert = this.alertCtrl.create({

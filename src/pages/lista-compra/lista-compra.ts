@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
+import { AuthProvider } from '../../providers/auth/auth';
 
 /**
  * Generated class for the ListaCompraPage page.
@@ -24,7 +25,7 @@ export class ListaCompraPage {
   public cliente:string;
   public compra:any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider) {
     this.idCompra = navParams.get('idCompra');
     this.idCliente = navParams.get('idCliente');
     this.fecha = this.formatDate(navParams.get('fecha'));
@@ -36,6 +37,18 @@ export class ListaCompraPage {
 
   ionViewDidLoad() {
     this.getCompra();
+    this.isLogged();
+  }
+
+  isLogged() {
+    this.auth.isLogged()
+      .subscribe(res => {
+        if (res.text() == '') {
+          this.navCtrl.setRoot('LoginPage');
+        } else {
+          this.auth.user = JSON.parse(res.text());
+        }
+      });
   }
 
   getCompra(){

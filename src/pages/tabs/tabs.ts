@@ -1,6 +1,7 @@
 import { Component, ElementRef, Renderer } from '@angular/core';
-import { MenuController, NavController } from 'ionic-angular';
+import { MenuController, NavController, AlertController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 @Component({
 	templateUrl: 'tabs.html'
@@ -12,12 +13,12 @@ export class TabsPage {
 	tab3Root = 'ServicioPage';
 	tab4Root = 'CotizacionPage';
 
-	constructor(public element: ElementRef, public renderer: Renderer, public menuController: MenuController, public auth: AuthProvider, public navCtrl: NavController) {
+	constructor(public element: ElementRef, public renderer: Renderer, public menuController: MenuController, public auth: AuthProvider, public navCtrl: NavController, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
 		menuController.enable(true);
-		this.isAuth();
+		// this.isLogged();
 	}
 
-	isAuth() {
+	isLogged() {
 		this.auth.isLogged().subscribe(user => {
 			if (user.text() == '') {
 				this.navCtrl.setRoot('LoginPage');
@@ -27,39 +28,54 @@ export class TabsPage {
 		});
 	}
 
-	// // para iconos .png	
-	// 	ionViewDidLoad() {
-	// 		let content = this.setIcon('ferreteria');
-	// 		this.loadIcon(content, 'assets/icon/icon_ferreterias.png');
-
-	// 		content = this.setIcon('servicio');
-	// 		this.loadIcon(content, 'assets/icon/icon_servicios.png');
-
-	// 		content = this.setIcon('electrico');
-	// 		this.loadIcon(content, 'assets/icon/icon_ferreelectricos.png');
-	// 	}
-
-	// 	setIcon(icon) {
-	// 		// icono android
-	// 		let content = this.element.nativeElement.getElementsByClassName('ion-md-' + icon)[0];
-
-	// 		if (content == undefined) {
-	// 			// icono ios
-	// 			content = this.element.nativeElement.getElementsByClassName('ion-ios-' + icon)[0];
-	// 			if (content == undefined) {
-	// 				// icono ios-outline
-	// 				content = this.element.nativeElement.getElementsByClassName('ion-ios-' + icon + '-outline')[0];
-	// 			}
-	// 		}
-
-	// 		return content;
-	// 	}
-
-	// 	loadIcon(content, url) {
-	// 		this.renderer.setElementStyle(content, 'background-image', 'url(' + url + ')');
-	// 		this.renderer.setElementStyle(content, 'width', '24px');
-	// 		this.renderer.setElementStyle(content, 'height', '24px');
-	// 		this.renderer.setElementStyle(content, 'background-size', 'contain');
-	// 		this.renderer.setElementStyle(content, 'background-repeat', 'no-repeat');
-	// 	}
+	onTabSelect(event) {
+		// this.isLogged();
+		if (event.index == 3) {
+			this.storage.empresaId = Number(window.localStorage.getItem('cotizacionTipoEmpresa'));
+			if (this.storage.empresaId == undefined || this.storage.empresaId == 0) {
+				let alert = this.alertCtrl.create({
+					subTitle: 'Seleccione el tipo de empresa',
+					inputs: [
+						{
+							type: 'radio',
+							label: 'Ferreterias',
+							value: '1',
+							handler: (event) => {
+								alert.dismiss();
+								this.storage.empresaId = event.value;
+								window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
+							}
+						},
+						{
+							type: 'radio',
+							label: 'Electricos',
+							value: '2',
+							handler: (event) => {
+								alert.dismiss();
+								this.storage.empresaId = event.value;
+								window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
+							}
+						},
+						{
+							type: 'radio',
+							label: 'Servicios',
+							value: '3',
+							handler: (event) => {
+								alert.dismiss();
+								this.storage.empresaId = event.value;
+								window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
+							}
+						}
+					],
+					buttons: [
+						{
+							text: 'Cancelar',
+							role: 'cancel'
+						}
+					]
+				});
+				alert.present();
+			}
+		}
+	}
 }

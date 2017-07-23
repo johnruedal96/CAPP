@@ -25,7 +25,10 @@ export class WebServiceProvider {
 	public urlGetCompras: string;
 	public urlGetCompra: string;
 	public urlGetDireccion: string;
+	public urlGuardarDireccion: string;
+	public urlRemoveDireccion: string;
 	public urlGetFormasPago: string;
+	public urlGetUnidad: string;
 
 	constructor(public http: Http) {
 		this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
@@ -42,7 +45,10 @@ export class WebServiceProvider {
 		this.urlGetCompras = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getComprasUsuario/";
 		this.urlGetCompra = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getCompra/";
 		this.urlGetDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getDireccion/";
+		this.urlGuardarDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/guardarDireccion";
+		this.urlRemoveDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/removeDireccion/";
 		this.urlGetFormasPago = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getFormasPago/";
+		this.urlGetUnidad = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getUnidad/";
 	}
 
 	getEmpresas(tipo) {
@@ -133,8 +139,24 @@ export class WebServiceProvider {
 			.map(res => res);
 	}
 
+	guardarDireccion(data, token) {
+		let options = this.getHeader(token);
+		return this.http.post(this.urlGuardarDireccion, data, options)
+			.map(res => res)
+	}
+
+	removeDireccion(id) {
+		return this.http.get(this.urlRemoveDireccion + id)
+			.map(res => res);
+	}
+
 	getFormasPago() {
 		return this.http.get(this.urlGetFormasPago)
+			.map(res => res);
+	}
+
+	getUnidad() {
+		return this.http.get(this.urlGetUnidad)
 			.map(res => res);
 	}
 

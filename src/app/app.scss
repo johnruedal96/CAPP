@@ -89,6 +89,10 @@ super-tabs-toolbar{
     top:0 !important;
 }
 
+.back-button-text-ios{
+    display: none !important;
+}
+
 super-tabs-container{
     height: calc(100% - 54px) !important;
 }
@@ -98,6 +102,35 @@ super-tabs-container{
 // }
 
 ion-icon {
+    &[class*="custom-"] {
+        // Instead of using the font-based icons
+        // We're applying SVG masks
+        mask-size: contain;
+        mask-position: 50% 50%;
+        mask-repeat: no-repeat;
+        background: currentColor;
+        width: 0.9em;
+        height: 0.9em;
+    }
+    // custom icons
+    &[class*="custom-wifi"] {
+        mask-image: url(../assets/icon/svg/wifi.svg);
+    }
+
+    &[class*="custom-ferreteria"] {
+        mask-image: url(../assets/icon/icon_ferreterias.svg);
+    }
+
+    &[class*="custom-electrico"] {
+        mask-image: url(../assets/icon/icon_ferreelectricos.svg);
+    }
+
+    &[class*="custom-servicio"] {
+        mask-image: url(../assets/icon/icon_servicios.svg);
+    }
+}
+
+span {
     &[class*="custom-"] {
         // Instead of using the font-based icons
         // We're applying SVG masks

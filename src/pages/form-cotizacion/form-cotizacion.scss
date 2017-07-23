@@ -1,11 +1,18 @@
-page-direccion {
-	.subTitle{
-		font-weight: bold;
+page-form-cotizacion {
+	.content-form{
+		display: table;
+		vertical-align: middle;
+		height: 80%;
+		margin: 0 auto;
 	}
 
-	.btn-eliminar{
-		float: right;
-		color: red;
+	.form{
+		display: table-cell;
+    	vertical-align: middle;
+	}
+
+	h5{
+		display: inline-block;
 	}
     // Estilos para ios
 	.toolbar-ios{
@@ -22,7 +29,6 @@ page-direccion {
 			position: absolute;
 			top: 15px;
 			left: 20%;
-			text-align: center;
 			width: 70%;
 		}
 	}
@@ -45,4 +51,16 @@ page-direccion {
 			}
 		}
 	}
+
+	// otros stilos
+
+	.item{
+        .item-inner{
+            .input-wrapper{
+                .label{
+                    white-space: normal !important;
+                }
+            }
+        }
+    }
 }

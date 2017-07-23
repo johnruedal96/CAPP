@@ -25,20 +25,6 @@
 
 <ion-content>
 
-	<form class="select-tipo" #formTipoEmpresa="ngForm">
-		<ion-list>
-			<ion-item>
-				<ion-label>Tipo Empresa</ion-label>
-				<ion-select [disabled]="tipoEmpresa" interface="popover" [(ngModel)]="storage.empresaId" (ionChange)="changeTipo($event)" name="tipoEmpresaId"
-				 required>
-					<ion-option value="1">Ferreterias</ion-option>
-					<ion-option value="2">Electricos</ion-option>
-					<ion-option value="3">Servicios</ion-option>
-				</ion-select>
-			</ion-item>
-		</ion-list>
-	</form>
-
 	<div>
 		<ion-segment [(ngModel)]="tabsCotizacion" color="darkCapp">
 			<ion-segment-button value="productoTab">
@@ -49,26 +35,13 @@
 			</ion-segment-button>
 		</ion-segment>
 	</div>
-
+	<ion-input type="hidden" (ionChange)="getEmpresas()" value="{{storage.empresaId}}"></ion-input>
 	<div [ngSwitch]="tabsCotizacion">
 		<!--tab Productos-->
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'productoTab'" padding>
-			<form #formCotizacion="ngForm">
-				<!--<ion-list>-->
-				<ion-item>
-					<label>Producto</label>
-					<ion-buttons>
-						<button ion-button full color="light" (click)="listarProductos()">
-								<label *ngIf="producto == null" class="labelButtonNoEspace">Selecciona el producto</label>
-								<label *ngIf="producto != null" class="labelButtonNoEspace">{{producto.nombre}}</label>
-								<!--<ion-icon style="color:#a1a1a1" name="arrow-dropright-circle" class="icon-button"></ion-icon>-->
-							</button>
-					</ion-buttons>
-				</ion-item>
-			</form>
-			<button [disabled]="producto == null || !formCotizacion.form.valid" (click)="agregar()" ion-button block color="darkCapp"><ion-icon name="cart" margin-right></ion-icon>AGREGAR A CARRITO</button>
-			<hr>
+			<button (click)="listarProductos()" ion-button style="margin: 0; width: 48%; font-size: 1.3rem">Agregar Producto</button>
+			<button (click)="cancelarCotizacion()" ion-button style="margin-left: -5px; width: 48%; font-size: 1.3rem" color="warning">Cancelar Cotización</button>
 			<h3 *ngIf="storage.productos.length > 0">Lista de compra</h3>
 			<ion-row *ngIf="storage.productos.length > 0" class="row-head row-table">
 				<ion-col col-11 class="col-body">Producto</ion-col>
@@ -79,19 +52,37 @@
 			<ion-list>
 				<ion-item class="item-table" *ngFor="let item of storage.productos">
 					<ion-row class="row-table">
-						<ion-col col-11 text-center>
-							<label style="white-space: normal !important">{{item.producto.nombre}}</label>
-						</ion-col>
 						<ion-col col-1 text-center class="btn-eliminar">
 							<button ion-button clear>
 									<ion-icon (click)="deleteItem(item)" name="close"></ion-icon>
 								</button>
 						</ion-col>
+						<ion-col col-7 text-center>
+							<label style="white-space: normal !important; font-size: 1.3rem !important">{{item.producto.nombre}}</label>
+						</ion-col>
+						<ion-col col-4>
+							<ion-row>
+								<ion-col col-2>
+									<button (click)="changeCantidad(true, item)" ion-button class="btn-add-remove" color="danger"><ion-icon name="remove"></ion-icon></button>
+								</ion-col>
+								<ion-col col-7 text-center>
+									<label style="white-space: normal !important; font-size: 1.3rem !important">{{item.cantidad}} </label>
+									<ion-row>
+										<ion-col col-12>
+											<label style="white-space: normal !important; font-size: 1rem !important">{{item.unidad.nombre}}</label>
+										</ion-col>
+									</ion-row>
+								</ion-col>
+								<ion-col col-2>
+									<button (click)="changeCantidad(false, item)" ion-button class="btn-add-remove"><ion-icon name="add"></ion-icon></button>
+								</ion-col>
+							</ion-row>
+						</ion-col>
 					</ion-row>
 				</ion-item>
 			</ion-list>
 
-			<button *ngIf="storage.productos.length > 0" [disabled]="disabledButtonEnviar" ion-button full color="darkCapp" (click)="alertCotizacion()">Enviar Cotización</button>
+			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="alertCotizacion()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -100,9 +91,9 @@
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'empresaTab'">
 			<ion-list class="lista">
-				<ion-row *ngFor="let empresa of storage.empresas">
-					<ion-col col-11 class="items" (click)="goToEmpresa(empresa)">
-						<ion-item>
+				<ion-row *ngFor="let empresa of empresas">
+					<ion-col col-12 class="items empresas-items" (click)="selectEmpresa(empresa)">
+						<ion-item [color]="empresa.selected ? 'success' : 'white'">
 							<ion-avatar item-start class="avatar">
 								<img class="img-logo" src="{{imagen}}{{empresa.imagen}}">
 							</ion-avatar>
@@ -110,26 +101,9 @@
 							<p class="circle-estado"></p>
 						</ion-item>
 					</ion-col>
-					<ion-col col-1>
-						<button class="delete" ion-button clear (click)="eliminarSeleccion(empresa)"><ion-icon name="close" color="danger"></ion-icon></button>
-					</ion-col>
 				</ion-row>
-				<!-- <ion-item *ngFor="let empresa of empresas" class="items" (click)="goToEmpresa(empresa)">
-					<ion-avatar item-start class="avatar">
-						<img class="img-logo" src="{{imagen}}{{empresa.imagen}}">
-					</ion-avatar>
-					<h3>{{empresa.nombre}}</h3>
-					<p class="circle-estado"></p>
-					<button class="delete" ion-button clear><ion-icon name="close" color="danger"></ion-icon></button>
-				</ion-item> -->
 			</ion-list>
 
-			<ion-fab bottom right *ngIf="addEmpresa" class="button-fab">
-
-				<button style="background-color: #333" ion-fab (click)="presentEmpresaModal()">
-					<ion-icon name="add"></ion-icon>
-				</button>
-			</ion-fab>
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 	</div>

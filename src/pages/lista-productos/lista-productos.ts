@@ -1,6 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Searchbar, LoadingController, Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Searchbar, LoadingController, Content, ToastController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
+import { AuthProvider } from '../../providers/auth/auth';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 import { Keyboard } from '@ionic-native/keyboard';
 import { Subscription } from 'rxjs/Subscription';
 import { Platform } from 'ionic-angular';
@@ -29,12 +32,12 @@ export class ListaProductosPage {
   // guarda lo escrito en el input de busqueda
   public txtSearch: string;
   public showSpinner: boolean = true;
-  public app:any;
+  public app: any;
 
   @ViewChild('searchbar') searchInput: Searchbar;
   @ViewChild(Content) content: Content;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public platform: Platform, public auth: AuthProvider, public modalCtrl: ModalController, public storage: LocalStorageProvider, public toastCtrl: ToastController) {
     this.id = this.navParams.get('id');
     this.app = this.navParams.get('app');
     this.productos = [];
@@ -48,7 +51,19 @@ export class ListaProductosPage {
     this.platform.registerBackButtonAction(() => {
       this.dismiss();
       this.app.buttomBack();
-		});
+    });
+    // this.isLogged();
+  }
+
+  isLogged() {
+    this.auth.isLogged()
+      .subscribe(res => {
+        if (res.text() == '') {
+          this.navCtrl.setRoot('LoginPage');
+        } else {
+          this.auth.user = JSON.parse(res.text());
+        }
+      });
   }
 
   cargarLista(offset, limit, scroll) {
@@ -59,17 +74,17 @@ export class ListaProductosPage {
     }
     this.ws.getProductos(this.id + '/' + offset + '/' + limit)
       .subscribe(
-        (res) => {
+      (res) => {
         let datos = res.json().data;
         this.llenarArray(datos);
         if (scroll != null) {
           scroll.complete();
         }
       },
-      (err)=>{
+      (err) => {
         this.showSpinner = false;
       }
-    );
+      );
   }
 
   llenarArray(datos) {
@@ -146,7 +161,29 @@ export class ListaProductosPage {
   }
 
   seleccionar(event, producto) {
-    this.viewCtrl.dismiss({ producto: producto });
+    let lista = JSON.parse(window.localStorage.getItem('CotizacionLista'));
+    let next = true;
+    if (lista != null) {
+      lista.find((element, index) => {
+        if (producto.id == element.producto.id) {
+          next = false;
+          this.toastCtrl.create({
+            message: 'El producto ya fue agregado a la lista',
+            duration: 3000
+          }).present();
+        }
+      });
+    }
+    if (next) {
+      let param = {
+        producto: producto
+      }
+      let productoModal = this.modalCtrl.create('FormCotizacionPage', param);
+      productoModal.onDidDismiss(data => {
+        this.viewCtrl.dismiss(data);
+      });
+      productoModal.present();
+    }
   }
 
   inputSearch() {
