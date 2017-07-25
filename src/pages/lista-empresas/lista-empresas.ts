@@ -75,7 +75,7 @@ export class ListaEmpresasPage {
 			this.dismiss();
 			this.app.buttomBack();
 		});
-		// this.isLogged();
+		this.isLogged();
 	}
 
 	isLogged() {

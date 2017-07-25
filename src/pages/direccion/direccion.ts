@@ -23,7 +23,7 @@ export class DireccionPage {
   }
 
   ionViewDidLoad() {
-    // this.isLogged();
+    this.isLogged();
     this.getDireccion();
   }
 

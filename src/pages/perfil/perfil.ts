@@ -46,7 +46,7 @@ export class PerfilPage {
 	ionViewDidLoad() {
 		this.searchCotizacion();
 		this.getCompras();
-		// this.isLogged();
+		this.isLogged();
 	}
 
 	isLogged() {

@@ -67,8 +67,8 @@
 		</ion-row>
 		<ion-row *ngFor="let item of compra" class="table-body">
 			<ion-col col-2>
-				<ion-row>
-					<ion-col class="divLabel" col-12text-center ><label>{{item.cantidad}}</label></ion-col>
+				<ion-row class="row-cantidad">
+					<ion-col class="divLabel" col-12text-center ><label text-center>{{item.cantidad}}</label></ion-col>
 					<ion-col class="divLabel" col-12>
 						<label text-center style="white-space: normal !important; font-size: 1rem !important">{{item.unidad}}</label>
 					</ion-col>

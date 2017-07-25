@@ -37,7 +37,7 @@ export class ListaCompraPage {
 
   ionViewDidLoad() {
     this.getCompra();
-    // this.isLogged();
+    this.isLogged();
   }
 
   isLogged() {

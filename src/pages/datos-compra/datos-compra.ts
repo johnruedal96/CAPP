@@ -40,7 +40,7 @@ export class DatosCompraPage {
   ionViewDidLoad() {
     this.getDireccion();
     this.getFormasPago();
-    // this.isLogged();
+    this.isLogged();
   }
 
   isLogged() {
