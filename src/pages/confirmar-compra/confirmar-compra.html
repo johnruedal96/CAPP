@@ -101,7 +101,7 @@
       </ion-item>
     </ion-item-group>
     <ion-item padding>
-      <button padding ion-button full color="darkCapp" (click)="comprar()">Comprar</button>
+      <button [disabled]="disabledButtonEnviar" padding ion-button full color="darkCapp" (click)="alertCotizacion()">Comprar</button>
     </ion-item>
   </ion-list>
 </ion-content>

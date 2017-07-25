@@ -55,25 +55,30 @@
 
 	<div class="table">
 		<ion-row color="darkCapp" class="table-head">
-      <ion-col col-2>
+			<ion-col col-2>
 				<label>Cant.</label>
 			</ion-col>
 			<ion-col col-7>
 				<label>Producto</label>
-      </ion-col>
-      <ion-col col-3>
+			</ion-col>
+			<ion-col col-3>
 				<label>Precio</label>
 			</ion-col>
 		</ion-row>
 		<ion-row *ngFor="let item of compra" class="table-body">
-      <ion-col col-2>
-				<div class="divLabel"><label text-center>{{item.cantidad}}</label></div>
+			<ion-col col-2>
+				<ion-row>
+					<ion-col class="divLabel" col-12text-center ><label>{{item.cantidad}}</label></ion-col>
+					<ion-col class="divLabel" col-12>
+						<label text-center style="white-space: normal !important; font-size: 1rem !important">{{item.unidad}}</label>
+					</ion-col>
+				</ion-row>
 			</ion-col>
 			<ion-col col-7>
 				<div class="divLabel"><label text-center>{{item.nombre}}</label></div>
-      </ion-col>
-      <ion-col col-3>
-				<div class="divLabel"><label text-center>{{item.precioTotal.toLocaleString()}}</label></div>
+			</ion-col>
+			<ion-col col-3>
+				<div class="divLabel"><label text-center style="color:#5cb85c">${{item.precioTotal.toLocaleString()}}</label></div>
 			</ion-col>
 		</ion-row>
 		<ion-row style="background-color: #333; color: white">

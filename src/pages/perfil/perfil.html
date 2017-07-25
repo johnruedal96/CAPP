@@ -94,8 +94,8 @@
 							{{cotizacion.cliente}}
 						</div>
 						<div class="item-total">
-							<div *ngIf="cotizacion.total != null">$ {{cotizacion.total.toLocaleString()}}</div>
-							<div *ngIf="cotizacion.total == null">$ 0</div>
+							<div *ngIf="cotizacion.total != null" style="color:#5cb85c">$ {{cotizacion.total.toLocaleString()}}</div>
+							<div *ngIf="cotizacion.total == null" style="color:#5cb85c">$ 0</div>
 						</div>
 					</div>
 				</div>
@@ -117,7 +117,7 @@
 			</div>
 			<div *ngFor="let compra of compras">
 				<div style="border-bottom: 1px solid" id="{{compra.idCompra}}">
-					<div class="item-list-nueva" (click)="verCotizacion(cotizacion)">
+					<div class="item-list-nueva" (click)="verCompra(compra)">
 						<div class="item-fecha">
 							{{compra.fechaFormat}}
 						</div>
@@ -125,7 +125,7 @@
 							{{compra.cliente}}
 						</div>
 						<div class="item-total">
-							<div>$ {{compra.total.toLocaleString()}}</div>
+							<div style="color:#5cb85c">$ {{compra.total.toLocaleString()}}</div>
 						</div>
 					</div>
 				</div>

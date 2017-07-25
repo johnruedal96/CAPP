@@ -46,7 +46,7 @@ export class PerfilPage {
 	ionViewDidLoad() {
 		this.searchCotizacion();
 		this.getCompras();
-		this.isLogged();
+		// this.isLogged();
 	}
 
 	isLogged() {
@@ -126,6 +126,7 @@ export class PerfilPage {
 			.subscribe(
 			(res) => {
 				this.compras = this.formatDate(res.json());
+				console.log(this.compras);
 				this.showSpinnerCompras = false;
 				if (this.seleccionCompra != null) {
 					this.aplicarColor();

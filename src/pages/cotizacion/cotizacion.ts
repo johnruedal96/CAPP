@@ -255,26 +255,7 @@ export class CotizacionPage {
 	alertCotizacion() {
 		this.disabledButtonEnviar = true;
 		if (this.storage.empresas.length > 0) {
-			let alert = this.alertCtrl.create({
-				title: 'Comfirmar envio',
-				message: 'El tiempo de entrega y el valor del domicilio para cada zona es responsabilidad de la ferreteria. <br><br> <b>CAPP</b> es totalmente gratuito no cobra por el servicio',
-				buttons: [
-					{
-						text: 'Cancelar',
-						role: 'cancel',
-						handler: () => {
-							this.disabledButtonEnviar = false;
-						}
-					},
-					{
-						text: 'Enviar',
-						handler: () => {
-							this.enviarCotizacion();
-						}
-					}
-				]
-			});
-			alert.present();
+			this.enviarCotizacion();
 		} else {
 			this.disabledButtonEnviar = false;
 			let alert = this.alertCtrl.create({
@@ -298,7 +279,7 @@ export class CotizacionPage {
 				let data = {
 					usuario: this.auth.user,
 					lista: this.storage.productos,
-					empresas: this.storage.empresas,
+					empresas: this.storage.empresas
 				}
 				this.nroRequestOk = 0;
 				this.nroRequest = this.storage.productos.length + this.storage.empresas.length;
@@ -330,6 +311,7 @@ export class CotizacionPage {
 					params = 'cantidad=' + data.lista[i].cantidad;
 					params += '&idProducto=' + data.lista[i].producto.id;
 					params += '&idCotizacion=' + cotizacion.id;
+					params += '&unidad=' + data.lista[i].unidad.id;
 					this.saveCotizacionProducto(params, token);
 				}
 
@@ -487,15 +469,15 @@ export class CotizacionPage {
 		let icon = '<div id="icon-alert"></div> Titulo';
 		let alert = this.alertCtrl.create({
 			title: <any>icon,
-			message: 'Se eliminará la cotización',
+			message: 'Se cancelará la cotización',
 			cssClass: 'alert-icon',
 			buttons: [
 				{
-					text: 'Cancelar',
+					text: 'NO Cancelar',
 					role: 'cancel'
 				},
 				{
-					text: 'Continuar',
+					text: 'Cancelar',
 					handler: (event) => {
 						this.storage.empresaId = 0;
 						this.storage.empresas = [];

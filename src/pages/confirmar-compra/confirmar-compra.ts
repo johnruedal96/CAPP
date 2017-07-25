@@ -26,6 +26,7 @@ export class ConfirmarCompraPage {
   public total: number;
   public cotizacion: number;
   public loader;
+  public disabledButtonEnviar: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
     this.direccionNombre = this.navParams.get('direccionNombre');
@@ -39,7 +40,7 @@ export class ConfirmarCompraPage {
   }
 
   ionViewDidLoad() {
-    this.isLogged();
+    // this.isLogged();
   }
 
   isLogged() {
@@ -93,6 +94,7 @@ export class ConfirmarCompraPage {
         let data = 'compra=' + compra;
         data += '&producto=' + item.idProducto;
         data += '&cantidad=' + item.cantidad;
+        data += '&unidad=' + item.idUnidad;
         data += '&precioUnitario=' + item.precio;
         data += '&precioTotal=' + item.precioTotal;
         data += '&cotizacion=' + this.cotizacion;
@@ -126,5 +128,29 @@ export class ConfirmarCompraPage {
 
       }
     }
+  }
+
+  alertCotizacion() {
+    this.disabledButtonEnviar = true;
+    let alert = this.alertCtrl.create({
+      title: 'Comfirmar compra',
+      message: 'El tiempo de entrega y el valor del domicilio para cada zona es responsabilidad de la ferreteria. <br><br> <b>CAPP</b> es totalmente gratuito no cobra por el servicio',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            this.disabledButtonEnviar = false;
+          }
+        },
+        {
+          text: 'Comprar',
+          handler: () => {
+            this.comprar();
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }

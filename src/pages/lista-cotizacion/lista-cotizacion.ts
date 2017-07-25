@@ -42,7 +42,7 @@ export class ListaCotizacionPage {
 	}
 
 	ionViewDidLoad() {
-		this.isLogged();
+		// this.isLogged();
 	}
 
 	formatDate(date) {

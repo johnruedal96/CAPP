@@ -43,9 +43,13 @@
 			<button (click)="listarProductos()" ion-button style="margin: 0; width: 48%; font-size: 1.3rem">Agregar Producto</button>
 			<button (click)="cancelarCotizacion()" ion-button style="margin-left: -5px; width: 48%; font-size: 1.3rem" color="warning">Cancelar Cotización</button>
 			<h3 *ngIf="storage.productos.length > 0">Lista de compra</h3>
-			<ion-row *ngIf="storage.productos.length > 0" class="row-head row-table">
-				<ion-col col-11 class="col-body">Producto</ion-col>
-				<ion-col col-1 class="col-body"></ion-col>
+			<ion-row class="row-head row-table">
+				<ion-col col-12 class="col-body">Producto</ion-col>
+			</ion-row>
+			<ion-row *ngIf="storage.productos.length == 0">
+				<ion-col col-12 text-center>
+					No se ha agregado ningun producto
+				</ion-col>
 			</ion-row>
 
 

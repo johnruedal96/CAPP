@@ -28,13 +28,11 @@ page-lista-cotizacion {
 			.divLabel{
 				display: table;
 				height: 100%;
+				margin: 0 auto;
 				label{
 					display: table-cell;
     				vertical-align: middle;
 				}
-			}
-			.cantidad{
-				margin: 0 auto;
 			}
 		}
 	}
