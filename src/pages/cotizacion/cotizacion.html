@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-	<ion-navbar color="orange">
+	<ion-navbar color="orange" *ngIf=!busqueda>
 
 		<button ion-button menuToggle>
 			<ion-icon name="menu"></ion-icon>
@@ -18,6 +18,20 @@
 		<ion-title>
 			<div class="text-title">Cotización</div>
 		</ion-title>
+
+		<ion-buttons end *ngIf="tabsCotizacion == 'empresaTab'">
+			<button ion-button icon-only (click)="inputSearch()">
+				<ion-icon name="search"></ion-icon>
+			</button>
+		</ion-buttons>
+	</ion-navbar>
+
+	<ion-navbar calss="search-header" *ngIf=busqueda>
+
+		<ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true"
+		 (ionCancel)="closeSearch($event)">
+		</ion-searchbar>
+
 	</ion-navbar>
 
 </ion-header>
@@ -94,8 +108,23 @@
 		<!--Tab Empresas-->
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'empresaTab'">
+			<ion-list>
+				<ion-item>
+					<ion-label>Filtro</ion-label>
+					<ion-select interface="popover" [(ngModel)]="filtro" (ionChange)="aplicarFiltro()">
+						<ion-option selected="true" value="1">Todas</ion-option>
+						<ion-option value="2">Seleccionadas</ion-option>
+					</ion-select>
+				</ion-item>
+			</ion-list>
+
 			<ion-list class="lista">
-				<ion-row *ngFor="let empresa of empresas">
+				<div class="spinnerCargando" *ngIf="showSpinnerEmpresas">
+					<!-- <div class="spinnerCargando"> -->
+					<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
+					<p text-center>Cargando...</p>
+				</div>
+				<ion-row *ngFor="let empresa of empresasLoad">
 					<ion-col col-12 class="items empresas-items" (click)="selectEmpresa(empresa)">
 						<ion-item [color]="empresa.selected ? 'success' : 'white'">
 							<ion-avatar item-start class="avatar">
@@ -107,6 +136,11 @@
 					</ion-col>
 				</ion-row>
 			</ion-list>
+
+			<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="enabledInfinite">
+				<ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando mas datos...">
+				</ion-infinite-scroll-content>
+			</ion-infinite-scroll>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->

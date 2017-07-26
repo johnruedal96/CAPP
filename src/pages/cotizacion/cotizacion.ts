@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, ModalController, ToastController, Searchbar } from 'ionic-angular';
 import { AlertController, LoadingController } from 'ionic-angular';
 import { MyApp } from '../../app/app.component';
 
@@ -7,6 +7,9 @@ import { MyApp } from '../../app/app.component';
 import { AuthProvider } from '../../providers/auth/auth';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+
+import { Subscription } from 'rxjs/Subscription';
+import { Keyboard } from '@ionic-native/keyboard';
 /**
  * Generated class for the CotizacionPage page.
  *
@@ -20,6 +23,7 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class CotizacionPage {
 
+	@ViewChild('searchbar') searchInput: Searchbar;
 	// variable que almacena el producto seleccionado
 	public product: any;
 	// variable que almacena la cantidad seleccionada
@@ -46,7 +50,21 @@ export class CotizacionPage {
 	public nroRequestOk: number;
 	public disabledButtonEnviar: boolean = false;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController) {
+	public showSpinnerEmpresas: boolean = true;
+	public filtro: number;
+	public auxEmpresas: any = [];
+	public busqueda: boolean = false;
+	// suscripcion a los metodos del teclado
+	private onHideSubscription: Subscription;
+	// indica cuando se realizo una busqueda
+	public loadListSearch: boolean = false;
+	// guarda lo escrito en el input de busqueda
+	public txtSearch: string;
+	public enabledInfinite: boolean = true;
+	public empresasLoad: any;
+	public refresher;
+
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard) {
 		this.storage.productos = [];
 		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
@@ -70,7 +88,9 @@ export class CotizacionPage {
 
 	ionViewDidLoad() {
 		this.obtenerCotizacionGuardada();
-		this.getEmpresas();
+		this.loadEmpresa(false);
+		// ejecuta la funcion closeSearch() cuando el teclado es cerrado
+		this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
 	}
 
 	getEmpresas() {
@@ -86,6 +106,8 @@ export class CotizacionPage {
 							}
 						})
 					}
+
+					this.showSpinnerEmpresas = false;
 				},
 				(err) => {
 					console.log(err);
@@ -136,7 +158,7 @@ export class CotizacionPage {
 			inputs: [
 				{
 					type: 'radio',
-					label: 'Ferreterias',
+					label: 'empresas',
 					value: '1',
 					handler: (event) => {
 						this.dismisAlert(event, alert, empresas);
@@ -518,4 +540,162 @@ export class CotizacionPage {
 		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 	}
 
+	aplicarFiltro() {
+		if (this.filtro == 1) {
+			if (this.auxEmpresas.length > 0) {
+				this.empresasLoad = this.auxEmpresas;
+			}
+		} else {
+			this.auxEmpresas = this.empresasLoad;
+			this.empresasLoad = this.storage.empresas;
+		}
+	}
+
+	inputSearch() {
+		this.busqueda = true;
+		setTimeout(() => {
+			this.searchInput.setFocus();
+		}, 300);
+	}
+
+	closeSearch() {
+		// si ya se realizo una busqueda, pone el texto del input en blanco
+		// oculta la barra de busqueda
+		// y carga todas las empresas
+		if (this.loadListSearch) {
+			this.txtSearch = '';
+			this.busqueda = false;
+			this.loadEmpresa(false);
+			this.loadListSearch = false;
+		}
+	}
+
+	closeKeyboard() {
+		if (!this.loadListSearch) {
+			this.busqueda = false;
+		}
+	}
+
+	loadEmpresa(refresh) {
+		this.enabledInfinite = true;
+		// muestra el 'Cargando' en la vista
+		// se la pagina se refresca con el efecto de estirar no se muestra el 'cargando'
+		if (!refresh) {
+			this.showSpinnerEmpresas = true;
+		}
+		// carga la informacion del web service
+		this.ws.getEmpresas(1)
+			.subscribe(
+			(ferreteria) => {
+				this.empresas = ferreteria.data;
+				this.empresasLoad = [];
+				this.cargarVista(20, refresh);
+			},
+			(err) => {
+				if (!refresh) {
+					// this.loader.dismiss();
+					this.showSpinnerEmpresas = false;
+				} else {
+					this.refresher.complete();
+				}
+
+				if (err.status == 0) {
+					this.app.rootPage = 'NoInternetPage';
+				}
+			}
+			);
+	}
+
+	cargarVista(numElemetos, refresh) {
+		let num = numElemetos;
+		if (this.empresas.length <= num) {
+			num = this.empresas.length
+		}
+		for (var i = 0; i < num; ++i) {
+			for (let e of this.storage.empresas) {
+				this.empresas.find((element, index) => {
+					if (element.id == e.id) {
+						element.selected = true;
+					}
+				})
+			}
+			this.empresasLoad.push(this.empresas[i]);
+		}
+
+
+		if (refresh) {
+			this.refresher.complete();
+			this.txtSearch = '';
+			this.busqueda = false;
+			this.loadListSearch = false;
+		} else {
+			// oculta el 'cargando' de la vista
+			this.showSpinnerEmpresas = false;
+		}
+	}
+
+	doInfinite(infiniteScroll) {
+
+		setTimeout(() => {
+			// numero de elementos cargados en la vista
+			let position = this.empresasLoad.length;
+			// numero de elementos a agregar en la vista (20)
+			let tamano = position + 20;
+			// si tamaño es mañor que el array de elementos, tamaño es igual al tamaño del array
+			if (tamano > this.empresas.length) {
+				tamano = this.empresas.length;
+			}
+
+			// agregar elementos al array que muestra la informacion el pantalla
+			for (let i = position; i < tamano; i++) {
+				this.empresasLoad.push(this.empresas[i]);
+			}
+
+			infiniteScroll.complete();
+			if (tamano == this.empresas.length) {
+				this.enabledInfinite = false;
+			}
+		}, 500);
+	}
+
+	search(event) {
+		// si se presiona el boton de buscar (teclado) se ejecuta la funciona
+		if (event == 13) {
+			this.empresasLoad = [];
+			this.loadSearch();
+		}
+	}
+
+	loadSearch() {
+		if (this.txtSearch != '' && this.txtSearch != undefined) {
+			// mustra el 'cargando' en la vista
+			this.showSpinnerEmpresas = true;
+			// realiza la busqueda y la muestra en pantalla
+			this.loadListSearch = true;
+			this.ws.search(1, this.txtSearch)
+				.subscribe(
+				(search) => {
+					this.empresas = search.data;
+					this.empresasLoad = [];
+					this.cargarVista(20, false);
+					this.keyboard.close();
+				},
+				(err) => {
+					// si no hay empresas para mostrar
+					if (err.status == 400) {
+						this.empresas = [];
+						this.empresasLoad = [];
+						this.cargarVista(20, false);
+						this.keyboard.close();
+					}
+					// si el dispositivo no tiene internet muestra la pagina de no internet
+					if (err.status == 0) {
+						this.showSpinnerEmpresas = false;
+						this.app.rootPage = 'NoInternetPage';
+					}
+				}
+				);
+		}
+
+	}
 }

@@ -25,13 +25,13 @@ export class MyApp {
       { title: 'Empresas', componet: TabsPage, icon: 'construct' },
       { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person' },
       { title: 'Datos de envio', componet: 'DireccionPage', icon: 'send' },
-      // { title: 'Contactenos', componet: 'ContactenosPage', icon: 'mail' }
-      { title: 'Contactenos', componet: 'FormCotizacionPage', icon: 'mail' }
+      { title: 'Contactenos', componet: 'ContactenosPage', icon: 'mail' }
+      // { title: 'Contactenos', componet: 'FormCotizacionPage', icon: 'mail' }
     ];
 
     platform.ready().then(() => {
-      // this.isLogged();
-      this.pc();
+      this.isLogged();
+      // this.pc();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
