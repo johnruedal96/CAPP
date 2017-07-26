@@ -50,7 +50,7 @@ export class LoginPage {
       },
       (err) => {
         respuesta.loader.dismiss();
-        this.presentAlert('Ha ocurrido un error', 'Por favor intente de nuevo');
+        this.presentAlert('Ha ocurrido un error', 'Ha ocurrido un error, por favor intente de nuevo');
       }
       );
   }
@@ -73,11 +73,20 @@ export class LoginPage {
 
   presentAlert(title, subTitle) {
     let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: subTitle,
-      buttons: ['cerrar']
-    });
-    alert.present();
+				title: title,
+				message: subTitle,
+				buttons: ['Cerrar']
+			})
+			alert.present();
+			setTimeout(() => {
+				let hdr = alert.instance.hdrId;
+				let desc = alert.instance.descId;
+				let head = window.document.getElementById(hdr);
+        let msg = window.document.getElementById(desc);
+				head.style.textAlign = 'center';
+				msg.style.textAlign = 'center';
+				head.innerHTML = '<ion-icon name="close" style="color:#f53d3d; text-aling:center" role="img" class="icon icon-md ion-md-close" aria-label="close" ng-reflect-name="close"></ion-icon>';
+			}, 100)
   }
 
 }

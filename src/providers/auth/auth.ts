@@ -61,7 +61,7 @@ export class AuthProvider {
     if (res.url == 'http://www.contactoarquitectonico.com.co/inicio') {
       window.localStorage.setItem('token', this.token);
     } else {
-      this.presentAlert('Datos invalidos', 'Por favor intente de nuevo');
+      this.presentAlert('Datos invalidos', 'Datos invalidos, por favor intente de nuevo');
     }
     this.loader.dismiss();
   }
@@ -118,11 +118,20 @@ export class AuthProvider {
 
   presentAlert(title, subTitle) {
     let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: subTitle,
-      buttons: ['cerrar']
-    });
-    alert.present();
+				title: title,
+				message: subTitle,
+				buttons: ['Cerrar']
+			})
+			alert.present();
+			setTimeout(() => {
+				let hdr = alert.instance.hdrId;
+				let desc = alert.instance.descId;
+				let head = window.document.getElementById(hdr);
+        let msg = window.document.getElementById(desc);
+				head.style.textAlign = 'center';
+				msg.style.textAlign = 'center';
+				head.innerHTML = '<ion-icon name="close" style="color:#f53d3d; text-aling:center" role="img" class="icon icon-md ion-md-close" aria-label="close" ng-reflect-name="close"></ion-icon>';
+			}, 100)
   }
 
 }

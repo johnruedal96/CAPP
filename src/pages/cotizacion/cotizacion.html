@@ -49,13 +49,14 @@
 			</ion-segment-button>
 		</ion-segment>
 	</div>
-	<ion-input type="hidden" (ionChange)="getEmpresas()" value="{{storage.empresaId}}"></ion-input>
+	<ion-input type="hidden" (ionChange)="loadEmpresa(false)" value="{{storage.empresaId}}"></ion-input>
 	<div [ngSwitch]="tabsCotizacion">
 		<!--tab Productos-->
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'productoTab'" padding>
-			<button (click)="listarProductos()" ion-button style="margin: 0; width: 48%; font-size: 1.3rem">Agregar Producto</button>
-			<button (click)="cancelarCotizacion()" ion-button style="margin-left: -5px; width: 48%; font-size: 1.3rem" color="warning">Cancelar Cotización</button>
+			<button *ngIf="!addEmpresa" (click)="listarProductos()" ion-button style="margin: 0; width: 100%; font-size: 1.3rem">Agregar Producto</button>
+			<button *ngIf="addEmpresa" (click)="listarProductos()" ion-button style="margin: 0; width: 48%; font-size: 1.3rem">Agregar Producto</button>
+			<button *ngIf="addEmpresa" (click)="cancelarCotizacion()" ion-button style="margin-left: -5px; width: 48%; font-size: 1.3rem" color="warning">Cancelar Cotización</button>
 			<h3 *ngIf="storage.productos.length > 0">Lista de compra</h3>
 			<ion-row class="row-head row-table">
 				<ion-col col-12 class="col-body">Producto</ion-col>
@@ -108,7 +109,7 @@
 		<!--Tab Empresas-->
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'empresaTab'">
-			<ion-list>
+			<ion-list *ngIf="addEmpresa">
 				<ion-item>
 					<ion-label>Filtro</ion-label>
 					<ion-select interface="popover" [(ngModel)]="filtro" (ionChange)="aplicarFiltro()">

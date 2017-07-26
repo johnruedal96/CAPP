@@ -61,7 +61,7 @@ export class CotizacionPage {
 	// guarda lo escrito en el input de busqueda
 	public txtSearch: string;
 	public enabledInfinite: boolean = true;
-	public empresasLoad: any;
+	public empresasLoad: any = [];
 	public refresher;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard) {
@@ -70,10 +70,12 @@ export class CotizacionPage {
 		this.empresa = this.navParams.get('empresa');
 		let mantenerProductos = this.navParams.get('mantener');
 		if (this.empresa != undefined) {
+			this.empresa.selected = true;
 			this.storage.empresas = [];
 			this.storage.empresas.push(this.empresa);
+			this.empresasLoad.push(this.empresa);
+			this.showSpinnerEmpresas = false;
 			this.addEmpresa = false;
-			this.tipoEmpresa = true;
 			this.storage.empresaId = this.empresa.tipo;
 			window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.storage.empresas));
 			if (mantenerProductos) {
@@ -88,32 +90,11 @@ export class CotizacionPage {
 
 	ionViewDidLoad() {
 		this.obtenerCotizacionGuardada();
-		this.loadEmpresa(false);
+		if (this.addEmpresa) {
+			this.loadEmpresa(false);
+		}
 		// ejecuta la funcion closeSearch() cuando el teclado es cerrado
 		this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
-	}
-
-	getEmpresas() {
-		if (this.storage.empresaId >= 1) {
-			this.ws.getEmpresas(this.storage.empresaId)
-				.subscribe(
-				(res) => {
-					this.empresas = res.data;
-					for (let e of this.storage.empresas) {
-						this.empresas.find((element, index) => {
-							if (element.id == e.id) {
-								element.selected = true;
-							}
-						})
-					}
-
-					this.showSpinnerEmpresas = false;
-				},
-				(err) => {
-					console.log(err);
-				}
-				)
-		}
 	}
 
 	obtenerCotizacionGuardada() {
@@ -158,7 +139,7 @@ export class CotizacionPage {
 			inputs: [
 				{
 					type: 'radio',
-					label: 'empresas',
+					label: 'Ferreterias',
 					value: '1',
 					handler: (event) => {
 						this.dismisAlert(event, alert, empresas);
@@ -193,7 +174,7 @@ export class CotizacionPage {
 
 	dismisAlert(event, alert, empresas) {
 		alert.dismiss();
-		this.getEmpresas();
+		this.loadEmpresa(false);
 		this.storage.empresaId = event.value;
 		window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
 		if (empresas) {
@@ -286,11 +267,22 @@ export class CotizacionPage {
 				buttons: [
 					{
 						text: 'Aceptar',
-						role: 'cancel',
+						handler: () => {
+							this.tabsCotizacion = 'empresaTab';
+						}
 					}
 				]
-			});
+			})
 			alert.present();
+			setTimeout(() => {
+				let hdr = alert.instance.hdrId;
+				let desc = alert.instance.descId;
+				let head = window.document.getElementById(hdr);
+				let msg = window.document.getElementById(desc);
+				head.style.textAlign = 'center';
+				msg.style.textAlign = 'center';
+				head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+			}, 100)
 		}
 	}
 
@@ -310,10 +302,20 @@ export class CotizacionPage {
 			(err) => {
 				let alert = this.alertCtrl.create({
 					title: 'Error',
-					subTitle: 'La cotización no se ha enviado',
+					message: 'La cotización no se ha enviado',
 					buttons: ['Aceptar']
-				});
+				})
 				alert.present();
+				setTimeout(() => {
+					let hdr = alert.instance.hdrId;
+					let desc = alert.instance.descId;
+					let head = window.document.getElementById(hdr);
+					let msg = window.document.getElementById(desc);
+					head.style.textAlign = 'center';
+					msg.style.textAlign = 'center';
+					head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+				}, 100)
+
 			}
 			)
 	}
@@ -371,7 +373,7 @@ export class CotizacionPage {
 				this.nroRequestOk++;
 				if (this.nroRequest == this.nroRequestOk) {
 					let title = 'Cotización enviada';
-					let subTitle = '';
+					let subTitle = 'Cotización enviada';
 					this.showAlertCotizacionEnviada(title, subTitle);
 				}
 			},
@@ -390,7 +392,7 @@ export class CotizacionPage {
 				this.nroRequestOk++;
 				if (this.nroRequest == this.nroRequestOk) {
 					let title = 'Cotización enviada';
-					let subTitle = '';
+					let subTitle = 'Cotización enviada';
 					this.showAlertCotizacionEnviada(title, subTitle);
 				}
 			},
@@ -464,13 +466,24 @@ export class CotizacionPage {
 		this.loader.dismiss();
 		let alert = this.alertCtrl.create({
 			title: title,
-			subTitle: subTitle,
+			message: subTitle,
 			buttons: ['Aceptar']
-		});
+		})
 		alert.present();
+		setTimeout(() => {
+			let hdr = alert.instance.hdrId;
+			let desc = alert.instance.descId;
+			let head = window.document.getElementById(hdr);
+			let msg = window.document.getElementById(desc);
+			head.style.textAlign = 'center';
+			msg.style.textAlign = 'center';
+			head.innerHTML = '<ion-icon name="checkmark" style="color:#5cb85c; text-aling:center" role="img" class="icon icon-md ion-md-checkmark" aria-label="checkmark" ng-reflect-name="checkmark"></ion-icon>';
+		}, 100)
+
 		this.storage.productos = [];
 		this.storage.empresas = [];
 		this.storage.empresaId = 0;
+		this.empresasLoad = [];
 		window.localStorage.removeItem('CotizacionLista');
 		window.localStorage.removeItem('CotizacionEmpresas');
 		window.localStorage.removeItem('cotizacionTipoEmpresa');
@@ -488,9 +501,8 @@ export class CotizacionPage {
 	}
 
 	cancelarCotizacion() {
-		let icon = '<div id="icon-alert"></div> Titulo';
 		let alert = this.alertCtrl.create({
-			title: <any>icon,
+			title: 'alert',
 			message: 'Se cancelará la cotización',
 			cssClass: 'alert-icon',
 			buttons: [
@@ -504,6 +516,7 @@ export class CotizacionPage {
 						this.storage.empresaId = 0;
 						this.storage.empresas = [];
 						this.storage.productos = [];
+						this.empresasLoad = [];
 						window.localStorage.removeItem('CotizacionLista');
 						window.localStorage.removeItem('CotizacionEmpresas');
 						window.localStorage.removeItem('cotizacionTipoEmpresa');
@@ -577,33 +590,35 @@ export class CotizacionPage {
 	}
 
 	loadEmpresa(refresh) {
-		this.enabledInfinite = true;
-		// muestra el 'Cargando' en la vista
-		// se la pagina se refresca con el efecto de estirar no se muestra el 'cargando'
-		if (!refresh) {
-			this.showSpinnerEmpresas = true;
-		}
-		// carga la informacion del web service
-		this.ws.getEmpresas(1)
-			.subscribe(
-			(ferreteria) => {
-				this.empresas = ferreteria.data;
-				this.empresasLoad = [];
-				this.cargarVista(20, refresh);
-			},
-			(err) => {
-				if (!refresh) {
-					// this.loader.dismiss();
-					this.showSpinnerEmpresas = false;
-				} else {
-					this.refresher.complete();
-				}
-
-				if (err.status == 0) {
-					this.app.rootPage = 'NoInternetPage';
-				}
+		if (this.storage.empresaId != 0) {
+			this.enabledInfinite = true;
+			// muestra el 'Cargando' en la vista
+			// se la pagina se refresca con el efecto de estirar no se muestra el 'cargando'
+			if (!refresh) {
+				this.showSpinnerEmpresas = true;
 			}
-			);
+			// carga la informacion del web service
+			this.ws.getEmpresas(this.storage.empresaId)
+				.subscribe(
+				(res) => {
+					this.empresas = res.data;
+					this.empresasLoad = [];
+					this.cargarVista(20, refresh);
+				},
+				(err) => {
+					if (!refresh) {
+						// this.loader.dismiss();
+						this.showSpinnerEmpresas = false;
+					} else {
+						this.refresher.complete();
+					}
+
+					if (err.status == 0) {
+						this.app.rootPage = 'NoInternetPage';
+					}
+				}
+				);
+		}
 	}
 
 	cargarVista(numElemetos, refresh) {
