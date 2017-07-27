@@ -1,7 +1,9 @@
 import { Component, ElementRef, Renderer } from '@angular/core';
-import { MenuController, NavController, AlertController } from 'ionic-angular';
+import { MenuController, NavController, AlertController, Platform } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+
+import { MyApp } from '../../app/app.component';
 
 @Component({
 	templateUrl: 'tabs.html'
@@ -13,7 +15,7 @@ export class TabsPage {
 	tab3Root = 'ServicioPage';
 	tab4Root = 'CotizacionPage';
 
-	constructor(public element: ElementRef, public renderer: Renderer, public menuController: MenuController, public auth: AuthProvider, public navCtrl: NavController, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
+	constructor(public element: ElementRef, public renderer: Renderer, public menuController: MenuController, public auth: AuthProvider, public navCtrl: NavController, public alertCtrl: AlertController, public storage: LocalStorageProvider, public platform: Platform) {
 		menuController.enable(true);
 		if (!storage.desarrollo) {
 			this.isLogged();

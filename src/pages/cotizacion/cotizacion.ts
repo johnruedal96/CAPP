@@ -167,10 +167,6 @@ export class CotizacionPage {
 					text: 'Cancelar',
 					handler: () => {
 						this.showSpinnerEmpresas = false;
-						this.platform.registerBackButtonAction(() => {
-							alert.dismiss();
-							this.app.buttomBack();
-						});
 					}
 				}
 			]
