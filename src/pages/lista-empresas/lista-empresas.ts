@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController, ToastController } 
 import { Platform, Searchbar } from 'ionic-angular';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { AuthProvider } from '../../providers/auth/auth';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -52,7 +53,7 @@ export class ListaEmpresasPage {
 
 	@ViewChild('searchbar') searchInput: Searchbar;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public toastCtrl: ToastController, public platform: Platform, public keyboard: Keyboard, public auth: AuthProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public toastCtrl: ToastController, public platform: Platform, public keyboard: Keyboard, public auth: AuthProvider, public storage: LocalStorageProvider) {
 
 		// si ecuentra el parametro, ejecuta la busqueda por el tipo de empresa (combo)
 		this.id = navParams.get('id');
@@ -75,7 +76,9 @@ export class ListaEmpresasPage {
 			this.dismiss();
 			this.app.buttomBack();
 		});
-		this.isLogged();
+		if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
 	}
 
 	isLogged() {

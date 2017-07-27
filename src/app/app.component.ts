@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { AuthProvider } from '../providers/auth/auth';
+import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 
 @Component({
   templateUrl: 'app.html'
@@ -19,7 +20,7 @@ export class MyApp {
   public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
   public alert;
 
-  constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider, public alertCtrl: AlertController) {
+  constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
 
     this.pages = [
       { title: 'Empresas', componet: TabsPage, icon: 'construct' },
@@ -30,8 +31,11 @@ export class MyApp {
     ];
 
     platform.ready().then(() => {
-      this.isLogged();
-      // this.pc();
+      if (storage.desarrollo) {
+        this.pc();
+      } else {
+        this.isLogged();
+      }
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();

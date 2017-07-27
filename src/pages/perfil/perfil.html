@@ -27,7 +27,7 @@
 <ion-content>
 	<div class="head-color">
 		<div class="div_img">
-			<img src="{{urlImagen}}logo_casco.png" *ngIf='auth.user.foto == null' />
+			<img src="{{urlImagen}}sin_logo.png" *ngIf='auth.user.foto == null' />
 			<img src="{{urlImagen}}{{auth.user.foto}}" *ngIf='auth.user.foto != null' />
 		</div>
 		<ion-segment [(ngModel)]="myProfile" color="dark">

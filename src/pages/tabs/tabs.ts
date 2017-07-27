@@ -15,7 +15,9 @@ export class TabsPage {
 
 	constructor(public element: ElementRef, public renderer: Renderer, public menuController: MenuController, public auth: AuthProvider, public navCtrl: NavController, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
 		menuController.enable(true);
-		this.isLogged();
+		if (!storage.desarrollo) {
+			this.isLogged();
+		}
 	}
 
 	isLogged() {
@@ -29,7 +31,9 @@ export class TabsPage {
 	}
 
 	onTabSelect(event) {
-		this.isLogged();
+		if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
 		if (event.index == 3) {
 			this.storage.empresaId = Number(window.localStorage.getItem('cotizacionTipoEmpresa'));
 			if (this.storage.empresaId == undefined || this.storage.empresaId == 0) {

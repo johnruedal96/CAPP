@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, AlertController
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 /**
  * Generated class for the ConfirmarCompraPage page.
@@ -28,7 +29,7 @@ export class ConfirmarCompraPage {
   public loader;
   public disabledButtonEnviar: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
     this.direccionNombre = this.navParams.get('direccionNombre');
     this.direccionId = this.navParams.get('direccionId');
     this.formaPagoNombre = this.navParams.get('formaPagoNombre');
@@ -40,7 +41,9 @@ export class ConfirmarCompraPage {
   }
 
   ionViewDidLoad() {
-    this.isLogged();
+    if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
   }
 
   isLogged() {

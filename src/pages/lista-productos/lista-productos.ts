@@ -52,7 +52,9 @@ export class ListaProductosPage {
       this.dismiss();
       this.app.buttomBack();
     });
-    this.isLogged();
+    if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
   }
 
   isLogged() {

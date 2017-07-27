@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, AlertController
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { AuthProvider } from '../../providers/auth/auth';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 /**
  * Generated class for the DatosCompraPage page.
@@ -30,7 +31,7 @@ export class DatosCompraPage {
   public spinnerDireccion: boolean = true;
   public spinnerPago: boolean = true;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public toastCtrl: ToastController, public storage: LocalStorageProvider) {
     this.cliente = this.navParams.get('cliente');
     this.lista = this.navParams.get('lista');
     this.total = this.navParams.get('total');
@@ -40,7 +41,9 @@ export class DatosCompraPage {
   ionViewDidLoad() {
     this.getDireccion();
     this.getFormasPago();
-    this.isLogged();
+    if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
   }
 
   isLogged() {

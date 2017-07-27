@@ -4,6 +4,7 @@ import { SuperTabsController } from 'ionic2-super-tabs';
 import { MyApp } from '../../app/app.component';
 
 import { AuthProvider } from '../../providers/auth/auth';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 /**
  * Generated class for the EmpresaPage page.
@@ -22,7 +23,7 @@ export class EmpresaPage {
 	public empresa: any;
 	public viewBtnCotizacion: boolean = true;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController, public auth: AuthProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController, public auth: AuthProvider, public storage: LocalStorageProvider) {
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 		this.empresa = navParams.get('empresa');
 		this.viewBtnCotizacion = navParams.get('viewBtnCotizacion');
@@ -32,7 +33,9 @@ export class EmpresaPage {
 	}
 
 	ionViewDidLoad() {
-		this.isLogged();
+		if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
 	}
 
 	isLogged() {
@@ -101,7 +104,7 @@ export class EmpresaPage {
 		}
 		let alert = this.alertCtrl.create({
 			title: 'Cotización',
-			subTitle: subtitle,
+			message: subtitle,
 			buttons: [
 				{
 					text: 'Cancelar',
@@ -114,8 +117,14 @@ export class EmpresaPage {
 					}
 				}
 			]
-		});
+		})
 		alert.present();
+		setTimeout(() => {
+			let hdr = alert.instance.hdrId;
+			let head = window.document.getElementById(hdr);
+			head.style.textAlign = 'center';
+			head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+		}, 100)
 	}
 
 }

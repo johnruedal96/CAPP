@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController, AlertController } 
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { AuthProvider } from '../../providers/auth/auth';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 /**
  * Generated class for the ListaCotizacionPage page.
@@ -30,7 +31,7 @@ export class ListaCotizacionPage {
 	public total: number = 0;
 	public direccion: number;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public auth: AuthProvider, public alertCtrl: AlertController) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public auth: AuthProvider, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
 		this.id = navParams.get('id');
 		this.fecha = this.formatDate(navParams.get('fecha'));
 		this.hora = this.formatHora(navParams.get('fecha'));
@@ -42,7 +43,9 @@ export class ListaCotizacionPage {
 	}
 
 	ionViewDidLoad() {
-		this.isLogged();
+		if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
 	}
 
 	formatDate(date) {

@@ -120,7 +120,7 @@
 			</ion-list>
 
 			<ion-list class="lista">
-				<div class="spinnerCargando" *ngIf="showSpinnerEmpresas">
+				<div class="spinnerCargando" *ngIf="showSpinnerEmpresas && this.storage.empresaId !=0">
 					<!-- <div class="spinnerCargando"> -->
 					<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
 					<p text-center>Cargando...</p>

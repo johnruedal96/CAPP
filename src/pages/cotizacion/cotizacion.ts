@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ToastController, Searchbar } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController, Searchbar, Platform } from 'ionic-angular';
 import { AlertController, LoadingController } from 'ionic-angular';
 import { MyApp } from '../../app/app.component';
 
@@ -64,7 +64,7 @@ export class CotizacionPage {
 	public empresasLoad: any = [];
 	public refresher;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard, public platform: Platform) {
 		this.storage.productos = [];
 		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
@@ -165,7 +165,13 @@ export class CotizacionPage {
 			buttons: [
 				{
 					text: 'Cancelar',
-					role: 'cancel'
+					handler: () => {
+						this.showSpinnerEmpresas = false;
+						this.platform.registerBackButtonAction(() => {
+							alert.dismiss();
+							this.app.buttomBack();
+						});
+					}
 				}
 			]
 		});
@@ -281,7 +287,7 @@ export class CotizacionPage {
 				let msg = window.document.getElementById(desc);
 				head.style.textAlign = 'center';
 				msg.style.textAlign = 'center';
-				head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+				head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
 			}, 100)
 		}
 	}
@@ -313,7 +319,7 @@ export class CotizacionPage {
 					let msg = window.document.getElementById(desc);
 					head.style.textAlign = 'center';
 					msg.style.textAlign = 'center';
-					head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+					head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
 				}, 100)
 
 			}
@@ -426,42 +432,6 @@ export class CotizacionPage {
 		}
 	}
 
-	changeTipo(event) {
-		if (this.time > 0) {
-			if (this.storage.productos.length > 0 || this.storage.empresas.length > 0) {
-				let alert = this.alertCtrl.create({
-					title: '¿Desa continuar?',
-					subTitle: 'Se borraran los productos agregados a la lista y las empresas seleccionadas',
-					buttons: [
-						{
-							text: 'No',
-							role: 'cancel',
-							handler: () => {
-								this.storage.empresaId = this.tipoEmpresaIdAntigua;
-								this.time = 0;
-							}
-						},
-						{
-							text: 'Si',
-							handler: () => {
-								this.storage.productos = [];
-								this.storage.empresas = [];
-								localStorage.removeItem('CotizacionLista');
-								localStorage.removeItem('CotizacionEmpresas');
-								this.tipoEmpresaIdAntigua = event;
-							}
-						}
-					]
-				})
-				alert.present();
-			}
-		} else {
-			this.tipoEmpresaIdAntigua = event;
-			this.time++;
-		}
-		window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
-	}
-
 	showAlertCotizacionEnviada(title, subTitle) {
 		this.loader.dismiss();
 		let alert = this.alertCtrl.create({
@@ -477,7 +447,7 @@ export class CotizacionPage {
 			let msg = window.document.getElementById(desc);
 			head.style.textAlign = 'center';
 			msg.style.textAlign = 'center';
-			head.innerHTML = '<ion-icon name="checkmark" style="color:#5cb85c; text-aling:center" role="img" class="icon icon-md ion-md-checkmark" aria-label="checkmark" ng-reflect-name="checkmark"></ion-icon>';
+			head.innerHTML = '<ion-icon name="checkmark" style="color:#5cb85c; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-checkmark" aria-label="checkmark" ng-reflect-name="checkmark"></ion-icon>';
 		}, 100)
 
 		this.storage.productos = [];
@@ -532,7 +502,7 @@ export class CotizacionPage {
 			let msg = window.document.getElementById(desc);
 			head.style.textAlign = 'center';
 			msg.style.textAlign = 'center';
-			head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+			head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
 		}, 100)
 		// div.
 	}

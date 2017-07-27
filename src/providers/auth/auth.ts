@@ -130,7 +130,7 @@ export class AuthProvider {
         let msg = window.document.getElementById(desc);
 				head.style.textAlign = 'center';
 				msg.style.textAlign = 'center';
-				head.innerHTML = '<ion-icon name="close" style="color:#f53d3d; text-aling:center" role="img" class="icon icon-md ion-md-close" aria-label="close" ng-reflect-name="close"></ion-icon>';
+				head.innerHTML = '<ion-icon name="close" style="color:#f53d3d; text-aling:center; font-size: 3em" role="img" class="icon icon-md ion-md-close" aria-label="close" ng-reflect-name="close"></ion-icon>';
 			}, 100)
   }
 

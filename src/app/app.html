@@ -2,7 +2,7 @@
 	<ion-content class="nav-list">
 	<div  *ngIf="login" class="banner-sidebar" style="background-image: url('assets/sideMenu.png')">
 		<div style="padding: 20px">
-			<img class="logo_usuario" src="{{urlImagen}}logo_casco.png" *ngIf='auth.user.foto == null' (click)="goToPage('PerfilPage')" menuClose>
+			<img class="logo_usuario" src="{{urlImagen}}sin_logo.png" *ngIf='auth.user.foto == null' (click)="goToPage('PerfilPage')" menuClose>
 			<img *ngIf='auth.user.foto != null' class="logo_usuario" src="{{urlImagen}}{{auth.user.foto}}"  (click)="goToPage('PerfilPage')" menuClose>
 			<div class="name-user">
 				{{auth.user.nombre}}

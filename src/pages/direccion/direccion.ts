@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, LoadingController
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 /**
  * Generated class for the DireccionPage page.
@@ -19,11 +20,13 @@ export class DireccionPage {
 
   public direcciones: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public storage: LocalStorageProvider) {
   }
 
   ionViewDidLoad() {
-    this.isLogged();
+    if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
     this.getDireccion();
   }
 

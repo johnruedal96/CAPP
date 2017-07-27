@@ -4,6 +4,7 @@ import { Content } from 'ionic-angular';
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
 /**
  * Generated class for the PerfilPage page.
@@ -33,7 +34,7 @@ export class PerfilPage {
 
 	@ViewChild(Content) content: Content;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer, public storage: LocalStorageProvider) {
 		this.cotizaciones = [];
 		this.compras = [];
 		this.myProfile = this.navParams.get('tab');
@@ -46,7 +47,9 @@ export class PerfilPage {
 	ionViewDidLoad() {
 		this.searchCotizacion();
 		this.getCompras();
-		this.isLogged();
+		if (!this.storage.desarrollo) {
+			this.isLogged();
+		}
 	}
 
 	isLogged() {

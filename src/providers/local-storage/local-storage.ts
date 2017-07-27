@@ -15,9 +15,10 @@ export class LocalStorageProvider {
   // window.localStorage.setItem('CotizacionLista', JSON.stringify(this.lista));
   // window.localStorage.setItem('cotizacionTipoEmpresa', this.tipoEmpresaId.toLocaleString());
   // Cotizacion
-  public empresas:any = [];
-  public productos:any = [];
-  public empresaId:any;
+  public empresas: any = [];
+  public productos: any = [];
+  public empresaId: any;
+  public desarrollo: boolean = false;
 
   constructor(public http: Http) {
 
