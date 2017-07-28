@@ -53,8 +53,10 @@
 				<img src="{{imagen}}{{servicio.imagen}}">
 			</ion-avatar>
 			<h3>{{servicio.nombre}}</h3>
-			<p class="circle-estado"></p>
-			<p class="txt-estado">abierto</p>
+			<p *ngIf="servicio.isOpen" class="circle-estado-abierto"></p>
+			<p *ngIf="servicio.isOpen" class="txt-estado">Abierto</p>
+			<p *ngIf="!servicio.isOpen" class="circle-estado-cerrado"></p>
+			<p *ngIf="!servicio.isOpen" class="txt-estado">Cerrado</p>
 		</ion-item>
 	</ion-list>
 

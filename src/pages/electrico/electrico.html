@@ -53,8 +53,10 @@
 				<img src="{{imagen}}{{electrico.imagen}}">
 			</ion-avatar>
 			<h3>{{electrico.nombre}}</h3>
-			<p class="circle-estado"></p>
-			<p class="txt-estado">abierto</p>
+			<p *ngIf="electrico.isOpen" class="circle-estado-abierto"></p>
+			<p *ngIf="electrico.isOpen" class="txt-estado">Abierto</p>
+			<p *ngIf="!electrico.isOpen" class="circle-estado-cerrado"></p>
+			<p *ngIf="!electrico.isOpen" class="txt-estado">Cerrado</p>
 		</ion-item>
 	</ion-list>
 

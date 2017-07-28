@@ -53,10 +53,10 @@
 				<img src="{{imagen}}{{ferreteria.imagen}}">
 			</ion-avatar>
 			<h3>{{ferreteria.nombre}}</h3>
-			<p *ngIf="ferreteria.abierto" class="circle-estado-abierto"></p>
-			<p *ngIf="ferreteria.abierto" class="txt-estado">Abierto</p>
-			<p *ngIf="!ferreteria.abierto" class="circle-estado-cerrado"></p>
-			<p *ngIf="!ferreteria.abierto" class="txt-estado">Cerrado</p>
+			<p *ngIf="ferreteria.isOpen" class="circle-estado-abierto"></p>
+			<p *ngIf="ferreteria.isOpen" class="txt-estado">Abierto</p>
+			<p *ngIf="!ferreteria.isOpen" class="circle-estado-cerrado"></p>
+			<p *ngIf="!ferreteria.isOpen" class="txt-estado">Cerrado</p>
 		</ion-item>
 	</ion-list>
 

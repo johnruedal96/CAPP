@@ -87,6 +87,7 @@ export class ElectricoPage {
 			num = this.electricos.length
 		}
 		for (var i = 0; i < num; ++i) {
+			this.isOpoen(i);
 			this.electricoLoad.push(this.electricos[i]);
 		}
 		if (refresh) {
@@ -182,6 +183,7 @@ export class ElectricoPage {
 
 			// agregar elementos al array que muestra la informacion el pantalla
 			for (let i = position; i < tamano; i++) {
+				this.isOpoen(i);
 				this.electricoLoad.push(this.electricos[i]);
 			}
 
@@ -195,5 +197,36 @@ export class ElectricoPage {
 	doRefresh(refresher) {
 		this.loadEmpresa(true);
 		this.refresher = refresher;
+	}
+
+	isOpoen(i) {
+		let date = new Date();
+		let horaActual = date.getHours();
+		let minutosActual = date.getMinutes();
+		let abierto = this.electricos[i].abierto.split(',');
+		let cerrado = this.electricos[i].cerrado.split(',');
+
+		for (var j = 0; j < abierto.length; j++) {
+			let a = abierto[j].split(':');
+			let c = cerrado[j].split(':');
+			if (a[0] <= horaActual && horaActual <= c[0]) {
+				if (a[0] == horaActual || horaActual == c[0]) {
+					if (a[1] <= minutosActual && minutosActual <= c[1]) {
+						this.electricos[i].isOpen = true;
+					} else {
+						this.electricos[i].isOpen = false;
+					}
+				} else {
+					this.electricos[i].isOpen = true;
+				}
+			} else {
+				this.electricos[i].isOpen = false;
+			}
+
+			if (this.electricos[i].isOpen) {
+				j = abierto.length;
+			}
+
+		}
 	}
 }

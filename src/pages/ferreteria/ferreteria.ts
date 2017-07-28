@@ -85,40 +85,12 @@ export class FerreteriaPage {
 	// Cargar los elementos en la lista
 	// numElemtos = numero de elementos a mostrar
 	cargarVista(numElemetos, refresh) {
-		let date = new Date();
-		let horaActual = date.getHours();
-		let minutosActual = date.getMinutes();
-		let segundosActual = date.getSeconds();
 		let num = numElemetos;
 		if (this.ferreterias.length <= num) {
 			num = this.ferreterias.length
 		}
 		for (var i = 0; i < num; ++i) {
-			let abierto = this.ferreterias[i].abierto.split(',');
-			let cerrado = this.ferreterias[i].cerrado.split(',');
-
-			for (var j = 0; j < abierto.length; j++) {
-				let a = abierto[j].split(':');
-				let c = cerrado[j].split(':');
-				if (a[0] <= horaActual && horaActual <= c[0]) {
-					if (a[0] == horaActual || horaActual == c[0]) {
-						if (a[1] <= minutosActual && minutosActual <= c[1]) {
-							this.ferreterias[i].abierto = true;
-						}else{
-							this.ferreterias[i].abierto = false;
-						}
-					}else{
-						this.ferreterias[i].abierto = true;
-					}
-				} else {
-					this.ferreterias[i].abierto = false;
-				}
-
-				if(this.ferreterias[i].abierto){
-					j = abierto.length;
-				}
-			}
-			// console.log(abierto[0])
+			this.isOpoen(i);
 			this.ferreteriaLoad.push(this.ferreterias[i]);
 		}
 
@@ -131,6 +103,37 @@ export class FerreteriaPage {
 			// oculta el 'cargando' de la vista
 			this.showSpinner = false;
 		}
+	}
+
+	isOpoen(i) {
+		let date = new Date();
+		let horaActual = date.getHours();
+		let minutosActual = date.getMinutes();
+		let abierto = this.ferreterias[i].abierto.split(',');
+		let cerrado = this.ferreterias[i].cerrado.split(',');
+
+		for (var j = 0; j < abierto.length; j++) {
+			let a = abierto[j].split(':');
+			let c = cerrado[j].split(':');
+			if (a[0] <= horaActual && horaActual <= c[0]) {
+				if (a[0] == horaActual || horaActual == c[0]) {
+					if (a[1] <= minutosActual && minutosActual <= c[1]) {
+						this.ferreterias[i].isOpen = true;
+					} else {
+						this.ferreterias[i].isOpen = false;
+					}
+				} else {
+					this.ferreterias[i].isOpen = true;
+				}
+			} else {
+				this.ferreterias[i].isOpen = false;
+			}
+
+			if (this.ferreterias[i].isOpen) {
+				j = abierto.length;
+			}
+		}
+		
 	}
 
 	// navega a las diferentes empresas
@@ -220,6 +223,7 @@ export class FerreteriaPage {
 
 			// agregar elementos al array que muestra la informacion el pantalla
 			for (let i = position; i < tamano; i++) {
+				this.isOpoen(i);
 				this.ferreteriaLoad.push(this.ferreterias[i]);
 			}
 

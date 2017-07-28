@@ -29,11 +29,19 @@ page-electrico {
 			}
 		}
 
-		.circle-estado {
+		.circle-estado-abierto {
 			display: inline-block;
 			width: 10px;
 			height: 10px;
 			background-color: #09b509;
+			border-radius: 50%;
+		}
+
+		.circle-estado-cerrado {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			background-color: #f53d3d;
 			border-radius: 50%;
 		}
 

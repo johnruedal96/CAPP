@@ -88,6 +88,7 @@ export class ServicioPage {
 			num = this.servicios.length
 		}
 		for (var i = 0; i < num; ++i) {
+			this.isOpoen(i);
 			this.servicioLoad.push(this.servicios[i]);
 		}
 		if (refresh) {
@@ -183,6 +184,7 @@ export class ServicioPage {
 
 			// agregar elementos al array que muestra la informacion el pantalla
 			for (let i = position; i < tamano; i++) {
+				this.isOpoen(i);
 				this.servicioLoad.push(this.servicios[i]);
 			}
 
@@ -197,4 +199,36 @@ export class ServicioPage {
 		this.loadEmpresa(true);
 		this.refresher = refresher;
 	}
+
+	isOpoen(i) {
+		let date = new Date();
+		let horaActual = date.getHours();
+		let minutosActual = date.getMinutes();
+		let abierto = this.servicios[i].abierto.split(',');
+		let cerrado = this.servicios[i].cerrado.split(',');
+
+		for (var j = 0; j < abierto.length; j++) {
+			let a = abierto[j].split(':');
+			let c = cerrado[j].split(':');
+			if (a[0] <= horaActual && horaActual <= c[0]) {
+				if (a[0] == horaActual || horaActual == c[0]) {
+					if (a[1] <= minutosActual && minutosActual <= c[1]) {
+						this.servicios[i].isOpen = true;
+					} else {
+						this.servicios[i].isOpen = false;
+					}
+				} else {
+					this.servicios[i].isOpen = true;
+				}
+			} else {
+				this.servicios[i].isOpen = false;
+			}
+
+			if (this.servicios[i].isOpen) {
+				j = abierto.length;
+			}
+
+		}
+	}
+
 }

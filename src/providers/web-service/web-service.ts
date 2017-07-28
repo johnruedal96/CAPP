@@ -31,7 +31,8 @@ export class WebServiceProvider {
 	public urlGetUnidad: string;
 
 	constructor(public http: Http) {
-		this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
+		// this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
+		this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getEmpresas/";
 		this.urlSearch = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/search/";
 		this.urlSearchProducto = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/searchProducto/";
 		this.urlProductos = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/productos/";
@@ -52,12 +53,14 @@ export class WebServiceProvider {
 	}
 
 	getEmpresas(tipo) {
-		return this.http.get(this.url + tipo)
+		let date = new Date();
+		return this.http.get(this.url + tipo + '/'+ date.getDay())
 			.map(res => res.json())
 	}
 
 	search(tipo, name) {
-		return this.http.get(this.urlSearch + tipo + '/' + name)
+		let date = new Date();
+		return this.http.get(this.urlSearch + tipo + '/' + date.getDay() + '/' + name)
 			.map(res => res.json())
 	}
 
