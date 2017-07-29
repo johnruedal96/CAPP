@@ -15,7 +15,7 @@ export class MyApp {
   @ViewChild('NAV') nav: Nav;
   rootPage: any;
 
-  public pages: Array<{ title: string, componet: any, icon: string }>;
+  public pages: Array<{ title: string, componet: any, icon: string, param:{} }>;
   public login: boolean = false;
   public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
   public alert;
@@ -23,10 +23,11 @@ export class MyApp {
   constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
 
     this.pages = [
-      { title: 'Empresas', componet: TabsPage, icon: 'construct' },
-      { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person' },
-      { title: 'Datos de envio', componet: 'DireccionPage', icon: 'send' },
-      { title: 'Contactenos', componet: 'ContactenosPage', icon: 'mail' }
+      { title: 'Empresas', componet: TabsPage, icon: 'construct', param:{}},
+      { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person', param:{}},
+      { title: 'Cotizar', componet: TabsPage, icon: 'cart' , param:{'cotizacion':true}},
+      { title: 'Datos de envio', componet: 'DireccionPage', icon: 'send', param:{}},
+      { title: 'Contactenos', componet: 'ContactenosPage', icon: 'mail', param:{} }
       // { title: 'Contactenos', componet: 'FormCotizacionPage', icon: 'mail' }
     ];
 
@@ -84,8 +85,8 @@ export class MyApp {
     this.alert.present();
   }
 
-  goToPage(page) {
-    this.nav.setRoot(page);
+  goToPage(page,param) {
+    this.nav.setRoot(page,param);
   }
 
   isLogged() {

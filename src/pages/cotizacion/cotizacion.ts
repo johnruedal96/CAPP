@@ -10,6 +10,8 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 
 import { Subscription } from 'rxjs/Subscription';
 import { Keyboard } from '@ionic-native/keyboard';
+
+import { TabsPage } from '../tabs/tabs';
 /**
  * Generated class for the CotizacionPage page.
  *
@@ -24,24 +26,15 @@ import { Keyboard } from '@ionic-native/keyboard';
 export class CotizacionPage {
 
 	@ViewChild('searchbar') searchInput: Searchbar;
-	// variable que almacena el producto seleccionado
-	public product: any;
-	// variable que almacena la cantidad seleccionada
-	public cantidad: any;
-	// variable que llega de la ventana modal
+	// en cazo que llegue desde la vista de las empresas
 	public empresa: any;
-	public id: number = 0;
-	// llega del modal lista-empresas variable que guarda los empresas (empresas)
+	// almacena las empresas seleccioandas
 	public empresas: any = [];
 	// variable que indica si se va a cotizar una o muchas empresas
 	public addEmpresa: boolean = true;
 	public tabsCotizacion: string = 'productoTab';
-	public tipoEmpresaIdAntigua: number;
-	public time: number = 0;
 	public imagen: string;
-	public selectOptions: any;
 
-	public productos: any;
 	public producto: any;
 	public tipoEmpresa: boolean = false;
 	public loader: any;
@@ -51,7 +44,6 @@ export class CotizacionPage {
 	public disabledButtonEnviar: boolean = false;
 
 	public showSpinnerEmpresas: boolean = true;
-	public filtro: number;
 	public auxEmpresas: any = [];
 	public busqueda: boolean = false;
 	// suscripcion a los metodos del teclado
@@ -66,7 +58,6 @@ export class CotizacionPage {
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard, public platform: Platform) {
 		this.storage.productos = [];
-		this.productos = [];
 		this.empresa = this.navParams.get('empresa');
 		let mantenerProductos = this.navParams.get('mantener');
 		if (this.empresa != undefined) {
@@ -95,13 +86,13 @@ export class CotizacionPage {
 		}
 		// ejecuta la funcion closeSearch() cuando el teclado es cerrado
 		this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
+		this.storage.filtro = Boolean(window.localStorage.getItem('filtro') == 'true');
 	}
 
 	obtenerCotizacionGuardada() {
 		let tipoEmpresaId = window.localStorage.getItem('cotizacionTipoEmpresa');
 		if (tipoEmpresaId != null) {
 			this.storage.empresaId = Number(tipoEmpresaId);
-			this.time++;
 		}
 
 		let lista = window.localStorage.getItem('CotizacionLista');
@@ -152,14 +143,6 @@ export class CotizacionPage {
 					handler: (event) => {
 						this.dismisAlert(event, alert, empresas);
 					}
-				},
-				{
-					type: 'radio',
-					label: 'Servicios',
-					value: '3',
-					handler: (event) => {
-						this.dismisAlert(event, alert, empresas);
-					}
 				}
 			],
 			buttons: [
@@ -184,19 +167,6 @@ export class CotizacionPage {
 		} else {
 			this.listarProductos();
 		}
-	}
-
-	agregar() {
-		let item = {
-			id: this.id,
-			cantidad: this.cantidad,
-			producto: this.producto
-		}
-		this.id++;
-		this.storage.productos.push(item);
-		this.producto = null;
-		this.cantidad = '';
-		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 	}
 
 	deleteItem(item) {
@@ -235,6 +205,8 @@ export class CotizacionPage {
 
 	listarProductos() {
 		if (this.storage.empresaId != undefined && this.storage.empresaId != 0) {
+			this.storage.filtro = Boolean(window.localStorage.getItem('filtro') == 'true');
+			this.storage.filtro = !this.storage.filtro;
 			let param = {
 				id: this.storage.empresaId,
 				app: this.app
@@ -254,10 +226,11 @@ export class CotizacionPage {
 			productoModal.present();
 		} else {
 			this.showSelectEmpresa(false);
+			this.storage.filtro = false;
 		}
 	}
 
-	alertCotizacion() {
+	alertCotizacionEmpresa() {
 		this.disabledButtonEnviar = true;
 		if (this.storage.empresas.length > 0) {
 			this.enviarCotizacion();
@@ -288,7 +261,43 @@ export class CotizacionPage {
 		}
 	}
 
+	alertCotizacionProducto() {
+		this.disabledButtonEnviar = true;
+		if (this.storage.productos.length > 0) {
+			this.enviarCotizacion();
+		} else {
+			this.disabledButtonEnviar = false;
+			let alert = this.alertCtrl.create({
+				title: 'Error',
+				message: 'Ningun producto seleccionado',
+				buttons: [
+					{
+						text: 'Aceptar',
+						handler: () => {
+							this.tabsCotizacion = 'productoTab';
+						}
+					}
+				]
+			})
+			alert.present();
+			setTimeout(() => {
+				let hdr = alert.instance.hdrId;
+				let desc = alert.instance.descId;
+				let head = window.document.getElementById(hdr);
+				let msg = window.document.getElementById(desc);
+				head.style.textAlign = 'center';
+				msg.style.textAlign = 'center';
+				head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+			}, 100)
+		}
+	}
+
 	enviarCotizacion() {
+		this.loader = this.loadingCtrl.create({
+			content: 'Enviando Cotización'
+		});
+
+		this.loader.present();
 		this.auth.getToken()
 			.subscribe(
 			(token) => {
@@ -323,11 +332,6 @@ export class CotizacionPage {
 	}
 
 	sendCotizacionWs(data, token) {
-		this.loader = this.loadingCtrl.create({
-			content: 'Enviando Cotización'
-		});
-
-		this.loader.present();
 		this.ws.sendCotizacion(data, token)
 			.subscribe(
 			(res) => {
@@ -429,6 +433,7 @@ export class CotizacionPage {
 	}
 
 	showAlertCotizacionEnviada(title, subTitle) {
+		this.storage.filtro = false;
 		this.loader.dismiss();
 		let alert = this.alertCtrl.create({
 			title: title,
@@ -450,11 +455,12 @@ export class CotizacionPage {
 		this.storage.empresas = [];
 		this.storage.empresaId = 0;
 		this.empresasLoad = [];
+		this.auxEmpresas = [];
 		window.localStorage.removeItem('CotizacionLista');
 		window.localStorage.removeItem('CotizacionEmpresas');
 		window.localStorage.removeItem('cotizacionTipoEmpresa');
-		this.time = 0;
 		this.disabledButtonEnviar = false;
+		this.app.nav.setRoot(TabsPage);
 	}
 
 	eliminarSeleccion(empresa) {
@@ -483,9 +489,18 @@ export class CotizacionPage {
 						this.storage.empresas = [];
 						this.storage.productos = [];
 						this.empresasLoad = [];
+						this.storage.filtro = false;
 						window.localStorage.removeItem('CotizacionLista');
 						window.localStorage.removeItem('CotizacionEmpresas');
 						window.localStorage.removeItem('cotizacionTipoEmpresa');
+						window.localStorage.setItem('filtro', 'false');
+						if (!this.addEmpresa) {
+							this.app.nav.setRoot(TabsPage);
+						} else {
+							if (this.tabsCotizacion == 'empresaTab') {
+								this.scroll({ scrollTop: 0 });
+							}
+						}
 					}
 				}
 			]
@@ -507,7 +522,7 @@ export class CotizacionPage {
 		this.storage.productos.find((element, index) => {
 			if (element == item) {
 				if (eliminar) {
-					if (element.cantidad > 0) {
+					if (element.cantidad > 1) {
 						element.cantidad--;
 					}
 				} else {
@@ -519,15 +534,28 @@ export class CotizacionPage {
 		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 	}
 
-	aplicarFiltro() {
-		if (this.filtro == 1) {
+	aplicarFiltro(load) {
+		window.localStorage.setItem('filtro', this.storage.filtro.toString());
+		this.storage.filtro = !this.storage.filtro;
+		if (!this.storage.filtro) {
 			if (this.auxEmpresas.length > 0) {
 				this.empresasLoad = this.auxEmpresas;
 			}
 		} else {
-			this.auxEmpresas = this.empresasLoad;
-			this.empresasLoad = this.storage.empresas;
+			if (!load) {
+				if (this.storage.empresas.length > 0) {
+					this.auxEmpresas = this.empresasLoad;
+					this.empresasLoad = this.storage.empresas;
+				} else {
+					this.storage.filtro = false;
+					let toast = this.toastCtrl.create({
+						message: 'Seleccione minimo una empresa',
+						duration: 3000
+					}).present();
+				}
+			}
 		}
+		this.scroll({ scrollTop: 0 });
 	}
 
 	inputSearch() {
@@ -569,7 +597,8 @@ export class CotizacionPage {
 				(res) => {
 					this.empresas = res.data;
 					this.empresasLoad = [];
-					this.cargarVista(20, refresh);
+					this.cargarVista(30, refresh);
+					this.aplicarFiltro(true);
 				},
 				(err) => {
 					if (!refresh) {
@@ -658,7 +687,7 @@ export class CotizacionPage {
 				(search) => {
 					this.empresas = search.data;
 					this.empresasLoad = [];
-					this.cargarVista(20, false);
+					this.cargarVista(30, false);
 					this.keyboard.close();
 				},
 				(err) => {
@@ -666,7 +695,7 @@ export class CotizacionPage {
 					if (err.status == 400) {
 						this.empresas = [];
 						this.empresasLoad = [];
-						this.cargarVista(20, false);
+						this.cargarVista(30, false);
 						this.keyboard.close();
 					}
 					// si el dispositivo no tiene internet muestra la pagina de no internet
@@ -678,5 +707,21 @@ export class CotizacionPage {
 				);
 		}
 
+	}
+
+	scroll(e) {
+		if (this.tabsCotizacion == 'empresaTab') {
+			let top = document.getElementById('btnListoFixed');
+			if (e.scrollTop < 43) {
+				top.style.position = 'relative';
+				top.style.top = '0px';
+			}
+			if (e.scrollTop >= 43) {
+				top.style.position = 'fixed';
+				top.style.zIndex = '2';
+				top.style.width = '100%';
+				top.style.top = '50px';
+			}
+		}
 	}
 }

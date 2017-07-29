@@ -71,7 +71,6 @@ export class ListaCotizacionPage {
 						this.hora_respuesta = this.formatHora(this.lista[i].fecha_respuesta);
 					}
 					this.total += this.lista[i].precio;
-					this.lista[i].cantidad = 1;
 					this.lista[i].precioTotal = this.lista[i].precio;
 				}
 			},

@@ -37,10 +37,10 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content (ionScroll)="scroll($event)">
 
 	<div>
-		<ion-segment [(ngModel)]="tabsCotizacion" color="darkCapp">
+		<ion-segment [(ngModel)]="tabsCotizacion" color="warning">
 			<ion-segment-button value="productoTab">
 				Productos
 			</ion-segment-button>
@@ -54,9 +54,14 @@
 		<!--tab Productos-->
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'productoTab'" padding>
-			<button *ngIf="!addEmpresa" (click)="listarProductos()" ion-button style="margin: 0; width: 100%; font-size: 1.3rem">Agregar Producto</button>
-			<button *ngIf="addEmpresa" (click)="listarProductos()" ion-button style="margin: 0; width: 48%; font-size: 1.3rem">Agregar Producto</button>
-			<button *ngIf="addEmpresa" (click)="cancelarCotizacion()" ion-button style="margin-left: -5px; width: 48%; font-size: 1.3rem" color="warning">Cancelar Cotización</button>
+			<ion-row>
+				<ion-col col-6>
+					<button (click)="listarProductos()" style="width: 100%; font-size: 1.3rem" ion-button>Agregar Producto</button>
+				</ion-col>
+				<ion-col col-6>
+					<button (click)="cancelarCotizacion()" style="width: 100%; font-size: 1.3rem" ion-button color="warning">Cancelar</button>
+				</ion-col>
+			</ion-row>
 			<h3 *ngIf="storage.productos.length > 0">Lista de compra</h3>
 			<ion-row class="row-head row-table">
 				<ion-col col-12 class="col-body">Producto</ion-col>
@@ -100,8 +105,8 @@
 					</ion-row>
 				</ion-item>
 			</ion-list>
-
-			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="alertCotizacion()">Enviar Cotización</button>
+			
+			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="alertCotizacionEmpresa()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -109,15 +114,24 @@
 		<!--Tab Empresas-->
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'empresaTab'">
-			<ion-list *ngIf="addEmpresa">
+			<!-- <ion-list *ngIf="addEmpresa">
 				<ion-item>
 					<ion-label>Filtro</ion-label>
-					<ion-select interface="popover" [(ngModel)]="filtro" (ionChange)="aplicarFiltro()">
+					<ion-select interface="popover" [(ngModel)]="filtro" (ionChange)="aplicarFiltro(false)">
 						<ion-option selected="true" value="1">Todas</ion-option>
 						<ion-option value="2">Seleccionadas</ion-option>
 					</ion-select>
 				</ion-item>
-			</ion-list>
+			</ion-list> -->
+			<ion-row id="btnListoFixed" style="padding:0 16px">
+				<ion-col col-6>
+					<button ion-button block (click)="aplicarFiltro(false)" *ngIf="!storage.filtro">Listo</button>
+					<button ion-button block (click)="aplicarFiltro(false)" *ngIf="storage.filtro">Ver todas</button>
+				</ion-col>
+				<ion-col col-6>
+					<button (click)="cancelarCotizacion()" style="width: 100%; font-size: 1.3rem" ion-button color="warning">Cancelar</button>
+				</ion-col>
+			</ion-row>
 
 			<ion-list class="lista">
 				<div class="spinnerCargando" *ngIf="showSpinnerEmpresas && this.storage.empresaId !=0">
@@ -137,6 +151,12 @@
 					</ion-col>
 				</ion-row>
 			</ion-list>
+
+			<ion-row id="btnListoFixed" style="padding:0 16px" *ngIf="storage.filtro">
+				<ion-col col-12>
+					<button ion-button block (click)="alertCotizacionProducto()">Enviar Cotización</button>
+				</ion-col>
+			</ion-row>
 
 			<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="enabledInfinite">
 				<ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando mas datos...">

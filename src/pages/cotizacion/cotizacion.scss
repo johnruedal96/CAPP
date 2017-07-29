@@ -30,6 +30,14 @@ page-cotizacion {
 		}
 	}
 
+	.segment-button {
+		color: black !important;
+	}
+
+	.segment-ios-warning .segment-button.segment-activated{
+		color: white !important;
+	}
+
 	.labelButtonNoEspace{
 		color:#a1a1a1;
 		white-space: normal;
@@ -96,7 +104,7 @@ page-cotizacion {
 
 	.row-head{
 		margin-top: 20px;
-		background-color: #333;
+		background-color: #545255;
 	}
 
 	.select-tipo{

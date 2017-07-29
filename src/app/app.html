@@ -10,7 +10,7 @@
 		</div>
 	</div>
 		<ion-list>
-			<button class="button-side" style="background-color: #333" ion-item *ngFor="let page of pages" (click)="goToPage(page.componet)" menuClose>
+			<button class="button-side" style="background-color: #333" ion-item *ngFor="let page of pages" (click)="goToPage(page.componet, page.param)" menuClose>
 				<ion-icon style="color: #b8c7ce" item-left name="{{page.icon}}"></ion-icon>
 				<label style="color: #b8c7ce">{{page.title}}</label>
 			</button>

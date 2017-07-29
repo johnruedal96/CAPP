@@ -21,15 +21,14 @@ export class EmpresaPage {
 
 	public imagen: string;
 	public empresa: any;
-	public viewBtnCotizacion: boolean = true;
+	public btnCotizar: boolean = true;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController, public auth: AuthProvider, public storage: LocalStorageProvider) {
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 		this.empresa = navParams.get('empresa');
 		console.log(this.empresa);
-		this.viewBtnCotizacion = navParams.get('viewBtnCotizacion');
-		if (this.viewBtnCotizacion == null) {
-			this.viewBtnCotizacion = true;
+		if(this.empresa.tipo == 3){
+			this.btnCotizar = false;
 		}
 	}
 

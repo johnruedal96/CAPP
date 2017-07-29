@@ -6,7 +6,7 @@
   <ion-tab [root]="tab4Root" tabsHideOnSubPages="true" tabTitle="Cotizacion" tabIcon="cart"></ion-tab>
 </ion-tabs>  -->
 
-<super-tabs height="100%" toolbarColor="light" toolbarBackground="orange" indicatorColor="light" badgeColor="light" 
+<super-tabs selectedTabIndex="{{tabSelected}}" height="100%" toolbarColor="light" toolbarBackground="orange" indicatorColor="light" badgeColor="light" 
 [config]="{ sideMenu: 'left', transitionEase: 'cubic-bezier(0.35, 1, 0.75, 1)'}" (tabSelect)="onTabSelect($event)">
   <super-tab [root]="tab1Root" title="Ferreterias" icon="custom-ferreteria"></super-tab>
   <super-tab [root]="tab2Root" title="Electricos" icon="custom-electrico"></super-tab>
