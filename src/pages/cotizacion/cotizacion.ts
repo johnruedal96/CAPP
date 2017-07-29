@@ -36,7 +36,6 @@ export class CotizacionPage {
 	public imagen: string;
 
 	public producto: any;
-	public tipoEmpresa: boolean = false;
 	public loader: any;
 
 	public nroRequest: number;
@@ -106,24 +105,6 @@ export class CotizacionPage {
 		}
 	}
 
-	presentEmpresaModal() {
-		if (this.storage.empresaId != undefined && this.storage.empresaId != 0) {
-			let param = {
-				empresas: this.storage.empresas,
-				id: this.storage.empresaId,
-				app: this.app
-			}
-			let profileModal = this.modalCtrl.create('ListaEmpresasPage', param);
-			profileModal.onDidDismiss(data => {
-				this.storage.empresas = data.seleccion;
-				window.localStorage.setItem('CotizacionEmpresas', JSON.stringify(this.storage.empresas));
-			});
-			profileModal.present();
-		} else {
-			this.showSelectEmpresa(true);
-		}
-	}
-
 	showSelectEmpresa(empresas) {
 		let alert = this.alertCtrl.create({
 			subTitle: 'Seleccione el tipo de empresa',
@@ -162,9 +143,7 @@ export class CotizacionPage {
 		this.loadEmpresa(false);
 		this.storage.empresaId = event.value;
 		window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
-		if (empresas) {
-			this.presentEmpresaModal();
-		} else {
+		if (!empresas) {
 			this.listarProductos();
 		}
 	}
