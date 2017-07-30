@@ -133,7 +133,7 @@ export class FerreteriaPage {
 				j = abierto.length;
 			}
 		}
-		
+
 	}
 
 	// navega a las diferentes empresas
@@ -168,45 +168,34 @@ export class FerreteriaPage {
 		}
 	}
 
-	loadSearch() {
-		if (this.txtSearch != '' && this.txtSearch != undefined) {
-			// mustra el 'cargando' en la vista
-			this.showSpinner = true;
-			// realiza la busqueda y la muestra en pantalla
-			this.loadListSearch = true;
-			this.ws.search(1, this.txtSearch)
-				.subscribe(
-				(search) => {
-					this.ferreterias = search.data;
+	search(event) {
+		this.ferreteriaLoad = [];
+		this.showSpinner = true;
+		// realiza la busqueda y la muestra en pantalla
+		this.loadListSearch = true;
+		this.ws.search(1, this.txtSearch)
+			.subscribe(
+			(search) => {
+				this.ferreterias = search.data;
+				this.ferreteriaLoad = [];
+				this.cargarVista(20, false);
+				this.keyboard.close();
+			},
+			(err) => {
+				// si no hay empresas para mostrar
+				if (err.status == 400) {
+					this.ferreterias = [];
 					this.ferreteriaLoad = [];
 					this.cargarVista(20, false);
 					this.keyboard.close();
-				},
-				(err) => {
-					// si no hay empresas para mostrar
-					if (err.status == 400) {
-						this.ferreterias = [];
-						this.ferreteriaLoad = [];
-						this.cargarVista(20, false);
-						this.keyboard.close();
-					}
-					// si el dispositivo no tiene internet muestra la pagina de no internet
-					if (err.status == 0) {
-						this.showSpinner = false;
-						this.app.rootPage = 'NoInternetPage';
-					}
 				}
-				);
-		}
-
-	}
-
-	search(event) {
-		// si se presiona el boton de buscar (teclado) se ejecuta la funciona
-		if (event == 13) {
-			this.ferreteriaLoad = [];
-			this.loadSearch();
-		}
+				// si el dispositivo no tiene internet muestra la pagina de no internet
+				if (err.status == 0) {
+					this.showSpinner = false;
+					this.app.rootPage = 'NoInternetPage';
+				}
+			}
+			);
 	}
 
 	doInfinite(infiniteScroll) {

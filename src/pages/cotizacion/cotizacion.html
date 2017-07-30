@@ -28,7 +28,7 @@
 
 	<ion-navbar calss="search-header" *ngIf=busqueda>
 
-		<ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true"
+		<ion-searchbar #searchbar placeholder="buscar" (ionInput)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true"
 		 (ionCancel)="closeSearch($event)">
 		</ion-searchbar>
 
@@ -41,10 +41,12 @@
 
 	<div>
 		<ion-segment [(ngModel)]="tabsCotizacion" color="warning">
-			<ion-segment-button value="productoTab">
+			<ion-segment-button value="productoTab" icon-left>
+				<ion-icon name="ios-archive"></ion-icon>
 				Productos
 			</ion-segment-button>
-			<ion-segment-button value="empresaTab">
+			<ion-segment-button value="empresaTab" icon-left>
+				<ion-icon name="ios-briefcase"></ion-icon>
 				Empresas
 			</ion-segment-button>
 		</ion-segment>
@@ -105,8 +107,8 @@
 					</ion-row>
 				</ion-item>
 			</ion-list>
-			
-			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="alertCotizacionEmpresa()">Enviar Cotización</button>
+
+			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="hidden()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -125,8 +127,8 @@
 			</ion-list> -->
 			<ion-row id="btnListoFixed" style="padding:0 16px">
 				<ion-col col-6>
-					<button ion-button block (click)="aplicarFiltro(false)" *ngIf="!storage.filtro">Listo</button>
-					<button ion-button block (click)="aplicarFiltro(false)" *ngIf="storage.filtro">Ver todas</button>
+					<button ion-button block (click)="aplicarFiltro(!storage.filtro)" *ngIf="!storage.filtro">Listo</button>
+					<button ion-button block (click)="aplicarFiltro(!storage.filtro)" *ngIf="storage.filtro">Ver todas</button>
 				</ion-col>
 				<ion-col col-6>
 					<button (click)="cancelarCotizacion()" style="width: 100%; font-size: 1.3rem" ion-button color="warning">Cancelar</button>

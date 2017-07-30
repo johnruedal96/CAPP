@@ -29,7 +29,7 @@
 
 	<ion-navbar calss="search-header" *ngIf=busqueda>
 
-		<ion-searchbar #searchbar placeholder="buscar" (keypress)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true"
+		<ion-searchbar #searchbar placeholder="buscar" (ionInput)="search($event.keyCode)" [(ngModel)]="txtSearch" [showCancelButton]="true"
 		 (ionCancel)="closeSearch($event)">
 		</ion-searchbar>
 

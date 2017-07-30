@@ -134,40 +134,31 @@ export class ServicioPage {
 		}
 	}
 
-	loadSearch() {
-		if (this.txtSearch != '' && this.txtSearch != undefined) {
-			// mustra el 'cargando' en la vista
-			this.showSpinner = true;
-			// realiza la busqueda y la muestra en pantalla
-			this.loadListSearch = true;
-			this.ws.search(3, this.txtSearch)
-				.subscribe(
-				(search) => {
-					this.servicios = search.data;
-					this.servicioLoad = [];
-					this.cargarVista(20, false);
-					this.keyboard.close();
-				},
-				(err) => {
-					this.servicios = [];
-					this.servicioLoad = [];
-					this.cargarVista(20, false);
-					this.keyboard.close();
-
-					if (err.status == 0) {
-						this.app.rootPage = 'NoInternetPage';
-					}
-				}
-				);
-		}
-
-	}
-
 	search(event) {
-		// si se presiona el boton de buscar (teclado) se ejecuta la funciona
-		if (event == 13) {
-			this.loadSearch();
-		}
+		this.servicioLoad = [];
+		// mustra el 'cargando' en la vista
+		this.showSpinner = true;
+		// realiza la busqueda y la muestra en pantalla
+		this.loadListSearch = true;
+		this.ws.search(3, this.txtSearch)
+			.subscribe(
+			(search) => {
+				this.servicios = search.data;
+				this.servicioLoad = [];
+				this.cargarVista(20, false);
+				this.keyboard.close();
+			},
+			(err) => {
+				this.servicios = [];
+				this.servicioLoad = [];
+				this.cargarVista(20, false);
+				this.keyboard.close();
+
+				if (err.status == 0) {
+					this.app.rootPage = 'NoInternetPage';
+				}
+			}
+			);
 	}
 
 	doInfinite(infiniteScroll) {

@@ -121,11 +121,10 @@ export class ListaProductosPage {
   }
 
   search(event, scroll) {
-    if (event == 13) {
-
-      if (this.txtSearch == '' || this.txtSearch == undefined) {
-        this.closeSearch(null);
-      }
+    // if (event == 13) {
+      // if (this.txtSearch == '' || this.txtSearch == undefined) {
+      //   this.closeSearch(null);
+      // }
 
       if (this.txtSearch != '' && this.txtSearch != undefined) {
         this.loadListSearch = true;
@@ -149,7 +148,6 @@ export class ListaProductosPage {
             }
           },
           (err) => {
-            console.log('error');
             if (scroll == null) {
               this.productos = [];
               this.showSpinner = false;
@@ -159,8 +157,8 @@ export class ListaProductosPage {
           }
           )
       }
-    }
-  }
+    // }
+  } 
 
   seleccionar(event, producto) {
     let lista = JSON.parse(window.localStorage.getItem('CotizacionLista'));

@@ -1,9 +1,7 @@
-import { Component, ElementRef, Renderer, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer } from '@angular/core';
 import { MenuController, NavController, AlertController, Platform, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
-
-import { SuperTabs } from 'ionic2-super-tabs';
 
 @Component({
 	templateUrl: 'tabs.html'
@@ -51,8 +49,6 @@ export class TabsPage {
 	showSelectEmpresa() {
 		this.storage.empresaId = Number(window.localStorage.getItem('cotizacionTipoEmpresa'));
 		if (this.storage.empresaId == undefined || this.storage.empresaId == 0) {
-			window.localStorage.setItem('filtro', 'true');
-			this.storage.filtro = true;
 			let alert = this.alertCtrl.create({
 				subTitle: 'Seleccione el tipo de empresa',
 				inputs: [

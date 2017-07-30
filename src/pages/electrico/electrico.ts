@@ -133,40 +133,30 @@ export class ElectricoPage {
 		}
 	}
 
-	loadSearch() {
-		if (this.txtSearch != '' && this.txtSearch != undefined) {
-			// mustra el 'cargando' en la vista
-			this.showSpinner = true;
-			// realiza la busqueda y la muestra en pantalla
-			this.loadListSearch = true;
-			this.ws.search(2, this.txtSearch)
-				.subscribe(
-				(search) => {
-					this.electricos = search.data;
-					this.electricoLoad = [];
-					this.keyboard.close();
-					this.cargarVista(20, false);
-				},
-				(err) => {
-					this.electricos = [];
-					this.electricoLoad = [];
-					this.keyboard.close();
-					this.cargarVista(20, false);
-
-					if (err.status == 0) {
-						this.app.rootPage = 'NoInternetPage';
-					}
-				}
-				);
-		}
-
-	}
-
 	search(event) {
-		// si se presiona el boton de buscar (teclado) se ejecuta la funciona
-		if (event == 13) {
-			this.loadSearch();
-		}
+		this.electricoLoad = [];
+		this.showSpinner = true;
+		// realiza la busqueda y la muestra en pantalla
+		this.loadListSearch = true;
+		this.ws.search(2, this.txtSearch)
+			.subscribe(
+			(search) => {
+				this.electricos = search.data;
+				this.electricoLoad = [];
+				this.keyboard.close();
+				this.cargarVista(20, false);
+			},
+			(err) => {
+				this.electricos = [];
+				this.electricoLoad = [];
+				this.keyboard.close();
+				this.cargarVista(20, false);
+
+				if (err.status == 0) {
+					this.app.rootPage = 'NoInternetPage';
+				}
+			}
+			);
 	}
 
 	doInfinite(infiniteScroll) {

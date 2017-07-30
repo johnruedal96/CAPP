@@ -85,7 +85,12 @@ export class CotizacionPage {
 		}
 		// ejecuta la funcion closeSearch() cuando el teclado es cerrado
 		this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
-		this.storage.filtro = Boolean(window.localStorage.getItem('filtro') == 'true');
+		let filtro = window.localStorage.getItem('filtro');
+		if (filtro != undefined) {
+			this.storage.filtro = Boolean(window.localStorage.getItem('filtro') == 'true');
+		} else {
+			this.storage.filtro = false;
+		}
 	}
 
 	obtenerCotizacionGuardada() {
@@ -184,8 +189,6 @@ export class CotizacionPage {
 
 	listarProductos() {
 		if (this.storage.empresaId != undefined && this.storage.empresaId != 0) {
-			this.storage.filtro = Boolean(window.localStorage.getItem('filtro') == 'true');
-			this.storage.filtro = !this.storage.filtro;
 			let param = {
 				id: this.storage.empresaId,
 				app: this.app
@@ -468,6 +471,7 @@ export class CotizacionPage {
 						this.storage.empresas = [];
 						this.storage.productos = [];
 						this.empresasLoad = [];
+						this.auxEmpresas = [];
 						this.storage.filtro = false;
 						window.localStorage.removeItem('CotizacionLista');
 						window.localStorage.removeItem('CotizacionEmpresas');
@@ -513,25 +517,23 @@ export class CotizacionPage {
 		window.localStorage.setItem('CotizacionLista', JSON.stringify(this.storage.productos));
 	}
 
-	aplicarFiltro(load) {
+	aplicarFiltro(filtro) {
+		this.storage.filtro = filtro;
 		window.localStorage.setItem('filtro', this.storage.filtro.toString());
-		this.storage.filtro = !this.storage.filtro;
 		if (!this.storage.filtro) {
 			if (this.auxEmpresas.length > 0) {
 				this.empresasLoad = this.auxEmpresas;
 			}
 		} else {
-			if (!load) {
-				if (this.storage.empresas.length > 0) {
-					this.auxEmpresas = this.empresasLoad;
-					this.empresasLoad = this.storage.empresas;
-				} else {
-					this.storage.filtro = false;
-					let toast = this.toastCtrl.create({
-						message: 'Seleccione minimo una empresa',
-						duration: 3000
-					}).present();
-				}
+			if (this.storage.empresas.length > 0) {
+				this.auxEmpresas = this.empresasLoad;
+				this.empresasLoad = this.storage.empresas;
+			} else {
+				this.storage.filtro = false;
+				this.toastCtrl.create({
+					message: 'Seleccione minimo una empresa',
+					duration: 3000
+				}).present();
 			}
 		}
 		this.scroll({ scrollTop: 0 });
@@ -577,7 +579,7 @@ export class CotizacionPage {
 					this.empresas = res.data;
 					this.empresasLoad = [];
 					this.cargarVista(30, refresh);
-					this.aplicarFiltro(true);
+					this.aplicarFiltro(this.storage.filtro);
 				},
 				(err) => {
 					if (!refresh) {
@@ -610,7 +612,6 @@ export class CotizacionPage {
 			}
 			this.empresasLoad.push(this.empresas[i]);
 		}
-
 
 		if (refresh) {
 			this.refresher.complete();
@@ -648,44 +649,33 @@ export class CotizacionPage {
 	}
 
 	search(event) {
-		// si se presiona el boton de buscar (teclado) se ejecuta la funciona
-		if (event == 13) {
-			this.empresasLoad = [];
-			this.loadSearch();
-		}
-	}
-
-	loadSearch() {
-		if (this.txtSearch != '' && this.txtSearch != undefined) {
-			// mustra el 'cargando' en la vista
-			this.showSpinnerEmpresas = true;
-			// realiza la busqueda y la muestra en pantalla
-			this.loadListSearch = true;
-			this.ws.search(1, this.txtSearch)
-				.subscribe(
-				(search) => {
-					this.empresas = search.data;
+		this.empresasLoad = [];
+		this.showSpinnerEmpresas = true;
+		// realiza la busqueda y la muestra en pantalla
+		this.loadListSearch = true;
+		this.ws.search(1, this.txtSearch)
+			.subscribe(
+			(search) => {
+				this.empresas = search.data;
+				this.empresasLoad = [];
+				this.cargarVista(30, false);
+				this.keyboard.close();
+			},
+			(err) => {
+				// si no hay empresas para mostrar
+				if (err.status == 400) {
+					this.empresas = [];
 					this.empresasLoad = [];
 					this.cargarVista(30, false);
 					this.keyboard.close();
-				},
-				(err) => {
-					// si no hay empresas para mostrar
-					if (err.status == 400) {
-						this.empresas = [];
-						this.empresasLoad = [];
-						this.cargarVista(30, false);
-						this.keyboard.close();
-					}
-					// si el dispositivo no tiene internet muestra la pagina de no internet
-					if (err.status == 0) {
-						this.showSpinnerEmpresas = false;
-						this.app.rootPage = 'NoInternetPage';
-					}
 				}
-				);
-		}
-
+				// si el dispositivo no tiene internet muestra la pagina de no internet
+				if (err.status == 0) {
+					this.showSpinnerEmpresas = false;
+					this.app.rootPage = 'NoInternetPage';
+				}
+			}
+			);
 	}
 
 	scroll(e) {
