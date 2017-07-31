@@ -54,7 +54,7 @@ export class WebServiceProvider {
 
 	getEmpresas(tipo) {
 		let date = new Date();
-		return this.http.get(this.url + tipo + '/'+ date.getDay())
+		return this.http.get(this.url + tipo + '/' + date.getDay())
 			.map(res => res.json())
 	}
 
@@ -161,6 +161,20 @@ export class WebServiceProvider {
 	getUnidad() {
 		return this.http.get(this.urlGetUnidad)
 			.map(res => res);
+	}
+
+	uploadImage(formData,usuario) {
+		let headers = new Headers({
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Disposition': 'form-data'
+		});
+
+		let options = new RequestOptions({
+			headers: headers
+		});
+
+		return this.http.post("http://www.contactoarquitectonico.com.co/capp_admin/wscapp/uploadImagen/"+usuario, formData)
+			.map(response => response.text())
 	}
 
 }

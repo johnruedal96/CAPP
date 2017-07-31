@@ -6,6 +6,9 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
+import { Camera } from '@ionic-native/camera';
+import { File, FileEntry } from '@ionic-native/file';
+
 /**
  * Generated class for the PerfilPage page.
  *
@@ -34,7 +37,7 @@ export class PerfilPage {
 
 	@ViewChild(Content) content: Content;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer, public storage: LocalStorageProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer, public storage: LocalStorageProvider, public camera: Camera, public file: File) {
 		this.cotizaciones = [];
 		this.compras = [];
 		this.myProfile = this.navParams.get('tab');
@@ -176,5 +179,56 @@ export class PerfilPage {
 				this.seleccionCompra = null;
 			}
 		}, 5000);
+	}
+
+	takePhoto() {
+		this.camera.getPicture({
+			quality: 100,
+			destinationType: this.camera.DestinationType.FILE_URI,
+			sourceType: this.camera.PictureSourceType.CAMERA,
+			encodingType: this.camera.EncodingType.PNG,
+			saveToPhotoAlbum: true
+		}).then(imageData => {
+			console.log(imageData);
+			this.uploadPhoto(imageData);
+		}, error => {
+			console.log(JSON.stringify(error));
+		});
+	}
+
+	selectPhoto(): void {
+		this.camera.getPicture({
+			sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+			destinationType: this.camera.DestinationType.FILE_URI,
+			quality: 100,
+			encodingType: this.camera.EncodingType.PNG,
+		}).then(imageData => {
+			console.log(imageData);
+			this.uploadPhoto(imageData);
+		}, error => {
+			console.log(JSON.stringify(error));
+		});
+	}
+	private uploadPhoto(imageFileUri: any): void {
+		this.file.resolveLocalFilesystemUrl(imageFileUri)
+			.then(entry => (<FileEntry>entry).file(file => this.readFile(file)))
+			.catch(err => console.log(err));
+	}
+
+	private readFile(file: any) {
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			const formData = new FormData();
+			const imgBlob = new Blob([reader.result], { type: file.type });
+			console.log(imgBlob);
+			formData.append('file', imgBlob, file.name);
+			this.postData(formData);
+		};
+		reader.readAsArrayBuffer(file);
+	}
+
+	private postData(formData: FormData) {
+		this.ws.uploadImage(formData, this.auth.user.id)
+			.subscribe(ok => console.log('ya'));
 	}
 }

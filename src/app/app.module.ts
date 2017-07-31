@@ -13,6 +13,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { HeaderColor } from '@ionic-native/header-color';
 
 import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
 
 // providers
 import { WebServiceProvider } from '../providers/web-service/web-service';
@@ -47,6 +48,7 @@ import { LocalStorageProvider } from '../providers/local-storage/local-storage';
     Keyboard,
     HeaderColor,
     Camera,
+    File,
     SuperTabsController,
     LocalStorageProvider
   ]
