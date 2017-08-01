@@ -498,7 +498,6 @@ export class CotizacionPage {
 			msg.style.textAlign = 'center';
 			head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
 		}, 100)
-		// div.
 	}
 
 	changeCantidad(eliminar, item) {
@@ -659,7 +658,7 @@ export class CotizacionPage {
 				this.empresas = search.data;
 				this.empresasLoad = [];
 				this.cargarVista(30, false);
-				this.keyboard.close();
+				// this.keyboard.close();
 			},
 			(err) => {
 				// si no hay empresas para mostrar
@@ -667,7 +666,7 @@ export class CotizacionPage {
 					this.empresas = [];
 					this.empresasLoad = [];
 					this.cargarVista(30, false);
-					this.keyboard.close();
+					// this.keyboard.close();
 				}
 				// si el dispositivo no tiene internet muestra la pagina de no internet
 				if (err.status == 0) {

@@ -176,7 +176,8 @@ export class ListaProductosPage {
     }
     if (next) {
       let param = {
-        producto: producto
+        producto: producto,
+        app: this.app
       }
       let productoModal = this.modalCtrl.create('FormCotizacionPage', param);
       productoModal.onDidDismiss(data => {

@@ -146,13 +146,13 @@ export class ServicioPage {
 				this.servicios = search.data;
 				this.servicioLoad = [];
 				this.cargarVista(20, false);
-				this.keyboard.close();
+				// this.keyboard.close();
 			},
 			(err) => {
 				this.servicios = [];
 				this.servicioLoad = [];
 				this.cargarVista(20, false);
-				this.keyboard.close();
+				// this.keyboard.close();
 
 				if (err.status == 0) {
 					this.app.rootPage = 'NoInternetPage';

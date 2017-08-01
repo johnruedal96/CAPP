@@ -179,7 +179,7 @@ export class FerreteriaPage {
 				this.ferreterias = search.data;
 				this.ferreteriaLoad = [];
 				this.cargarVista(20, false);
-				this.keyboard.close();
+				// this.keyboard.close();
 			},
 			(err) => {
 				// si no hay empresas para mostrar
@@ -187,7 +187,7 @@ export class FerreteriaPage {
 					this.ferreterias = [];
 					this.ferreteriaLoad = [];
 					this.cargarVista(20, false);
-					this.keyboard.close();
+					// this.keyboard.close();
 				}
 				// si el dispositivo no tiene internet muestra la pagina de no internet
 				if (err.status == 0) {

@@ -14,11 +14,14 @@ import { LoadingController, AlertController } from 'ionic-angular';
 export class AuthProvider {
 
   public user: any;
+  public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
+  public imagen: string;
 
   public urlToken: string;
   public urlLogin: string;
   public urlLogout: string;
   public urlRegister: string;
+  public urlActualizar: string;
   public token: string;
   public loader;
 
@@ -27,6 +30,7 @@ export class AuthProvider {
     this.urlLogin = 'http://www.contactoarquitectonico.com.co/login';
     this.urlLogout = 'http://www.contactoarquitectonico.com.co/logout';
     this.urlRegister = 'http://www.contactoarquitectonico.com.co/capp_admin/wscapp/register';
+    this.urlActualizar = 'http://www.contactoarquitectonico.com.co/capp_admin/wscapp/actualizarDatos';
   }
 
   getToken() {
@@ -74,6 +78,11 @@ export class AuthProvider {
     this.http.get(this.urlLogout)
       .subscribe(
       (res) => {
+        window.localStorage.removeItem('CotizacionLista');
+        window.localStorage.removeItem('CotizacionEmpresas');
+        window.localStorage.removeItem('cotizacionTipoEmpresa');
+        window.localStorage.setItem('filtro', 'false');
+        this.imagen = null;
         nav.setRoot('LoginPage');
         loader.dismiss();
       },
@@ -118,20 +127,34 @@ export class AuthProvider {
 
   presentAlert(title, subTitle) {
     let alert = this.alertCtrl.create({
-				title: title,
-				message: subTitle,
-				buttons: ['Cerrar']
-			})
-			alert.present();
-			setTimeout(() => {
-				let hdr = alert.instance.hdrId;
-				let desc = alert.instance.descId;
-				let head = window.document.getElementById(hdr);
-        let msg = window.document.getElementById(desc);
-				head.style.textAlign = 'center';
-				msg.style.textAlign = 'center';
-				head.innerHTML = '<ion-icon name="close" style="color:#f53d3d; text-aling:center; font-size: 3em" role="img" class="icon icon-md ion-md-close" aria-label="close" ng-reflect-name="close"></ion-icon>';
-			}, 100)
+      title: title,
+      message: subTitle,
+      buttons: ['Cerrar']
+    })
+    alert.present();
+    setTimeout(() => {
+      let hdr = alert.instance.hdrId;
+      let desc = alert.instance.descId;
+      let head = window.document.getElementById(hdr);
+      let msg = window.document.getElementById(desc);
+      head.style.textAlign = 'center';
+      msg.style.textAlign = 'center';
+      head.innerHTML = '<ion-icon name="close" style="color:#f53d3d; text-aling:center; font-size: 3em" role="img" class="icon icon-md ion-md-close" aria-label="close" ng-reflect-name="close"></ion-icon>';
+    }, 100)
+  }
+
+  actualizarDatos(token, params) {
+    let headers = new Headers({
+      'X-CSRF-TOKEN': token,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    return this.http.post(this.urlActualizar, params, options)
+      .map(res => res);
   }
 
 }

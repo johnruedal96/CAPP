@@ -21,11 +21,13 @@
 }
 
 .logo_usuario{
+    overflow: hidden;
 	border-radius: 50%;
 	box-shadow: 1px 1px 30px 1px;
 	display:block;
 	margin:10px auto;
 	width: 100px;
+	height: 100px;
 }
 
 .name-user{

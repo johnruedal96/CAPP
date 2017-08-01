@@ -1,4 +1,8 @@
 page-perfil {
+	.segment-activated{
+		border-color: white !important;
+	}
+
 	.boton-imagen{
 		position: absolute;
 		top: 0;
@@ -13,13 +17,27 @@ page-perfil {
 		width: 100%;
 	}
 
-	.div_img img{
-		border-radius: 50%;
-		display: block;
-		height: 150px;
-		margin: 0 auto;
+	.div_img {
+		div{
+			border-radius: 100%;
+			display: block;
+			height: 150px;
+			width: 150px;
+			margin: 0 auto;
+			overflow: hidden;
+		}
 		padding: 10px;
+		.icon-imagen{
+			color: white;
+			position: absolute;
+			right: 0;
+			top: 0;
+			.button-effect{
+				display: none;
+			}
+		}
 	}
+
 
 	.head-color{
 		background-color: #EF6C00;

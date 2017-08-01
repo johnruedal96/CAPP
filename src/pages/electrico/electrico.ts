@@ -143,13 +143,13 @@ export class ElectricoPage {
 			(search) => {
 				this.electricos = search.data;
 				this.electricoLoad = [];
-				this.keyboard.close();
+				// this.keyboard.close();
 				this.cargarVista(20, false);
 			},
 			(err) => {
 				this.electricos = [];
 				this.electricoLoad = [];
-				this.keyboard.close();
+				// this.keyboard.close();
 				this.cargarVista(20, false);
 
 				if (err.status == 0) {

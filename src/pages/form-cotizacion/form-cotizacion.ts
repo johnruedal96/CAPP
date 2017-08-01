@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
+import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { AuthProvider } from '../../providers/auth/auth';
 
 /**
  * Generated class for the FormCotizacionPage page.
@@ -19,13 +21,34 @@ export class FormCotizacionPage {
   public cantidad: number = 0;
   public unidad: any;
   public unidadId: number;
+  public app: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public platform: Platform, public storage: LocalStorageProvider, public auth: AuthProvider) {
     this.producto = this.navParams.get('producto');
+    this.app = this.navParams.get('app');
   }
 
   ionViewDidLoad() {
     this.getUnidad();
+    this.platform
+    this.platform.registerBackButtonAction(() => {
+      this.dismiss();
+      this.app.buttomBack();
+    });
+    if (!this.storage.desarrollo) {
+      this.isLogged();
+    }
+  }
+
+  isLogged() {
+    this.auth.isLogged()
+      .subscribe(res => {
+        if (res.text() == '') {
+          this.navCtrl.setRoot('LoginPage');
+        } else {
+          this.auth.user = JSON.parse(res.text());
+        }
+      });
   }
 
   dismiss() {
@@ -45,16 +68,16 @@ export class FormCotizacionPage {
   getUnidad() {
     this.ws.getUnidad()
       .subscribe(
-        (res)=>{
-          this.unidad = res.json();
-        }
+      (res) => {
+        this.unidad = res.json();
+      }
       )
   }
 
-  agregar(){
+  agregar() {
     let unidad = [];
-    this.unidad.find((element)=>{
-      if(element.id == this.unidadId){
+    this.unidad.find((element) => {
+      if (element.id == this.unidadId) {
         unidad = element;
       }
     });

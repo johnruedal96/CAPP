@@ -27,8 +27,11 @@
 <ion-content>
 	<div class="head-color">
 		<div class="div_img">
-			<img src="{{urlImagen}}sin_logo.png" *ngIf='auth.user.foto == null' />
-			<img src="{{urlImagen}}{{auth.user.foto}}" *ngIf='auth.user.foto != null' />
+			<div>
+				<img onerror="this.src='http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/sin_logo.png'" src="{{auth.urlImagen}}{{auth.user.imagen}}" *ngIf='auth.imagen == null' />
+				<img src="{{auth.imagen}}" *ngIf='auth.imagen != null' />
+			</div>
+			<button ion-button clear class="icon-imagen" small icon-left (click)="showSheet()"><ion-icon name="md-create"></ion-icon>Cambiar Foto</button>
 		</div>
 		<ion-segment [(ngModel)]="myProfile" color="dark">
 			<ion-segment-button value="perfil">
@@ -46,33 +49,33 @@
 	<div [ngSwitch]="myProfile" (ionChange)="cargar($event)">
 
 		<ion-list *ngSwitchCase="'perfil'">
-			<ion-item>
-				<ion-icon name="person" item-start></ion-icon>
-				<ion-input #inputNombre [disabled]="!editarCampos" type="text" value="{{auth.user.nombre}}"></ion-input>
-			</ion-item>
-			<ion-item>
-				<ion-icon name="mail" item-start></ion-icon>
-				<ion-input #inputEmail [disabled]="!editarCampos" type="text" value="{{auth.user.email}}"></ion-input>
-			</ion-item>
-			<button ion-button color="dark" block (click)="editar()">
-				<label *ngIf="!editarCampos">Editar</label>
-				<label *ngIf="editarCampos">Guardar cambios</label>
+			<ion-row class="encabezado">
+				<ion-col col-12>
+					<label>Datos de usuario</label>
+				</ion-col>
+			</ion-row>
+			<form #formActualizar="ngForm">
+				<ion-item>
+					<ion-icon name="person" item-start></ion-icon>
+					<ion-input type="text" [(ngModel)]="auth.user.nombre" name="nombre" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-icon name="mail" item-start></ion-icon>
+					<ion-input type="email" [(ngModel)]="auth.user.email" name="email" email required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-icon name="lock" item-start></ion-icon>
+					<ion-input clearOnEdit="false" placeholder="Contraseña (opcional)" type="password" name="password" [(ngModel)]="password"></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-icon name="lock" item-start></ion-icon>
+					<ion-input clearOnEdit="false" [placeholder]="password.length == 0 ? 'Confirme la contraseña (opcional)' : 'Confirme la contraseña'"
+					 type="password" name="passwordConfirm" [(ngModel)]="passwordConfirm"></ion-input>
+				</ion-item>
+			</form>
+			<button ion-button color="dark" block (click)="editar()" [disabled]="(auth.user.nombre == nombreUsuario && auth.user.email == email) && (password.length == 0 || passwordConfirm.length == 0) || !formActualizar.form.valid">
+				<label>Actualizar Datos</label>
 			</button>
-
-			<ion-item>
-				<ion-row>
-					<ion-col width-50>
-						<button ion-button color="danger" type="button" full round large (click)="takePhoto()">
-         <ion-icon name="camera"></ion-icon>
-       </button>
-					</ion-col>
-					<ion-col width-50>
-						<button ion-button color="secondary" type="button" full round large (click)="selectPhoto()">
-         <ion-icon name="image"></ion-icon>
-       </button>
-					</ion-col>
-				</ion-row>
-			</ion-item>
 		</ion-list>
 
 		<ion-list *ngSwitchCase="'cotizaciones'">

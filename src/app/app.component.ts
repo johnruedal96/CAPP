@@ -17,7 +17,6 @@ export class MyApp {
 
   public pages: Array<{ title: string, componet: any, icon: string, param:{} }>;
   public login: boolean = false;
-  public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
   public alert;
 
   constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
@@ -113,7 +112,7 @@ export class MyApp {
       "nombre": "John Rueda",
       "email": "johnruedal96@gmail.com",
       "estado": 1,
-      "foto": 'usuario_3.jpg',
+      "imagen": 'usuario_7.jpg',
       "created_at": "2017-06-27 14:26:55",
       "updated_at": "2017-06-29 11:20:24",
       "id_perfil": 2

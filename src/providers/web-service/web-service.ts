@@ -164,15 +164,6 @@ export class WebServiceProvider {
 	}
 
 	uploadImage(formData,usuario) {
-		let headers = new Headers({
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Content-Disposition': 'form-data'
-		});
-
-		let options = new RequestOptions({
-			headers: headers
-		});
-
 		return this.http.post("http://www.contactoarquitectonico.com.co/capp_admin/wscapp/uploadImagen/"+usuario, formData)
 			.map(response => response.text())
 	}

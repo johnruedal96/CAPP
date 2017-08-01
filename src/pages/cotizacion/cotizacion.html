@@ -108,7 +108,7 @@
 				</ion-item>
 			</ion-list>
 
-			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="hidden()">Enviar Cotización</button>
+			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="alertCotizacionProducto()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->

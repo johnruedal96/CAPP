@@ -1,5 +1,6 @@
 import { Component, ElementRef, Renderer, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
+import { ActionSheetController, AlertController, LoadingController } from 'ionic-angular';
 import { Content } from 'ionic-angular';
 
 import { AuthProvider } from '../../providers/auth/auth';
@@ -22,12 +23,10 @@ import { File, FileEntry } from '@ionic-native/file';
 })
 export class PerfilPage {
 
-	public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
 	public myProfile: string;
 	public seleccionCompra: number;
 	public cotizaciones: any;
 	public compras: any;
-	public editarCampos: boolean = false;
 	public showSpinner: boolean;
 	public showSpinnerCompras: boolean;
 
@@ -35,9 +34,15 @@ export class PerfilPage {
 	public contadorCotizaciones: any;
 	public idShowCotizacion: any;
 
+	public email: string;
+	public nombreUsuario: string;
+	public password: string = '';
+	public passwordConfirm: string = '';
+	public loader;
+
 	@ViewChild(Content) content: Content;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer, public storage: LocalStorageProvider, public camera: Camera, public file: File) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer, public storage: LocalStorageProvider, public camera: Camera, public file: File, public actionSheetCtrl: ActionSheetController, public alertCtrl: AlertController, public loadingCtrl: LoadingController) {
 		this.cotizaciones = [];
 		this.compras = [];
 		this.myProfile = this.navParams.get('tab');
@@ -48,6 +53,8 @@ export class PerfilPage {
 	}
 
 	ionViewDidLoad() {
+		this.email = this.auth.user.email;
+		this.nombreUsuario = this.auth.user.nombre;
 		this.searchCotizacion();
 		this.getCompras();
 		if (!this.storage.desarrollo) {
@@ -64,22 +71,6 @@ export class PerfilPage {
 					this.auth.user = JSON.parse(res.text());
 				}
 			});
-	}
-
-	editar() {
-		this.editarCampos = !this.editarCampos;
-		if (this.editarCampos) {
-			this.presentToast(3000, 'Ahora puede editar sus datos');
-		}
-	}
-
-	presentToast(time, message) {
-		let toast = this.toastCtrl.create({
-			message: message,
-			duration: time
-		});
-
-		toast.present();
 	}
 
 	searchCotizacion() {
@@ -132,7 +123,6 @@ export class PerfilPage {
 			.subscribe(
 			(res) => {
 				this.compras = this.formatDate(res.json());
-				console.log(this.compras);
 				this.showSpinnerCompras = false;
 				if (this.seleccionCompra != null) {
 					this.aplicarColor();
@@ -186,10 +176,13 @@ export class PerfilPage {
 			quality: 100,
 			destinationType: this.camera.DestinationType.FILE_URI,
 			sourceType: this.camera.PictureSourceType.CAMERA,
-			encodingType: this.camera.EncodingType.PNG,
-			saveToPhotoAlbum: true
+			encodingType: this.camera.EncodingType.JPEG,
+			saveToPhotoAlbum: false,
+			targetWidth: 500,
+			targetHeight: 500,
+			correctOrientation: true,
 		}).then(imageData => {
-			console.log(imageData);
+			this.auth.imagen = imageData;
 			this.uploadPhoto(imageData);
 		}, error => {
 			console.log(JSON.stringify(error));
@@ -201,34 +194,136 @@ export class PerfilPage {
 			sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
 			destinationType: this.camera.DestinationType.FILE_URI,
 			quality: 100,
-			encodingType: this.camera.EncodingType.PNG,
+			encodingType: this.camera.EncodingType.JPEG,
+			targetWidth: 500,
+			targetHeight: 500,
 		}).then(imageData => {
-			console.log(imageData);
+			this.auth.imagen = imageData;
 			this.uploadPhoto(imageData);
 		}, error => {
 			console.log(JSON.stringify(error));
 		});
 	}
-	private uploadPhoto(imageFileUri: any): void {
+
+	uploadPhoto(imageFileUri: any): void {
 		this.file.resolveLocalFilesystemUrl(imageFileUri)
 			.then(entry => (<FileEntry>entry).file(file => this.readFile(file)))
 			.catch(err => console.log(err));
 	}
 
-	private readFile(file: any) {
+	readFile(file: any) {
 		const reader = new FileReader();
 		reader.onloadend = () => {
 			const formData = new FormData();
 			const imgBlob = new Blob([reader.result], { type: file.type });
-			console.log(imgBlob);
 			formData.append('file', imgBlob, file.name);
 			this.postData(formData);
 		};
 		reader.readAsArrayBuffer(file);
 	}
 
-	private postData(formData: FormData) {
+	postData(formData: FormData) {
 		this.ws.uploadImage(formData, this.auth.user.id)
-			.subscribe(ok => console.log('ya'));
+			.subscribe(ok => ok);
+	}
+
+	showSheet() {
+		let actionSheet = this.actionSheetCtrl.create({
+			buttons: [
+				{
+					text: 'Tomar foto',
+					icon: 'camera',
+					handler: () => {
+						this.takePhoto();
+					}
+				},
+				{
+					text: 'Seleccionar foto desde galeria',
+					icon: 'md-photos',
+					handler: () => {
+						this.selectPhoto();
+					}
+				},
+				{
+					text: 'Cancelar',
+					role: 'cancel'
+				}
+			]
+		});
+
+		actionSheet.present();
+	}
+
+
+	editar() {
+		if (this.password.length > 0 || this.passwordConfirm.length > 0) {
+			if (this.password == this.passwordConfirm) {
+				this.enviarDatosNuevos(true);
+			} else {
+				this.toastCtrl.create({
+					message: 'Las contraseñas no coinciden',
+					duration: 3000,
+				}).present();
+			}
+		} else {
+			this.enviarDatosNuevos(false);
+		}
+	}
+
+	enviarDatosNuevos(password) {
+		this.nombreUsuario = this.auth.user.nombre;
+		this.email = this.auth.user.email;
+		this.loader = this.loadingCtrl.create({
+			content: 'Actualizando datos'
+		});
+		this.loader.present();
+		this.auth.getToken()
+			.subscribe(
+			(res) => {
+				let params = 'id=' + this.auth.user.id;
+				params += '&nombre=' + this.auth.user.nombre;
+				params += '&email=' + this.auth.user.email;
+				if(password){
+					params += '&password=' + this.password;
+				}
+				this.auth.actualizarDatos(res.text(), params)
+					.subscribe(
+					(res) => {
+						this.showAlertConfirm();
+					},
+					(err) => {
+						console.log(err);
+					}
+					)
+			},
+			(err) => {
+				console.log(err);
+			}
+			)
+	}
+
+	showAlertConfirm(){
+		this.loader.dismiss();
+		let alert = this.alertCtrl.create({
+			title: 'alert',
+			message: 'Datos actualizados',
+			cssClass: 'alert-icon',
+			buttons: [
+				{
+					text: 'Aceptar',
+					role: 'cancel'
+				}
+			]
+		})
+		alert.present();
+		setTimeout(() => {
+			let hdr = alert.instance.hdrId;
+			let desc = alert.instance.descId;
+			let head = window.document.getElementById(hdr);
+			let msg = window.document.getElementById(desc);
+			head.style.textAlign = 'center';
+			msg.style.textAlign = 'center';
+			head.innerHTML = '<ion-icon name="checkmark" style="color:#5fb471; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-checkmark" aria-label="checkmark" ng-reflect-name="checkmark"></ion-icon>';
+		}, 100)
 	}
 }

@@ -1,16 +1,20 @@
 <ion-menu [content]="NAV">
 	<ion-content class="nav-list">
-	<div  *ngIf="login" class="banner-sidebar" style="background-image: url('assets/sideMenu.png')">
-		<div style="padding: 20px">
-			<img class="logo_usuario" src="{{urlImagen}}sin_logo.png" *ngIf='auth.user.foto == null' (click)="goToPage('PerfilPage')" menuClose>
-			<img *ngIf='auth.user.foto != null' class="logo_usuario" src="{{urlImagen}}{{auth.user.foto}}"  (click)="goToPage('PerfilPage')" menuClose>
-			<div class="name-user">
-				{{auth.user.nombre}}
+		<div *ngIf="login" class="banner-sidebar" style="background-image: url('assets/sideMenu.png')">
+			<div style="padding: 20px">
+				<div class="logo_usuario">
+					<img onerror="this.src='http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/sin_logo.png'" *ngIf='auth.imagen == null' src="{{auth.urlImagen}}{{auth.user.imagen}}"
+					 (click)="goToPage('PerfilPage')" menuClose>
+					<img *ngIf='auth.imagen != null' src="{{auth.imagen}}" (click)="goToPage('PerfilPage')" menuClose>
+				</div>
+				<div class="name-user">
+					{{auth.user.nombre}}
+				</div>
 			</div>
 		</div>
-	</div>
 		<ion-list>
-			<button class="button-side" style="background-color: #333" ion-item *ngFor="let page of pages" (click)="goToPage(page.componet, page.param)" menuClose>
+			<button class="button-side" style="background-color: #333" ion-item *ngFor="let page of pages" (click)="goToPage(page.componet, page.param)"
+			 menuClose>
 				<ion-icon style="color: #b8c7ce" item-left name="{{page.icon}}"></ion-icon>
 				<label style="color: #b8c7ce">{{page.title}}</label>
 			</button>
