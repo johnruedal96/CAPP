@@ -141,6 +141,14 @@ export class CotizacionPage {
 			]
 		});
 		alert.present();
+
+		this.platform.registerBackButtonAction(() => {
+			if (alert) {
+				alert.dismiss();
+				alert = null;
+			}
+			this.app.buttomBack();
+		});
 	}
 
 	dismisAlert(event, alert, empresas) {

@@ -15,18 +15,18 @@ export class MyApp {
   @ViewChild('NAV') nav: Nav;
   rootPage: any;
 
-  public pages: Array<{ title: string, componet: any, icon: string, param:{} }>;
+  public pages: Array<{ title: string, componet: any, icon: string, param: {} }>;
   public login: boolean = false;
   public alert;
 
   constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
 
     this.pages = [
-      { title: 'Empresas', componet: TabsPage, icon: 'construct', param:{}},
-      { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person', param:{}},
-      { title: 'Cotizar', componet: TabsPage, icon: 'cart' , param:{'cotizacion':true}},
-      { title: 'Datos de envio', componet: 'DireccionPage', icon: 'send', param:{}},
-      { title: 'Contactenos', componet: 'ContactenosPage', icon: 'mail', param:{} }
+      { title: 'Empresas', componet: TabsPage, icon: 'construct', param: {'nav': this.nav} },
+      { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person', param: {} },
+      { title: 'Cotizar', componet: TabsPage, icon: 'cart', param: { 'cotizacion': true } },
+      { title: 'Datos de envio', componet: 'DireccionPage', icon: 'send', param: {} },
+      { title: 'Contactenos', componet: 'ContactenosPage', icon: 'mail', param: {} }
       // { title: 'Contactenos', componet: 'FormCotizacionPage', icon: 'mail' }
     ];
 
@@ -84,8 +84,12 @@ export class MyApp {
     this.alert.present();
   }
 
-  goToPage(page,param) {
-    this.nav.setRoot(page,param);
+  goToPage(page, param) {
+    if (page == TabsPage) {
+      this.nav.setRoot(page, param);
+    }else{
+      this.nav.push(page);
+    }
   }
 
   isLogged() {

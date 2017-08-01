@@ -14,6 +14,9 @@ export class TabsPage {
 	tab4Root = 'CotizacionPage';
 
 	public tabSelected: string = "0";
+	public nav: any;
+	public alert: any;
+	public alertCerrar: any;
 
 	constructor(public element: ElementRef, public renderer: Renderer, public menuController: MenuController, public auth: AuthProvider, public navCtrl: NavController, public alertCtrl: AlertController, public storage: LocalStorageProvider, public platform: Platform, public navParams: NavParams) {
 		menuController.enable(true);
@@ -25,6 +28,8 @@ export class TabsPage {
 			this.tabSelected = '3';
 			this.showSelectEmpresa();
 		}
+
+		this.nav = this.navParams.get('app');
 	}
 
 	isLogged() {
@@ -49,7 +54,7 @@ export class TabsPage {
 	showSelectEmpresa() {
 		this.storage.empresaId = Number(window.localStorage.getItem('cotizacionTipoEmpresa'));
 		if (this.storage.empresaId == undefined || this.storage.empresaId == 0) {
-			let alert = this.alertCtrl.create({
+			this.alert = this.alertCtrl.create({
 				subTitle: 'Seleccione el tipo de empresa',
 				inputs: [
 					{
@@ -57,7 +62,7 @@ export class TabsPage {
 						label: 'Ferreterias',
 						value: '1',
 						handler: (event) => {
-							alert.dismiss();
+							this.alert.dismiss();
 							this.storage.empresaId = event.value;
 							window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
 						}
@@ -67,7 +72,7 @@ export class TabsPage {
 						label: 'Electricos',
 						value: '2',
 						handler: (event) => {
-							alert.dismiss();
+							this.alert.dismiss();
 							this.storage.empresaId = event.value;
 							window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
 						}
@@ -80,7 +85,44 @@ export class TabsPage {
 					}
 				]
 			});
-			alert.present();
+			this.alert.present();
+
+			this.buttomBack()
 		}
+
+	}
+
+	buttomBack() {
+		this.platform.registerBackButtonAction(() => {
+			if (this.alertCerrar) {
+				this.alertCerrar.dismiss();
+				this.alertCerrar = null;
+			} else if(this.alert) {
+				this.alert.dismiss();
+				this.alert = null;
+			}else{
+				this.showAlert();
+			}
+		});
+	}
+
+	showAlert() {
+		this.alertCerrar = this.alertCtrl.create({
+			title: 'CAPP se cerrará',
+			subTitle: '¿Desea permanecer en la aplicación?',
+			buttons: [
+				{
+					text: 'salir',
+					handler: data => {
+						this.platform.exitApp();
+					}
+				},
+				{
+					text: 'No salir',
+					role: 'cancel',
+				}
+			]
+		});
+		this.alertCerrar.present();
 	}
 }
