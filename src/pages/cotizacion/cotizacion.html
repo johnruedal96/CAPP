@@ -108,7 +108,7 @@
 				</ion-item>
 			</ion-list>
 
-			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="alertCotizacionProducto()">Enviar Cotización</button>
+			<button *ngIf="storage.productos.length > 0" color="success" [disabled]="disabledButtonEnviar" ion-button full (click)="alertCotizacionEmpresa()">Enviar Cotización</button>
 
 		</ion-list>
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -116,15 +116,6 @@
 		<!--Tab Empresas-->
 		<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 		<ion-list *ngSwitchCase="'empresaTab'">
-			<!-- <ion-list *ngIf="addEmpresa">
-				<ion-item>
-					<ion-label>Filtro</ion-label>
-					<ion-select interface="popover" [(ngModel)]="filtro" (ionChange)="aplicarFiltro(false)">
-						<ion-option selected="true" value="1">Todas</ion-option>
-						<ion-option value="2">Seleccionadas</ion-option>
-					</ion-select>
-				</ion-item>
-			</ion-list> -->
 			<ion-row id="btnListoFixed" style="padding:0 16px">
 				<ion-col col-6>
 					<button ion-button block (click)="aplicarFiltro(!storage.filtro)" *ngIf="!storage.filtro">Listo</button>
@@ -137,7 +128,6 @@
 
 			<ion-list class="lista">
 				<div class="spinnerCargando" *ngIf="showSpinnerEmpresas && this.storage.empresaId !=0">
-					<!-- <div class="spinnerCargando"> -->
 					<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
 					<p text-center>Cargando...</p>
 				</div>

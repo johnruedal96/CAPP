@@ -12,6 +12,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Keyboard } from '@ionic-native/keyboard';
 
 import { TabsPage } from '../tabs/tabs';
+
+import { LocalNotifications } from '@ionic-native/local-notifications';
 /**
  * Generated class for the CotizacionPage page.
  *
@@ -55,7 +57,7 @@ export class CotizacionPage {
 	public empresasLoad: any = [];
 	public refresher;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard, public platform: Platform) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard, public platform: Platform, public localNotifications: LocalNotifications) {
 		this.storage.productos = [];
 		this.empresa = this.navParams.get('empresa');
 		let mantenerProductos = this.navParams.get('mantener');

@@ -3,8 +3,8 @@
 		<div *ngIf="login" class="banner-sidebar" style="background-image: url('assets/sideMenu.png')">
 			<div style="padding: 20px">
 				<div class="logo_usuario">
-					<img onerror="this.src='http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/sin_logo.png'" *ngIf='auth.imagen == null' src="{{auth.urlImagen}}{{auth.user.imagen}}"
-					 (click)="goToPage('PerfilPage')" menuClose>
+					<img onerror="this.src='http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/sin_logo.png'" *ngIf='auth.imagen == null'
+					 src="{{auth.urlImagen}}{{auth.user.imagen}}" (click)="goToPage('PerfilPage')" menuClose>
 					<img *ngIf='auth.imagen != null' src="{{auth.imagen}}" (click)="goToPage('PerfilPage')" menuClose>
 				</div>
 				<div class="name-user">
@@ -25,5 +25,4 @@
 		</ion-list>
 	</ion-content>
 </ion-menu>
-
 <ion-nav #NAV [root]="rootPage"></ion-nav>
