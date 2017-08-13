@@ -33,13 +33,17 @@ export class TabsPage {
 	}
 
 	isLogged() {
-		this.auth.isLogged().subscribe(user => {
-			if (user.text() == '') {
-				this.navCtrl.setRoot('LoginPage');
-			} else {
-				this.auth.user = JSON.parse(user.text());
-			}
-		});
+		if (!this.auth.loginFacebookGoogle) {
+			this.auth.isLogged().subscribe(user => {
+				if (user.text() == '') {
+					this.navCtrl.setRoot('LoginPage');
+				} else {
+					this.auth.user = JSON.parse(user.text());
+				}
+			});
+		}else{
+			this.auth.getCredencialesFacebook(this.navCtrl);
+		}
 	}
 
 	onTabSelect(event) {
@@ -53,7 +57,7 @@ export class TabsPage {
 
 	showSelectEmpresa() {
 		this.storage.empresaId = Number(window.localStorage.getItem('cotizacionTipoEmpresa'));
-		if (this.storage.empresaId == undefined || this.storage.empresaId == 0) {
+		if (this.storage.productos == 0) {
 			this.alert = this.alertCtrl.create({
 				subTitle: 'Seleccione el tipo de empresa',
 				inputs: [
@@ -97,10 +101,10 @@ export class TabsPage {
 			if (this.alertCerrar) {
 				this.alertCerrar.dismiss();
 				this.alertCerrar = null;
-			} else if(this.alert) {
+			} else if (this.alert) {
 				this.alert.dismiss();
 				this.alert = null;
-			}else{
+			} else {
 				this.showAlert();
 			}
 		});

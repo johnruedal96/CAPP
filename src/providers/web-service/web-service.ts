@@ -48,7 +48,7 @@ export class WebServiceProvider {
 		this.urlGuardarDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/guardarDireccion";
 		this.urlRemoveDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/removeDireccion/";
 		this.urlGetFormasPago = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getFormasPago/";
-		this.urlGetUnidad = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getUnidad/";
+		this.urlGetUnidad = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getUnidad";
 	}
 
 	getEmpresas(tipo) {

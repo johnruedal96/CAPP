@@ -25,11 +25,14 @@ export class FormCotizacionPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public platform: Platform, public storage: LocalStorageProvider, public auth: AuthProvider) {
     this.producto = this.navParams.get('producto');
+    console.log(this.producto);
+    this.unidad = this.producto.unidad;
+    this.unidadId = this.producto.unidad_medida;
+    console.log(this.unidad, this.unidadId);
     this.app = this.navParams.get('app');
   }
 
   ionViewDidLoad() {
-    this.getUnidad();
     this.platform
     this.platform.registerBackButtonAction(() => {
       this.dismiss();
@@ -41,14 +44,18 @@ export class FormCotizacionPage {
   }
 
   isLogged() {
-    this.auth.isLogged()
-      .subscribe(res => {
-        if (res.text() == '') {
-          this.navCtrl.setRoot('LoginPage');
-        } else {
-          this.auth.user = JSON.parse(res.text());
-        }
-      });
+    if (!this.auth.loginFacebookGoogle) {
+      this.auth.isLogged()
+        .subscribe(res => {
+          if (res.text() == '') {
+            this.navCtrl.setRoot('LoginPage');
+          } else {
+            this.auth.user = JSON.parse(res.text());
+          }
+        });
+    }else{
+      this.auth.getCredencialesFacebook(this.navCtrl);
+    }
   }
 
   dismiss() {
@@ -65,22 +72,11 @@ export class FormCotizacionPage {
     }
   }
 
-  getUnidad() {
-    this.ws.getUnidad()
-      .subscribe(
-      (res) => {
-        this.unidad = res.json();
-      }
-      )
-  }
-
   agregar() {
-    let unidad = [];
-    this.unidad.find((element) => {
-      if (element.id == this.unidadId) {
-        unidad = element;
-      }
-    });
+    let unidad = {
+      id: this.unidadId,
+      nombre: this.unidad
+    };
     let param = {
       producto: this.producto,
       cantidad: this.cantidad,

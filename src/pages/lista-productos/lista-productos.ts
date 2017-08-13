@@ -47,25 +47,28 @@ export class ListaProductosPage {
 
   ionViewDidLoad() {
     this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
-    this.platform
     this.platform.registerBackButtonAction(() => {
       this.dismiss();
       this.app.buttomBack();
     });
     if (!this.storage.desarrollo) {
-			this.isLogged();
-		}
+      this.isLogged();
+    }
   }
 
   isLogged() {
-    this.auth.isLogged()
-      .subscribe(res => {
-        if (res.text() == '') {
-          this.navCtrl.setRoot('LoginPage');
-        } else {
-          this.auth.user = JSON.parse(res.text());
-        }
-      });
+    if (!this.auth.loginFacebookGoogle) {
+      this.auth.isLogged()
+        .subscribe(res => {
+          if (res.text() == '') {
+            this.navCtrl.setRoot('LoginPage');
+          } else {
+            this.auth.user = JSON.parse(res.text());
+          }
+        });
+    }else{
+      this.auth.getCredencialesFacebook(this.navCtrl);
+    }
   }
 
   cargarLista(offset, limit, scroll) {
@@ -122,43 +125,43 @@ export class ListaProductosPage {
 
   search(event, scroll) {
     // if (event == 13) {
-      // if (this.txtSearch == '' || this.txtSearch == undefined) {
-      //   this.closeSearch(null);
-      // }
-
-      if (this.txtSearch != '' && this.txtSearch != undefined) {
-        this.loadListSearch = true;
-        if (scroll == null) {
-          this.content.scrollToTop();
-          this.tamañoBusqueda = this.rango;
-          this.productos = [];
-          this.showSpinner = true;
-        }
-        this.ws.searchProducto(this.id, this.txtSearch, this.tamañoBusqueda - this.rango, this.tamañoBusqueda)
-          .subscribe(
-          (res) => {
-            if (scroll == null) {
-              this.productos = [];
-            }
-            this.llenarArray(res.data);
-            if (scroll == null) {
-              this.showSpinner = false;
-            } else {
-              scroll.complete();
-            }
-          },
-          (err) => {
-            if (scroll == null) {
-              this.productos = [];
-              this.showSpinner = false;
-            } else {
-              scroll.complete();
-            }
-          }
-          )
-      }
+    // if (this.txtSearch == '' || this.txtSearch == undefined) {
+    //   this.closeSearch(null);
     // }
-  } 
+
+    if (this.txtSearch != '' && this.txtSearch != undefined) {
+      this.loadListSearch = true;
+      if (scroll == null) {
+        this.content.scrollToTop();
+        this.tamañoBusqueda = this.rango;
+        this.productos = [];
+        this.showSpinner = true;
+      }
+      this.ws.searchProducto(this.id, this.txtSearch, this.tamañoBusqueda - this.rango, this.tamañoBusqueda)
+        .subscribe(
+        (res) => {
+          if (scroll == null) {
+            this.productos = [];
+          }
+          this.llenarArray(res.data);
+          if (scroll == null) {
+            this.showSpinner = false;
+          } else {
+            scroll.complete();
+          }
+        },
+        (err) => {
+          if (scroll == null) {
+            this.productos = [];
+            this.showSpinner = false;
+          } else {
+            scroll.complete();
+          }
+        }
+        )
+    }
+    // }
+  }
 
   seleccionar(event, producto) {
     let lista = JSON.parse(window.localStorage.getItem('CotizacionLista'));

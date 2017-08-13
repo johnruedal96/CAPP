@@ -28,8 +28,8 @@
 <ion-content padding>
   <div class="content-form">
     <div class="form">
-      <h5>Producto:</h5>
-       <label>{{producto.nombre}}</label> 
+      <h4>Producto:</h4>
+      <label>{{producto.nombre}}</label>
       <form margin-top>
         <ion-list>
 
@@ -47,18 +47,9 @@
             </ion-col>
           </ion-row>
 
-          <form class="select-tipo" #formTipoEmpresa="ngForm">
-            <ion-list>
-              <ion-item>
-                <ion-label>Unidad</ion-label>
-                <ion-select [disabled]="tipoEmpresa" interface="popover" name="unidadId" [(ngModel)]="unidadId" required>
-                  <ion-option *ngFor="let und of unidad" value="{{und.id}}">{{und.nombre}}</ion-option>
-                </ion-select>
-              </ion-item>
-            </ion-list>
-          </form>
-
-          <button ion-button full color="success" [disabled]="unidadId == undefined || cantidad == 0" (click)="agregar()">Agregar</button>
+            <h6>Unidad de medida:</h6>
+            <label>{{unidad}}</label>
+          <button ion-button full color="success" [disabled]="cantidad == 0" (click)="agregar()">Agregar</button>
 
         </ion-list>
       </form>

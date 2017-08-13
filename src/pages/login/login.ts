@@ -6,6 +6,8 @@ import { TabsPage } from '../tabs/tabs';
 import { AuthProvider } from '../../providers/auth/auth';
 import { MyApp } from '../../app/app.component';
 
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+
 /**
  * Generated class for the LoginPage page.
  *
@@ -21,7 +23,7 @@ export class LoginPage {
 
   public token: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuController: MenuController, public auth: AuthProvider, public app: MyApp, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuController: MenuController, public auth: AuthProvider, public app: MyApp, public alertCtrl: AlertController, public fb: Facebook) {
     menuController.enable(false);
   }
 
@@ -30,8 +32,7 @@ export class LoginPage {
     this.auth.getToken()
       .subscribe(token => {
         this.token = token.text();
-      })
-
+      });
   }
 
   login(formLogin) {
@@ -55,6 +56,46 @@ export class LoginPage {
       );
   }
 
+  loginWithFacebook() {
+    this.fb.login(['public_profile', 'email'])
+      .then((res: FacebookLoginResponse) => {
+        this.fb.api('me?fields=id,name,email,first_name,last_name,picture.width(720).height(720).as(profile_picture)', [])
+          .then(profile => {
+            let user = {
+              email : profile['email'],
+              id : profile['id'],
+              nombre : profile['first_name'] + ' ' + profile['last_name'],
+              imagen : profile['profile_picture']['data']['url']
+            }
+            this.auth.user = user;
+            this.app.login = true;
+            this.auth.loginFacebookGoogle = true;
+            this.auth.urlImagen = '';
+            this.navCtrl.setRoot(TabsPage);
+            window.localStorage.setItem('loginFacebookGoogle', 'true');
+            window.localStorage.setItem('user', JSON.stringify(this.auth.user));
+
+            this.auth.getToken()
+            .subscribe(
+              (token)=>{
+                this.auth.registrarCredencialesFacebook(token.text())
+                .subscribe(
+                  (res) => {
+                    this.auth.user.id = res.json().id;
+                  },
+                  (err)=>{
+                    this.app.login = false;
+                    this.navCtrl.setRoot('LoginPage');
+                    this.auth.loginFacebookGoogle = false;
+                  }
+                );
+              }
+            )
+          })
+      })
+      .catch(e => console.log('Error logging into Facebook', e));
+  }
+
   goToPage(registro) {
     if (registro) {
       this.navCtrl.push('RegistroPage');
@@ -73,20 +114,20 @@ export class LoginPage {
 
   presentAlert(title, subTitle) {
     let alert = this.alertCtrl.create({
-				title: title,
-				message: subTitle,
-				buttons: ['Cerrar']
-			})
-			alert.present();
-			setTimeout(() => {
-				let hdr = alert.instance.hdrId;
-				let desc = alert.instance.descId;
-				let head = window.document.getElementById(hdr);
-        let msg = window.document.getElementById(desc);
-				head.style.textAlign = 'center';
-				msg.style.textAlign = 'center';
-				head.innerHTML = '<ion-icon name="close" style="color:#f53d3d; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-close" aria-label="close" ng-reflect-name="close"></ion-icon>';
-			}, 100)
+      title: title,
+      message: subTitle,
+      buttons: ['Cerrar']
+    })
+    alert.present();
+    setTimeout(() => {
+      let hdr = alert.instance.hdrId;
+      let desc = alert.instance.descId;
+      let head = window.document.getElementById(hdr);
+      let msg = window.document.getElementById(desc);
+      head.style.textAlign = 'center';
+      msg.style.textAlign = 'center';
+      head.innerHTML = '<ion-icon name="close" style="color:#f53d3d; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-close" aria-label="close" ng-reflect-name="close"></ion-icon>';
+    }, 100)
   }
 
 }

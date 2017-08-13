@@ -11,8 +11,14 @@ page-form-cotizacion {
     	vertical-align: middle;
 	}
 
-	h5{
-		display: inline-block;
+	h4{
+		font-weight: bold;
+	}
+
+	h6{
+		margin-right: 16px;
+		font-weight: bold;
+    	display: inline-block;
 	}
     // Estilos para ios
 	.toolbar-ios{

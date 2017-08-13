@@ -22,7 +22,7 @@ export class MyApp {
   constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthProvider, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
 
     this.pages = [
-      { title: 'Empresas', componet: TabsPage, icon: 'construct', param: {'nav': this.nav} },
+      { title: 'Empresas', componet: TabsPage, icon: 'construct', param: { 'nav': this.nav } },
       { title: 'Mi Perfil', componet: 'PerfilPage', icon: 'person', param: {} },
       { title: 'Cotizar', componet: TabsPage, icon: 'cart', param: { 'cotizacion': true } },
       { title: 'Datos de envio', componet: 'DireccionPage', icon: 'send', param: {} },
@@ -87,27 +87,42 @@ export class MyApp {
   goToPage(page, param) {
     if (page == TabsPage) {
       this.nav.setRoot(page, param);
-    }else{
+    } else {
       this.nav.push(page);
     }
   }
 
   isLogged() {
-    this.auth.isLogged().subscribe(
-      (user) => {
-        if (user.text() == '') {
-          this.nav.setRoot('LoginPage');
-        } else {
-          this.auth.user = JSON.parse(user.text());
-          this.login = true;
-          this.nav.setRoot(TabsPage);
+    this.auth.loginFacebookGoogle = window.localStorage.getItem('loginFacebookGoogle');
+
+    if (this.auth.loginFacebookGoogle == null) {
+      this.auth.loginFacebookGoogle = false;
+    } else if (this.auth.loginFacebookGoogle == 'true') {
+      this.auth.loginFacebookGoogle = true
+    } else {
+      this.auth.loginFacebookGoogle = false;
+    }
+
+    if (!this.auth.loginFacebookGoogle) {
+      this.auth.isLogged().subscribe(
+        (user) => {
+          if (user.text() == '') {
+            this.nav.setRoot('LoginPage');
+          } else {
+            this.auth.user = JSON.parse(user.text());
+            this.login = true;
+            this.nav.setRoot(TabsPage);
+          }
+        },
+        (err) => {
+          this.rootPage = 'NoInternetPage';
         }
-      },
-      (err) => {
-        this.rootPage = 'NoInternetPage';
-        // console.log('no hay conexión a internet');
-      }
-    );
+      );
+    } else {
+      this.auth.getCredencialesFacebook(this.nav);
+      this.login = true;
+      this.nav.setRoot(TabsPage);
+    }
   }
 
   pc() {
@@ -116,7 +131,7 @@ export class MyApp {
       "nombre": "John Rueda",
       "email": "johnruedal96@gmail.com",
       "estado": 1,
-      "imagen": 'usuario_7.jpg',
+      "imagen": 'usuario_3.jpg',
       "created_at": "2017-06-27 14:26:55",
       "updated_at": "2017-06-29 11:20:24",
       "id_perfil": 2

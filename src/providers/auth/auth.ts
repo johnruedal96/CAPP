@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import { LoadingController, AlertController } from 'ionic-angular';
+import { Facebook } from '@ionic-native/facebook';
 /*
   Generated class for the AuthProvider provider.
 
@@ -14,7 +15,7 @@ import { LoadingController, AlertController } from 'ionic-angular';
 export class AuthProvider {
 
   public user: any;
-  public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
+  public urlImagen: string;
   public imagen: string;
 
   public urlToken: string;
@@ -25,12 +26,15 @@ export class AuthProvider {
   public token: string;
   public loader;
 
-  constructor(public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
+  public loginFacebookGoogle;
+
+  constructor(public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public fb: Facebook) {
     this.urlToken = 'http://www.contactoarquitectonico.com.co/api/csrf';
     this.urlLogin = 'http://www.contactoarquitectonico.com.co/login';
     this.urlLogout = 'http://www.contactoarquitectonico.com.co/logout';
     this.urlRegister = 'http://www.contactoarquitectonico.com.co/capp_admin/wscapp/register';
     this.urlActualizar = 'http://www.contactoarquitectonico.com.co/capp_admin/wscapp/actualizarDatos';
+
   }
 
   getToken() {
@@ -75,21 +79,30 @@ export class AuthProvider {
       content: 'Cerrando Sesion...'
     });
     loader.present();
-    this.http.get(this.urlLogout)
-      .subscribe(
-      (res) => {
-        window.localStorage.removeItem('CotizacionLista');
-        window.localStorage.removeItem('CotizacionEmpresas');
-        window.localStorage.removeItem('cotizacionTipoEmpresa');
-        window.localStorage.setItem('filtro', 'false');
-        this.imagen = null;
-        nav.setRoot('LoginPage');
-        loader.dismiss();
-      },
-      (err) => {
-        loader.dismiss();
-      }
-      );
+    if (this.loginFacebookGoogle) {
+      this.fb.logout();
+      this.loginFacebookGoogle = false;
+      nav.setRoot('LoginPage');
+      window.localStorage.removeItem('loginFacebookGoogle');
+      window.localStorage.removeItem('user');
+      loader.dismiss();
+    } else {
+      this.http.get(this.urlLogout)
+        .subscribe(
+        (res) => {
+          window.localStorage.removeItem('CotizacionLista');
+          window.localStorage.removeItem('CotizacionEmpresas');
+          window.localStorage.removeItem('cotizacionTipoEmpresa');
+          window.localStorage.setItem('filtro', 'false');
+          this.imagen = null;
+          nav.setRoot('LoginPage');
+          loader.dismiss();
+        },
+        (err) => {
+          loader.dismiss();
+        }
+        );
+    }
     return true;
   }
 
@@ -155,6 +168,50 @@ export class AuthProvider {
 
     return this.http.post(this.urlActualizar, params, options)
       .map(res => res);
+  }
+
+  registrarCredencialesFacebook(token) {
+    let headers = new Headers({
+      'X-CSRF-TOKEN': token,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    this.token = token;
+    // let params = '_token=' + data._token;
+    let params = 'nombre=' + this.user.nombre;
+    params += '&email=' + this.user.email;
+    params += '&id=' + this.user.id;
+
+    return this.http.post(this.urlRegister, params, options);
+  }
+
+  getCredencialesFacebook(nav) {
+    if (this.loginFacebookGoogle) {
+      this.urlImagen = '';
+      this.user = JSON.parse(window.localStorage.getItem('user'));
+      this.fb.getLoginStatus().then((res) => {
+        if (res.status == 'connected') {
+          this.fb.api('me?fields=id,name,email,first_name,last_name,picture.width(720).height(720).as(profile_picture)', [])
+            .then(profile => {
+              this.user.emal = profile['email'];
+              this.user.nombre = profile['first_name'] + ' ' + profile['last_name'];
+              this.user.imagen = profile['profile_picture']['data']['url'];
+            }).catch(() => {
+              this.loginFacebookGoogle = false;
+            });
+        } else{
+          nav.setRoot('LoginPage');
+        }
+      }).catch((err) => {
+        console.log(err);
+        nav.setRoot('LoginPage');
+      });
+    } else {
+      this.urlImagen = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
+    }
   }
 
 }

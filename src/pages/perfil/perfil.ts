@@ -63,14 +63,18 @@ export class PerfilPage {
 	}
 
 	isLogged() {
-		this.auth.isLogged()
-			.subscribe(res => {
-				if (res.text() == '') {
-					this.navCtrl.setRoot('LoginPage');
-				} else {
-					this.auth.user = JSON.parse(res.text());
-				}
-			});
+		if (!this.auth.loginFacebookGoogle) {
+			this.auth.isLogged()
+				.subscribe(res => {
+					if (res.text() == '') {
+						this.navCtrl.setRoot('LoginPage');
+					} else {
+						this.auth.user = JSON.parse(res.text());
+					}
+				});
+		}else{
+			this.auth.getCredencialesFacebook(this.navCtrl);
+		}
 	}
 
 	searchCotizacion() {
@@ -283,7 +287,7 @@ export class PerfilPage {
 				let params = 'id=' + this.auth.user.id;
 				params += '&nombre=' + this.auth.user.nombre;
 				params += '&email=' + this.auth.user.email;
-				if(password){
+				if (password) {
 					params += '&password=' + this.password;
 				}
 				this.auth.actualizarDatos(res.text(), params)
@@ -302,7 +306,7 @@ export class PerfilPage {
 			)
 	}
 
-	showAlertConfirm(){
+	showAlertConfirm() {
 		this.loader.dismiss();
 		let alert = this.alertCtrl.create({
 			title: 'alert',

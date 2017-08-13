@@ -18,13 +18,13 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class ListaCompraPage {
 
-  public idCompra:number;
-  public idCliente:number;
-  public fecha:string;
-  public hora:string;
-  public total:number;
-  public cliente:string;
-  public compra:any;
+  public idCompra: number;
+  public idCliente: number;
+  public fecha: string;
+  public hora: string;
+  public total: number;
+  public cliente: string;
+  public compra: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public storage: LocalStorageProvider) {
     this.idCompra = navParams.get('idCompra');
@@ -39,40 +39,44 @@ export class ListaCompraPage {
   ionViewDidLoad() {
     this.getCompra();
     if (!this.storage.desarrollo) {
-			this.isLogged();
-		}
+      this.isLogged();
+    }
   }
 
   isLogged() {
-    this.auth.isLogged()
-      .subscribe(res => {
-        if (res.text() == '') {
-          this.navCtrl.setRoot('LoginPage');
-        } else {
-          this.auth.user = JSON.parse(res.text());
-        }
-      });
+    if (!this.auth.loginFacebookGoogle) {
+      this.auth.isLogged()
+        .subscribe(res => {
+          if (res.text() == '') {
+            this.navCtrl.setRoot('LoginPage');
+          } else {
+            this.auth.user = JSON.parse(res.text());
+          }
+        });
+    }else{
+      this.auth.getCredencialesFacebook(this.navCtrl);
+    }
   }
 
-  getCompra(){
+  getCompra() {
     this.ws.getCompra(this.idCompra)
-    .subscribe(
-      (res)=>{
+      .subscribe(
+      (res) => {
         this.compra = res.json();
       }
-    )
+      )
   }
 
   formatDate(date) {
-		let options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-		let fecha = new Date(date);
-		return fecha.toLocaleDateString('es-ES', options);
-	}
+    let options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+    let fecha = new Date(date);
+    return fecha.toLocaleDateString('es-ES', options);
+  }
 
-	formatHora(date){
-		let options = {	hour:'numeric',minute:'numeric', hour12:true }
-		let hora = new Date(date);
-		return hora.toLocaleTimeString('es-ES', options);
-	}
+  formatHora(date) {
+    let options = { hour: 'numeric', minute: 'numeric', hour12: true }
+    let hora = new Date(date);
+    return hora.toLocaleTimeString('es-ES', options);
+  }
 
 }

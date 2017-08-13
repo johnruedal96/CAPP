@@ -26,7 +26,7 @@ export class EmpresaPage {
 	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController, public auth: AuthProvider, public storage: LocalStorageProvider) {
 		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
 		this.empresa = navParams.get('empresa');
-		if(this.empresa.tipo == 3){
+		if (this.empresa.tipo == 3) {
 			this.btnCotizar = false;
 		}
 	}
@@ -38,14 +38,18 @@ export class EmpresaPage {
 	}
 
 	isLogged() {
-		this.auth.isLogged()
-			.subscribe(res => {
-				if (res.text() == '') {
-					this.navCtrl.setRoot('LoginPage');
-				} else {
-					this.auth.user = JSON.parse(res.text());
-				}
-			});
+		if (!this.auth.loginFacebookGoogle) {
+			this.auth.isLogged()
+				.subscribe(res => {
+					if (res.text() == '') {
+						this.navCtrl.setRoot('LoginPage');
+					} else {
+						this.auth.user = JSON.parse(res.text());
+					}
+				});
+		}else{
+			this.auth.getCredencialesFacebook(this.navCtrl);
+		}
 	}
 
 	cotizar() {

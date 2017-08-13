@@ -25,6 +25,8 @@ import { SuperTabsModule } from 'ionic2-super-tabs';
 import { SuperTabsController } from 'ionic2-super-tabs';
 import { LocalStorageProvider } from '../providers/local-storage/local-storage';
 
+import { Facebook } from '@ionic-native/facebook';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -53,7 +55,8 @@ import { LocalStorageProvider } from '../providers/local-storage/local-storage';
     File,
     SuperTabsController,
     LocalStorageProvider,
-    LocalNotifications
+    LocalNotifications,
+    Facebook
   ]
 })
 export class AppModule {}

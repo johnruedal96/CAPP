@@ -25,21 +25,25 @@ export class DireccionPage {
 
   ionViewDidLoad() {
     if (!this.storage.desarrollo) {
-			this.isLogged();
-		}
+      this.isLogged();
+    }
     this.getDireccion();
   }
 
   isLogged() {
-    this.auth.isLogged()
-      .subscribe(res => {
-        if (res.text() == '') {
-          this.navCtrl.setRoot('LoginPage');
-        } else {
-          this.auth.user = JSON.parse(res.text());
+    if (!this.auth.loginFacebookGoogle) {
+      this.auth.isLogged()
+        .subscribe(res => {
+          if (res.text() == '') {
+            this.navCtrl.setRoot('LoginPage');
+          } else {
+            this.auth.user = JSON.parse(res.text());
 
-        }
-      });
+          }
+        });
+    }else{
+      this.auth.getCredencialesFacebook(this.navCtrl);
+    }
   }
 
   getDireccion() {
