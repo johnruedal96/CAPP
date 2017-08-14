@@ -28,6 +28,7 @@ export class WebServiceProvider {
 	public urlRemoveDireccion: string;
 	public urlGetFormasPago: string;
 	public urlGetUnidad: string;
+	public urlSendMessage: string;
 
 	constructor(public http: Http) {
 		// this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
@@ -49,6 +50,7 @@ export class WebServiceProvider {
 		this.urlRemoveDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/removeDireccion/";
 		this.urlGetFormasPago = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getFormasPago/";
 		this.urlGetUnidad = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getUnidad";
+		this.urlSendMessage = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/sendMenssage";
 	}
 
 	getEmpresas(tipo) {
@@ -165,6 +167,11 @@ export class WebServiceProvider {
 	uploadImage(formData,usuario) {
 		return this.http.post("http://www.contactoarquitectonico.com.co/capp_admin/wscapp/uploadImagen/"+usuario, formData)
 			.map(response => response.text())
+	}
+
+	sendMessage(data) {
+		return this.http.post(this.urlSendMessage, data)
+			.map(res => res);
 	}
 
 }

@@ -46,6 +46,7 @@ export class LoginPage {
             this.navCtrl.setRoot(TabsPage);
             this.auth.user = JSON.parse(user.text());
             this.app.login = true;
+            this.auth.urlImagen = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
           }
         });
       },
@@ -62,10 +63,10 @@ export class LoginPage {
         this.fb.api('me?fields=id,name,email,first_name,last_name,picture.width(720).height(720).as(profile_picture)', [])
           .then(profile => {
             let user = {
-              email : profile['email'],
-              id : profile['id'],
-              nombre : profile['first_name'] + ' ' + profile['last_name'],
-              imagen : profile['profile_picture']['data']['url']
+              email: profile['email'],
+              id: profile['id'],
+              nombre: profile['first_name'] + ' ' + profile['last_name'],
+              imagen: profile['profile_picture']['data']['url']
             }
             this.auth.user = user;
             this.app.login = true;
@@ -76,21 +77,22 @@ export class LoginPage {
             window.localStorage.setItem('user', JSON.stringify(this.auth.user));
 
             this.auth.getToken()
-            .subscribe(
-              (token)=>{
+              .subscribe(
+              (token) => {
                 this.auth.registrarCredencialesFacebook(token.text())
-                .subscribe(
+                  .subscribe(
                   (res) => {
                     this.auth.user.id = res.json().id;
+                    window.localStorage.setItem('user', JSON.stringify(this.auth.user));
                   },
-                  (err)=>{
+                  (err) => {
                     this.app.login = false;
                     this.navCtrl.setRoot('LoginPage');
                     this.auth.loginFacebookGoogle = false;
                   }
-                );
+                  );
               }
-            )
+              )
           })
       })
       .catch(e => console.log('Error logging into Facebook', e));

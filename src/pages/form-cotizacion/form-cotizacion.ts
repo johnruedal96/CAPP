@@ -18,17 +18,15 @@ import { AuthProvider } from '../../providers/auth/auth';
 export class FormCotizacionPage {
 
   public producto: any;
-  public cantidad: number = 0;
+  public cantidad: number = 1;
   public unidad: any;
   public unidadId: number;
   public app: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public platform: Platform, public storage: LocalStorageProvider, public auth: AuthProvider) {
     this.producto = this.navParams.get('producto');
-    console.log(this.producto);
     this.unidad = this.producto.unidad;
     this.unidadId = this.producto.unidad_medida;
-    console.log(this.unidad, this.unidadId);
     this.app = this.navParams.get('app');
   }
 

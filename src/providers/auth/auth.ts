@@ -15,7 +15,7 @@ import { Facebook } from '@ionic-native/facebook';
 export class AuthProvider {
 
   public user: any;
-  public urlImagen: string;
+  public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
   public imagen: string;
 
   public urlToken: string;
@@ -209,8 +209,6 @@ export class AuthProvider {
         console.log(err);
         nav.setRoot('LoginPage');
       });
-    } else {
-      this.urlImagen = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
     }
   }
 

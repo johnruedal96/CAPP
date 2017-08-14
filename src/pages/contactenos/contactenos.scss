@@ -4,6 +4,26 @@ page-contactenos {
 		text-align: center; display: inline-block; width: 75%
 	}
 
+	// textarea.text-input{
+	// 	height: 350px !important;
+	// }
+
+	.textarea-message{
+		height: 50% !important;
+		position: absolute !important;
+		width: 90% !important;
+	}
+
+	textarea{
+		height: 100%;
+	}
+
+	.btnEnviar{
+		position: absolute;
+		bottom: 0;
+		width: 90%
+	}
+
 	// estilos para android
 	.toolbar-md .title {
 		position: absolute;

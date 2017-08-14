@@ -24,17 +24,18 @@
 
 
 <ion-content padding>
-  <h1>Direccion</h1>
-  <label>Bucaramanga, Santander, 
-    Colombia
-  </label>
+  <form #formContacto="ngForm">
+    <ion-item>
+      <ion-label color="primary" stacked>Asunto</ion-label>
+      <ion-input [ngModel]="formContacto.asunto" name="asunto" type="text" placeholder="Asunto" required></ion-input>
+    </ion-item>
 
-  <h1>INFORMACIÓN DE CONTACTO</h1>
-  <label>
-    Celular: +57 3114933829
-  </label>
-  <br>
-  <label>
-    Email : contactocapp95@gmail.com
-  </label>
+    <ion-item class="textarea-message">
+      <ion-label color="primary" stacked>Mensaje</ion-label>
+      <ion-textarea [ngModel]="formContacto.mensaje" name="mensaje" placeholder="Escríbenos tu mensaje" required></ion-textarea>
+    </ion-item>
+
+  </form>
+
+  <button ion-button block color="dark" (click)="enviar(formContacto)" [disabled]="!formContacto.form.valid" class="btnEnviar">Enviar</button>
 </ion-content>
