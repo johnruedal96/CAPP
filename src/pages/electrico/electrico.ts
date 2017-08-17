@@ -86,10 +86,9 @@ export class ElectricoPage {
 		if (this.electricos.length <= num) {
 			num = this.electricos.length
 		}
-		for (var i = 0; i < num; ++i) {
-			this.isOpoen(i);
-			this.electricoLoad.push(this.electricos[i]);
-		}
+
+		this.llenarArrayLoad(0, num);
+
 		if (refresh) {
 			this.refresher.complete();
 			this.txtSearch = '';
@@ -171,17 +170,61 @@ export class ElectricoPage {
 				tamano = this.electricos.length;
 			}
 
-			// agregar elementos al array que muestra la informacion el pantalla
-			for (let i = position; i < tamano; i++) {
-				this.isOpoen(i);
-				this.electricoLoad.push(this.electricos[i]);
-			}
+			this.llenarArrayLoad(position, tamano);
 
 			infiniteScroll.complete();
 			if (tamano == this.electricos.length) {
 				this.enabledInfinite = false;
 			}
 		}, 500);
+	}
+
+	// agregar elementos al array que muestra la informacion el pantalla
+	llenarArrayLoad(position, tamano) {
+		for (let i = position; i < tamano; i++) {
+			this.isOpoen(i);
+			// Separa el entero y del numero decimal
+			let numero = this.electricos[i].puntos;
+			let entero = parseInt(this.electricos[i].puntos);
+			let decimal = 0;
+			// si puntos es nullo, puntos = 0
+			if (this.electricos[i].puntos == null) {
+				entero = 0;
+				numero = 0;
+			} else {
+				// calcula el numero decumal
+				decimal = numero - entero;
+			}
+			// si decimal < 0.5 no pinte estrella, si decimal es mayor o igual a 0.5 pinta media estrella
+			if (decimal < 0.25) {
+				decimal = 0
+			} else if(decimal >= 0.25 && decimal < 0.75){
+				decimal = 1;
+			}else if(decimal >= 0.75){
+				decimal = 0;
+				entero++;
+			}
+
+			// llena arrays para recorrerlos en la vista
+			let stars = [];
+			for (var j = 1; j <= entero; j++) {
+				stars.push(j);
+			}
+			let halfs = [];
+			for (var j = 1; j <= decimal; j++) {
+				halfs.push(j);
+			}
+			let outline = [];
+			for (var j = 1; j <= 5 - entero - decimal; j++) {
+				outline.push(j);
+			}
+			// agrega valores nuevos en el array
+			this.electricos[i].star = stars;
+			this.electricos[i].starHalf = halfs;
+			this.electricos[i].starOutline = outline;
+
+			this.electricoLoad.push(this.electricos[i]);
+		}
 	}
 
 	doRefresh(refresher) {

@@ -57,6 +57,7 @@ export class TabsPage {
 
 	showSelectEmpresa() {
 		this.storage.empresaId = Number(window.localStorage.getItem('cotizacionTipoEmpresa'));
+		this.storage.productos = JSON.parse(window.localStorage.getItem('CotizacionLista'));
 		if (this.storage.productos == 0) {
 			this.alert = this.alertCtrl.create({
 				subTitle: 'Seleccione el tipo de empresa',

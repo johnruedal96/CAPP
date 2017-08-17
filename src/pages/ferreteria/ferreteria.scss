@@ -19,6 +19,16 @@ page-ferreteria {
 		background-color: #f8f8f8 !important;
 	}
 
+	.rating{
+		float: right;
+		div{
+			display: inline-block;
+		}
+		ion-icon{
+			color: #FFB300;
+		}
+	}
+
 	.items{
 		background-color: #f8f8f8;
 		.avatar{

@@ -29,6 +29,8 @@ export class WebServiceProvider {
 	public urlGetFormasPago: string;
 	public urlGetUnidad: string;
 	public urlSendMessage: string;
+	public urlGetRating: string;
+	public urlPuntuar: string;
 
 	constructor(public http: Http) {
 		// this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
@@ -51,6 +53,8 @@ export class WebServiceProvider {
 		this.urlGetFormasPago = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getFormasPago/";
 		this.urlGetUnidad = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getUnidad";
 		this.urlSendMessage = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/sendMenssage";
+		this.urlGetRating = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getRating/";
+		this.urlPuntuar = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/puntuar";
 	}
 
 	getEmpresas(tipo) {
@@ -164,13 +168,24 @@ export class WebServiceProvider {
 			.map(res => res);
 	}
 
-	uploadImage(formData,usuario) {
-		return this.http.post("http://www.contactoarquitectonico.com.co/capp_admin/wscapp/uploadImagen/"+usuario, formData)
+	uploadImage(formData, usuario) {
+		return this.http.post("http://www.contactoarquitectonico.com.co/capp_admin/wscapp/uploadImagen/" + usuario, formData)
 			.map(response => response.text())
 	}
 
 	sendMessage(data) {
 		return this.http.post(this.urlSendMessage, data)
+			.map(res => res);
+	}
+
+	getRating(cliente, usuario, compra) {
+		return this.http.get(this.urlGetRating + cliente + '/' + usuario + '/' + compra)
+			.map(res => res)
+	}
+
+	puntuar(token, params) {
+		let options = this.getHeader(token);
+		return this.http.post(this.urlPuntuar, params, options)
 			.map(res => res);
 	}
 

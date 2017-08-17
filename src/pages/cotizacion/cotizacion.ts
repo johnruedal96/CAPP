@@ -303,6 +303,7 @@ export class CotizacionPage {
 				this.sendCotizacionWs(data, token.text());
 			},
 			(err) => {
+				this.loader.dismiss();
 				let alert = this.alertCtrl.create({
 					title: 'Error',
 					message: 'La cotización no se ha enviado',

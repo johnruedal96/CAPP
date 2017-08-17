@@ -57,6 +57,17 @@
 			<p *ngIf="ferreteria.isOpen" class="txt-estado">Abierto</p>
 			<p *ngIf="!ferreteria.isOpen" class="circle-estado-cerrado"></p>
 			<p *ngIf="!ferreteria.isOpen" class="txt-estado">Cerrado</p>
+			<div class="rating">
+				<div *ngFor="let star of ferreteria.star">
+					<ion-icon name="ios-star"></ion-icon>
+				</div>
+				<div *ngFor="let star of ferreteria.starHalf">
+					<ion-icon name="ios-star-half"></ion-icon>
+				</div>
+				<div *ngFor="let star of ferreteria.starOutline">
+					<ion-icon name="ios-star-outline"></ion-icon>
+				</div>
+			</div>
 		</ion-item>
 	</ion-list>
 

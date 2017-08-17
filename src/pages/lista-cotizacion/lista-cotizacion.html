@@ -107,7 +107,7 @@
 				<div class="divLabel"><label text-center>{{item.nombre}}</label></div>
 			</ion-col>
 			<ion-col col-4 *ngIf="estadoId == 2">
-				<div class="divLabel"><label style="color:#5cb85c">$ {{item.precio.toLocaleString()}}</label></div>
+				<div class="divLabel"><label style="color:#5cb85c">$ {{(item.precio * item.cantidad).toLocaleString()}}</label></div>
 			</ion-col>
 		</ion-row>
 		<ion-row *ngIf="estadoId == 2" style="background-color: #333; color: white">

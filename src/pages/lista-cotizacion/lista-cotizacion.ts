@@ -70,8 +70,9 @@ export class ListaCotizacionPage {
 						this.fecha_respuesta = this.formatDate(this.lista[i].fecha_respuesta);
 						this.hora_respuesta = this.formatHora(this.lista[i].fecha_respuesta);
 					}
-					this.total += this.lista[i].precio;
-					this.lista[i].precioTotal = this.lista[i].precio;
+					let totalRow = this.lista[i].precio * this.lista[i].cantidad;
+					this.total += totalRow;
+					this.lista[i].precioTotal = this.lista[i].precio * this.lista[i].cantidad;
 				}
 			},
 			(err) => {

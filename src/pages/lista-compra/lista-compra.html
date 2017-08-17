@@ -68,7 +68,7 @@
 		<ion-row *ngFor="let item of compra" class="table-body">
 			<ion-col col-2>
 				<ion-row class="row-cantidad">
-					<ion-col class="divLabel" col-12text-center ><label text-center>{{item.cantidad}}</label></ion-col>
+					<ion-col class="divLabel" col-12text-center><label text-center>{{item.cantidad}}</label></ion-col>
 					<ion-col class="divLabel" col-12>
 						<label text-center style="white-space: normal !important; font-size: 1rem !important">{{item.unidad}}</label>
 					</ion-col>
@@ -91,4 +91,9 @@
 		</ion-row>
 	</div>
 
+	<div class="rating">
+		<ion-icon *ngFor="let star of stars, let i = index" (click)="fillStar(i)" name="{{star.icon}}"></ion-icon>
+	</div>
+
+	<!-- <button (click)="puntuar()" [disabled]="puntuacion == 0" color="darkCapp" ion-button full>Puntuar</button> -->
 </ion-content>
