@@ -225,9 +225,9 @@ export class FerreteriaPage {
 			let numero = this.ferreterias[i].puntos;
 			let entero = parseInt(this.ferreterias[i].puntos);
 			let decimal = 0;
-			// si puntos es nullo, puntos = 0
+			// si puntos es nullo, puntos = 5
 			if(this.ferreterias[i].puntos == null){
-				entero = 0;
+				entero = 5;
 				numero = 0;
 			}else{
 				// calcula el numero decumal

@@ -34,9 +34,9 @@ page-cotizacion {
 		color: black !important;
 	}
 
-	.segment-ios-warning .segment-button.segment-activated{
-		color: white !important;
-	}
+	// .segment-ios-warning .segment-button.segment-activated{
+	// 	color: white !important;
+	// }
 
 	.labelButtonNoEspace{
 		color:#a1a1a1;
@@ -51,6 +51,12 @@ page-cotizacion {
 			padding: 0;
 			background-color: rgba(255, 255, 255, 0);
 			color: red;
+		}
+	}
+
+	#btnListoFixed{
+		button{
+			font-size: 1.3rem;
 		}
 	}
 

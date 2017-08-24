@@ -187,9 +187,9 @@ export class ElectricoPage {
 			let numero = this.electricos[i].puntos;
 			let entero = parseInt(this.electricos[i].puntos);
 			let decimal = 0;
-			// si puntos es nullo, puntos = 0
+			// si puntos es nullo, puntos = 5
 			if (this.electricos[i].puntos == null) {
-				entero = 0;
+				entero = 5;
 				numero = 0;
 			} else {
 				// calcula el numero decumal

@@ -33,7 +33,7 @@
 			</div>
 			<button *ngIf="!auth.loginFacebookGoogle" ion-button clear class="icon-imagen" small icon-left (click)="showSheet()"><ion-icon name="md-create"></ion-icon>Cambiar Foto</button>
 		</div>
-		<ion-segment [(ngModel)]="myProfile" color="dark">
+		<ion-segment [(ngModel)]="myProfile" color="dark" class="segment segment-md segment-md-dark ng-untouched ng-pristine ng-valid">
 			<ion-segment-button value="perfil">
 				Perfil
 			</ion-segment-button>

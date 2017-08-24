@@ -33,6 +33,7 @@ export class EmpresaPage {
 	}
 
 	ionViewDidLoad() {
+		this.buttomBack();
 		if (!this.storage.desarrollo) {
 			this.isLogged();
 		}
@@ -138,14 +139,13 @@ export class EmpresaPage {
 
 	buttomBack() {
 		this.app.platform.registerBackButtonAction(() => {
-			if (this.app.nav.canGoBack()) {
-				this.app.nav.pop();
+			if (this.alert) {
+				this.alert.dismiss();
+				this.alert = null;
 			} else {
-				if (this.alert) {
-					this.alert.dismiss();
-					this.alert = null;
-				} else {
-					this.app.showAlert();
+				if (this.app.nav.canGoBack()) {
+					this.app.nav.pop();
+					this.app.buttomBack();
 				}
 			}
 		});

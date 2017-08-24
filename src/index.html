@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="es" dir="ltr">
 
 <head>
   <meta charset="UTF-8">
@@ -38,22 +38,6 @@
 
   <!-- The bundle js is generated during the build process -->
   <script src="build/main.js"></script>
-  <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
-
-  <script>
-    var pusher = new Pusher('d54723f092383760e917', {
-      cluster: 'us2',
-      encrypted: false
-    });
-
-    var channel = pusher.subscribe('notification_channel');
-    channel.bind('\\App\\Events\\EnviarNotificacion', function (data) {
-      console.log(data.message);
-    });
-    channel.bind('EnviarNotificacion', function (data) {
-      console.log(data.message);
-    });
-  </script>
 </body>
 
 </html>
