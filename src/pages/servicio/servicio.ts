@@ -22,6 +22,8 @@ export class ServicioPage {
 
 	@ViewChild('searchbar') searchInput: Searchbar;
 
+	public urlBaner = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/banners/banner_servicios.png'
+
 	public servicios: any;
 	public imagen: string;
 	public servicioLoad: any;

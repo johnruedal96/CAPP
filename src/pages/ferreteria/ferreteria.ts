@@ -22,6 +22,8 @@ export class FerreteriaPage {
 
 	@ViewChild('searchbar') searchInput: Searchbar;
 
+	public urlBaner = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/banners/banner_ferreterias.png'
+
 	public ferreterias: any;
 	public imagen: string;
 	// array elemtos scroll infinite

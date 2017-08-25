@@ -22,6 +22,8 @@ export class ElectricoPage {
 
 	@ViewChild('searchbar') searchInput: Searchbar;
 
+	public urlBaner = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/banners/banner_ferreelectricos.png'
+
 	public electricos: any;
 	public imagen: string;
 	public electricoLoad: any;
