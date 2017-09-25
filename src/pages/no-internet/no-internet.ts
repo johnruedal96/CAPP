@@ -32,12 +32,27 @@ export class NoInternetPage {
     this.auth.getToken()
       .subscribe(
       (data) => {
-        this.app.rootPage = TabsPage;
+        this.isLogged();
       },
       (err)=>{
         this.showSpiner = false;
       }
       )
   }
+
+  isLogged() {
+		if (!this.auth.loginFacebookGoogle) {
+			this.auth.isLogged().subscribe(user => {
+				if (user.text() == '') {
+					this.app.rootPage = 'LoginPage';
+				} else {
+          this.app.rootPage = TabsPage;
+					this.auth.user = JSON.parse(user.text());
+				}
+			});
+		}else{
+			this.auth.getCredencialesFacebook(this.navCtrl);
+		}
+	}
 
 }
