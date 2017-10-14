@@ -129,7 +129,7 @@ export class MyApp {
     let user = {
       "id": 3,
       "nombre": "John Rueda",
-      "email": "johnruedal96@gmail.com",
+      "email": "john@gmail.com",
       "estado": 1,
       "imagen": 'usuario_3.jpg',
       "created_at": "2017-06-27 14:26:55",

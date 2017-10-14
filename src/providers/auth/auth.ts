@@ -15,7 +15,7 @@ import { Facebook } from '@ionic-native/facebook';
 export class AuthProvider {
 
   public user: any;
-  public urlImagen: string = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
+  public urlImagen: string = 'http://www.cappco.com.co/capp_admin/archivos/perfiles/img_user/';
   public imagen: string;
 
   public urlToken: string;
@@ -29,11 +29,11 @@ export class AuthProvider {
   public loginFacebookGoogle;
 
   constructor(public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public fb: Facebook) {
-    this.urlToken = 'http://www.contactoarquitectonico.com.co/api/csrf';
-    this.urlLogin = 'http://www.contactoarquitectonico.com.co/login';
-    this.urlLogout = 'http://www.contactoarquitectonico.com.co/logout';
-    this.urlRegister = 'http://www.contactoarquitectonico.com.co/capp_admin/wscapp/register';
-    this.urlActualizar = 'http://www.contactoarquitectonico.com.co/capp_admin/wscapp/actualizarDatos';
+    this.urlToken = 'http://www.cappco.com.co/api/csrf';
+    this.urlLogin = 'http://www.cappco.com.co/login';
+    this.urlLogout = 'http://www.cappco.com.co/logout';
+    this.urlRegister = 'http://www.cappco.com.co/capp_admin/wscapp/register';
+    this.urlActualizar = 'http://www.cappco.com.co/capp_admin/wscapp/actualizarDatos';
 
   }
 
@@ -66,7 +66,7 @@ export class AuthProvider {
   }
 
   extractData(res) {
-    if (res.url == 'http://www.contactoarquitectonico.com.co/inicio') {
+    if (res.url == 'http://www.cappco.com.co/inicio') {
       window.localStorage.setItem('token', this.token);
     } else {
       this.presentAlert('Datos invalidos', 'Datos invalidos, por favor intente de nuevo');

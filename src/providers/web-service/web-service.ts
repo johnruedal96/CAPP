@@ -33,28 +33,28 @@ export class WebServiceProvider {
 	public urlPuntuar: string;
 
 	constructor(public http: Http) {
-		// this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/show/";
-		this.url = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getEmpresas/";
-		this.urlSearch = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/search/";
-		this.urlSearchProducto = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/searchProducto/";
-		this.urlProductos = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/productos/";
-		this.urlSendCotizacion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/cotizacion";
-		this.urlSendCotizacionProducto = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/cotizacionProducto";
-		this.urlSendCotizacionCliente = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/cotizacionCliente";
-		this.urlSearchCotizacionUsuario = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/buscarCotizacionUsuario/";
-		this.urlGetCotizacion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getCotizacion/";
-		this.urlSendCompra = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/compra";
-		this.urlSendCompraProducto = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/compraProducto";
-		this.urlGetCompras = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getComprasUsuario/";
-		this.urlGetCompra = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getCompra/";
-		this.urlGetDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getDireccion/";
-		this.urlGuardarDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/guardarDireccion";
-		this.urlRemoveDireccion = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/removeDireccion/";
-		this.urlGetFormasPago = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getFormasPago/";
-		this.urlGetUnidad = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getUnidad";
-		this.urlSendMessage = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/sendMenssage";
-		this.urlGetRating = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/getRating/";
-		this.urlPuntuar = "http://www.contactoarquitectonico.com.co/capp_admin/wscapp/puntuar";
+		// this.url = "http://www.cappco.com.co/capp_admin/wscapp/show/";
+		this.url = "http://www.cappco.com.co/capp_admin/wscapp/getEmpresas/";
+		this.urlSearch = "http://www.cappco.com.co/capp_admin/wscapp/search/";
+		this.urlSearchProducto = "http://www.cappco.com.co/capp_admin/wscapp/searchProducto/";
+		this.urlProductos = "http://www.cappco.com.co/capp_admin/wscapp/productos/";
+		this.urlSendCotizacion = "http://www.cappco.com.co/capp_admin/wscapp/cotizacion";
+		this.urlSendCotizacionProducto = "http://www.cappco.com.co/capp_admin/wscapp/cotizacionProducto";
+		this.urlSendCotizacionCliente = "http://www.cappco.com.co/capp_admin/wscapp/cotizacionCliente";
+		this.urlSearchCotizacionUsuario = "http://www.cappco.com.co/capp_admin/wscapp/buscarCotizacionUsuario/";
+		this.urlGetCotizacion = "http://www.cappco.com.co/capp_admin/wscapp/getCotizacion/";
+		this.urlSendCompra = "http://www.cappco.com.co/capp_admin/wscapp/compra";
+		this.urlSendCompraProducto = "http://www.cappco.com.co/capp_admin/wscapp/compraProducto";
+		this.urlGetCompras = "http://www.cappco.com.co/capp_admin/wscapp/getComprasUsuario/";
+		this.urlGetCompra = "http://www.cappco.com.co/capp_admin/wscapp/getCompra/";
+		this.urlGetDireccion = "http://www.cappco.com.co/capp_admin/wscapp/getDireccion/";
+		this.urlGuardarDireccion = "http://www.cappco.com.co/capp_admin/wscapp/guardarDireccion";
+		this.urlRemoveDireccion = "http://www.cappco.com.co/capp_admin/wscapp/removeDireccion/";
+		this.urlGetFormasPago = "http://www.cappco.com.co/capp_admin/wscapp/getFormasPago/";
+		this.urlGetUnidad = "http://www.cappco.com.co/capp_admin/wscapp/getUnidad";
+		this.urlSendMessage = "http://www.cappco.com.co/capp_admin/wscapp/sendMenssage";
+		this.urlGetRating = "http://www.cappco.com.co/capp_admin/wscapp/getRating/";
+		this.urlPuntuar = "http://www.cappco.com.co/capp_admin/wscapp/puntuar";
 	}
 
 	getEmpresas(tipo) {
@@ -169,7 +169,7 @@ export class WebServiceProvider {
 	}
 
 	uploadImage(formData, usuario) {
-		return this.http.post("http://www.contactoarquitectonico.com.co/capp_admin/wscapp/uploadImagen/" + usuario, formData)
+		return this.http.post("http://www.cappco.com.co/capp_admin/wscapp/uploadImagen/" + usuario, formData)
 			.map(response => response.text())
 	}
 
