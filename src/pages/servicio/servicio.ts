@@ -22,7 +22,7 @@ export class ServicioPage {
 
 	@ViewChild('searchbar') searchInput: Searchbar;
 
-	public urlBaner = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/banners/banner_servicios.png'
+	public urlBaner = 'http://www.cappco.com.co/capp_admin/archivos/banners/banner_servicios.png'
 
 	public servicios: any;
 	public imagen: string;
@@ -43,7 +43,7 @@ export class ServicioPage {
 	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public app: MyApp) {
 		this.servicios = [];
 		this.servicioLoad = [];
-		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
+		this.imagen = "http://www.cappco.com.co/capp_admin/archivos/";
 		this.busqueda = false;
 	}
 

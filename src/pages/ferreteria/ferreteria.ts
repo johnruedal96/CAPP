@@ -22,7 +22,7 @@ export class FerreteriaPage {
 
 	@ViewChild('searchbar') searchInput: Searchbar;
 
-	public urlBaner = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/banners/banner_ferreterias.png'
+	public urlBaner = 'http://www.cappco.com.co/capp_admin/archivos/banners/banner_ferreterias.png'
 
 	public ferreterias: any;
 	public imagen: string;
@@ -44,7 +44,7 @@ export class FerreteriaPage {
 	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public app: MyApp) {
 		this.ferreterias = [];
 		this.ferreteriaLoad = [];
-		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
+		this.imagen = "http://www.cappco.com.co/capp_admin/archivos/";
 		this.busqueda = false;
 	}
 

@@ -126,7 +126,7 @@ export class AuthProvider {
   }
 
   isLogged() {
-    return this.http.get('http://www.contactoarquitectonico.com.co/api/user')
+    return this.http.get('http://www.cappco.com.co/api/user')
       .map(user => user);
   }
 
