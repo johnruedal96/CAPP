@@ -24,6 +24,7 @@ export class ListaCotizacionPage {
 	public empresa: string;
 	public fecha_respuesta: string;
 	public hora_respuesta: string;
+	public docimicio_respuesta: number = 0;
 	public clienteId: number;
 	public estado: string;
 	public estadoId: number;
@@ -69,11 +70,13 @@ export class ListaCotizacionPage {
 					if (i == 0) {
 						this.fecha_respuesta = this.formatDate(this.lista[i].fecha_respuesta);
 						this.hora_respuesta = this.formatHora(this.lista[i].fecha_respuesta);
+						this.docimicio_respuesta = parseFloat(this.lista[i].costo_docimilio);
 					}
 					let totalRow = this.lista[i].precio * this.lista[i].cantidad;
 					this.total += totalRow;
 					this.lista[i].precioTotal = this.lista[i].precio * this.lista[i].cantidad;
 				}
+				this.total += this.docimicio_respuesta;
 			},
 			(err) => {
 				console.log(err);
@@ -119,7 +122,8 @@ export class ListaCotizacionPage {
 			cliente: this.clienteId,
 			lista: this.lista,
 			total: this.total,
-			cotizacion: this.id
+			cotizacion: this.id,
+			docimicio_respuesta: this.docimicio_respuesta
 		}
 		this.navCtrl.push('DatosCompraPage', params);
 	}

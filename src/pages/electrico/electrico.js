@@ -28,7 +28,7 @@ var ElectricoPage = (function () {
         this.loadListSearch = false;
         this.electricos = [];
         this.electricoLoad = [];
-        this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
+        this.imagen = "http://cappco.com.co/capp_admin/archivos/";
         this.busqueda = false;
     }
     ElectricoPage.prototype.ionViewDidLoad = function () {

@@ -83,7 +83,6 @@ export class PerfilPage {
 		this.ws.searchCotizacionUsuario(this.auth.user.id)
 			.subscribe(
 			(res) => {
-				console.log(res.json());
 				this.cotizaciones = this.formatDate(res.json());
 				this.showSpinner = false;
 			},
@@ -332,21 +331,3 @@ export class PerfilPage {
 		}, 100)
 	}
 }
-
-
-
-
-// $cotizacion = Cotizacion::select('cotizacion.id as cotizacion','estadocotizacion.nombre as estado','cotizacion.fecha','clientes.nombre as cliente','estadocotizacion.id as estadoid','cotizacioncliente.idCliente as clienteid', DB::raw('IF(cotizacioncliente.idEstado = 2,  SUM(cotizacionprecio.precio), NULL) as total'), 'clientes.tipo')
-// 			->where('usuario', $usuario)
-// 			->where('estadocotizacion.id','<>','3')
-// 			->join('cotizacioncliente', 'cotizacioncliente.idCotizacion', '=', 'cotizacion.id')
-// 			->leftJoin('cotizacionprecio','cotizacioncliente.idCliente','=','cotizacionprecio.idCliente')
-// 			->join('clientes', 'clientes.id', '=', 'cotizacioncliente.idCliente')
-// 			->join('estadocotizacion', 'estadocotizacion.id', '=', 'cotizacioncliente.idEstado')
-// 			->groupBy('cotizacion.id','cotizacioncliente.idCliente')
-// 			->orderBY('cotizacion.id')
-// 			->orderBy('cotizacioncliente.idEstado','DESC')
-// 			->orderBy('total')
-// 			->get();
-		
-// 		return $cotizacion;

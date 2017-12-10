@@ -26,8 +26,9 @@ export class DatosCompraPage {
   public formasPago: any;
   public formasPagoSelectedId: any;
   public formasPagoSelectedName: any;
-  public total: number
-  public cotizacion: number
+  public total: number;
+  public docimicio_respuesta: number;
+  public cotizacion: number;
   public spinnerDireccion: boolean = true;
   public spinnerPago: boolean = true;
 
@@ -35,6 +36,7 @@ export class DatosCompraPage {
     this.cliente = this.navParams.get('cliente');
     this.lista = this.navParams.get('lista');
     this.total = this.navParams.get('total');
+    this.docimicio_respuesta = this.navParams.get('docimicio_respuesta');
     this.cotizacion = this.navParams.get('cotizacion');
   }
 
@@ -112,7 +114,8 @@ export class DatosCompraPage {
       productos: this.lista,
       cliente: this.cliente,
       total: this.total,
-      cotizacion: this.cotizacion
+      cotizacion: this.cotizacion,
+      docimicio_respuesta: this.docimicio_respuesta
     }
     this.navCtrl.push('ConfirmarCompraPage', params);
   }

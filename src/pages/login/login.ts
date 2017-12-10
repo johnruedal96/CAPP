@@ -46,7 +46,7 @@ export class LoginPage {
             this.navCtrl.setRoot(TabsPage);
             this.auth.user = JSON.parse(user.text());
             this.app.login = true;
-            this.auth.urlImagen = 'http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/';
+            this.auth.urlImagen = 'http://cappco.com.co/capp_admin/archivos/perfiles/img_user/';
           }
         });
       },

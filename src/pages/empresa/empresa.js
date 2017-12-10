@@ -19,7 +19,7 @@ var EmpresaPage = (function () {
     function EmpresaPage(navCtrl, navParams) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
-        this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
+        this.imagen = "http://cappco.com.co/capp_admin/archivos/";
         this.empresa = navParams.get('empresa');
     }
     EmpresaPage.prototype.ionViewDidLoad = function () {

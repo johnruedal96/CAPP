@@ -25,6 +25,7 @@ export class ConfirmarCompraPage {
   public productos: any;
   public cliente: any;
   public total: number;
+  public docimicio_respuesta: number;
   public cotizacion: number;
   public loader;
   public disabledButtonEnviar: boolean = false;
@@ -37,6 +38,7 @@ export class ConfirmarCompraPage {
     this.productos = this.navParams.get('productos');
     this.cliente = this.navParams.get('cliente');
     this.total = this.navParams.get('total');
+    this.docimicio_respuesta = this.navParams.get('docimicio_respuesta');
     this.cotizacion = this.navParams.get('cotizacion');
   }
 
@@ -141,7 +143,7 @@ export class ConfirmarCompraPage {
     this.disabledButtonEnviar = true;
     let alert = this.alertCtrl.create({
       title: 'Comfirmar compra',
-      message: 'El tiempo de entrega y el valor del domicilio para cada zona es responsabilidad de la ferreteria. <br><br> <b>CAPP</b> es totalmente gratuito no cobra por el servicio',
+      message: 'El tiempo de entrega y el valor del domicilio para cada zona lo determinará la ferretería. <br><br> <b>CAPP</b> es totalmente gratuito no cobra por el servicio',
       buttons: [
         {
           text: 'Cancelar',

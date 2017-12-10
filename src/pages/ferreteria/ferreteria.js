@@ -28,7 +28,7 @@ var FerreteriaPage = (function () {
         this.loadListSearch = false;
         this.ferreterias = [];
         this.ferreteriaLoad = [];
-        this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
+        this.imagen = "http:/cappco.com.co/capp_admin/archivos/";
         this.busqueda = false;
         // console.log(window.localStorage.getItem('token'));
     }

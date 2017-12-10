@@ -28,7 +28,7 @@
 	<div class="head-color">
 		<div class="div_img">
 			<div>
-				<img onerror="this.src='http://www.contactoarquitectonico.com.co/capp_admin/archivos/perfiles/img_user/sin_logo.png'" src="{{auth.urlImagen}}{{auth.user.imagen}}" *ngIf='auth.imagen == null' />
+				<img onerror="this.src='http://cappco.com.co/capp_admin/archivos/perfiles/img_user/sin_logo.png'" src="{{auth.urlImagen}}{{auth.user.imagen}}" *ngIf='auth.imagen == null' />
 				<img src="{{auth.imagen}}" *ngIf='auth.imagen != null' />
 			</div>
 			<button *ngIf="!auth.loginFacebookGoogle" ion-button clear class="icon-imagen" small icon-left (click)="showSheet()"><ion-icon name="md-create"></ion-icon>Cambiar Foto</button>

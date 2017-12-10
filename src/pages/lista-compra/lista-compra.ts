@@ -139,4 +139,8 @@ export class ListaCompraPage {
       )
   }
 
+  goToEmpresa(empresa){
+    console.log(empresa);
+  }
+
 }

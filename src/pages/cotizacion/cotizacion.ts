@@ -77,7 +77,7 @@ export class CotizacionPage {
 			}
 			window.localStorage.setItem('cotizacionTipoEmpresa', this.storage.empresaId.toLocaleString());
 		}
-		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
+		this.imagen = "http://www.cappco.com.co/capp_admin/archivos/";
 	}
 
 	ionViewDidLoad() {

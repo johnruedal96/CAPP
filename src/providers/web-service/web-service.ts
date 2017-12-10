@@ -138,6 +138,7 @@ export class WebServiceProvider {
 	}
 
 	getCompra(compra) {
+		console.log(compra);
 		return this.http.get(this.urlGetCompra + compra)
 			.map(res => res);
 	}

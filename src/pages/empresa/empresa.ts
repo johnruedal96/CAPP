@@ -25,7 +25,7 @@ export class EmpresaPage {
 	public alert: any;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController, public auth: AuthProvider, public storage: LocalStorageProvider) {
-		this.imagen = "http://www.contactoarquitectonico.com.co/capp_admin/archivos/";
+		this.imagen = "http://www.cappco.com.co/capp_admin/archivos/";
 		this.empresa = navParams.get('empresa');
 		if (this.empresa.tipo == 3) {
 			this.btnCotizar = false;
