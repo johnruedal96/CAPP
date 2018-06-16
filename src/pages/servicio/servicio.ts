@@ -7,6 +7,8 @@ import { MyApp } from '../../app/app.component';
 
 import { Subscription } from 'rxjs/Subscription';
 
+import { AdMobFree, AdMobFreeBannerConfig } from '@ionic-native/admob-free';
+
 /**
  * Generated class for the ServicioPage page.
  *
@@ -40,7 +42,7 @@ export class ServicioPage {
 
 	public refresher;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public app: MyApp) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public keyboard: Keyboard, public loadingCtrl: LoadingController, public app: MyApp, private admob: AdMobFree) {
 		this.servicios = [];
 		this.servicioLoad = [];
 		this.imagen = "http://www.cappco.com.co/capp_admin/archivos/";
@@ -52,6 +54,22 @@ export class ServicioPage {
 		// ejecuta la funcion closeSearch() cuando el teclado es cerrado
 		this.onHideSubscription = this.keyboard.onKeyboardHide().subscribe(() => this.closeKeyboard());
 	}
+
+	showBanner() {
+ 
+        let bannerConfig: AdMobFreeBannerConfig = {
+            id: 'ca-app-pub-3043398460212143/6365070369',
+			isTesting: false,
+			autoShow: true
+        };
+ 
+        this.admob.banner.config(bannerConfig);
+ 
+        this.admob.banner.prepare().then(() => {
+			// success
+        }).catch(e => console.log(e));
+ 
+    }
 
 	loadEmpresa(refresh) {
 		this.enabledInfinite = true;

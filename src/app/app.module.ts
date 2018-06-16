@@ -16,6 +16,7 @@ import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { AdMobFree } from '@ionic-native/admob-free'
 
 // providers
 import { WebServiceProvider } from '../providers/web-service/web-service';
@@ -56,7 +57,8 @@ import { Facebook } from '@ionic-native/facebook';
     SuperTabsController,
     LocalStorageProvider,
     LocalNotifications,
-    Facebook
+    Facebook,
+    AdMobFree
   ]
 })
 export class AppModule {}

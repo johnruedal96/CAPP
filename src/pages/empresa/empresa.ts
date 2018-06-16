@@ -6,6 +6,8 @@ import { MyApp } from '../../app/app.component';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
 
+import { AdMobFree, AdMobFreeBannerConfig } from '@ionic-native/admob-free';
+
 /**
  * Generated class for the EmpresaPage page.
  *
@@ -24,7 +26,7 @@ export class EmpresaPage {
 	public btnCotizar: boolean = true;
 	public alert: any;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController, public auth: AuthProvider, public storage: LocalStorageProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, private superTabsCtrl: SuperTabsController, public app: MyApp, public alertCtrl: AlertController, public auth: AuthProvider, public storage: LocalStorageProvider, private admob: AdMobFree) {
 		this.imagen = "http://www.cappco.com.co/capp_admin/archivos/";
 		this.empresa = navParams.get('empresa');
 		if (this.empresa.tipo == 3) {
@@ -53,6 +55,22 @@ export class EmpresaPage {
 			this.auth.getCredencialesFacebook(this.navCtrl);
 		}
 	}
+
+	showBanner() {
+ 
+        let bannerConfig: AdMobFreeBannerConfig = {
+            id: 'ca-app-pub-3043398460212143/6365070369',
+			isTesting: false,
+			autoShow: true
+        };
+ 
+        this.admob.banner.config(bannerConfig);
+ 
+        this.admob.banner.prepare().then(() => {
+			// success
+        }).catch(e => console.log(e));
+ 
+    }
 
 	cotizar() {
 		this.obtenerCotizacionGuardada();
