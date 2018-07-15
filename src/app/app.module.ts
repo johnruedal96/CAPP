@@ -15,7 +15,7 @@ import { HeaderColor } from '@ionic-native/header-color';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 
-import { LocalNotifications } from '@ionic-native/local-notifications';
+//import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AdMobFree } from '@ionic-native/admob-free'
 
 // providers
@@ -56,7 +56,7 @@ import { Facebook } from '@ionic-native/facebook';
     File,
     SuperTabsController,
     LocalStorageProvider,
-    LocalNotifications,
+    //LocalNotifications,
     Facebook,
     AdMobFree
   ]
