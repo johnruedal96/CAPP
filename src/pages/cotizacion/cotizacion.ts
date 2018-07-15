@@ -58,7 +58,7 @@ export class CotizacionPage {
 	public refresher;
 
 	//constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard, public platform: Platform, public localNotifications: LocalNotifications) {
-	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard, public platform: Platform, public localNotifications: LocalNotifications) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public alertCtrl: AlertController, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public storage: LocalStorageProvider, public app: MyApp, public toastCtrl: ToastController, public keyboard: Keyboard, public platform: Platform) {
 		this.storage.productos = [];
 		this.empresa = this.navParams.get('empresa');
 		let mantenerProductos = this.navParams.get('mantener');
