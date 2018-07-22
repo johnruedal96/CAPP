@@ -63,6 +63,10 @@
 					<ion-icon name="mail" item-start></ion-icon>
 					<ion-input type="email" [(ngModel)]="auth.user.email" name="email" email required [disabled]="auth.loginFacebookGoogle"></ion-input>
 				</ion-item>
+				<ion-item>
+					<ion-icon name="call" item-start></ion-icon>
+					<ion-input type="tel" [(ngModel)]="auth.user.telefono" name="telefono" required [disabled]="auth.loginFacebookGoogle"></ion-input>
+				</ion-item>
 				<ion-item *ngIf="!auth.loginFacebookGoogle">
 					<ion-icon name="lock" item-start></ion-icon>
 					<ion-input clearOnEdit="false" placeholder="Contraseña (opcional)" type="password" name="password" [(ngModel)]="password"></ion-input>
@@ -73,7 +77,7 @@
 					 type="password" name="passwordConfirm" [(ngModel)]="passwordConfirm"></ion-input>
 				</ion-item>
 			</form>
-			<button *ngIf="!auth.loginFacebookGoogle" ion-button color="dark" block (click)="editar()" [disabled]="(auth.user.nombre == nombreUsuario && auth.user.email == email) && (password.length == 0 || passwordConfirm.length == 0) || !formActualizar.form.valid">
+			<button *ngIf="!auth.loginFacebookGoogle" ion-button color="dark" block (click)="editar()" [disabled]="(auth.user.nombre == nombreUsuario && auth.user.email == email && auth.user.telefono == telefono) && (password.length == 0 || passwordConfirm.length == 0) || !formActualizar.form.valid">
 				<label>Actualizar Datos</label>
 			</button>
 		</ion-list>

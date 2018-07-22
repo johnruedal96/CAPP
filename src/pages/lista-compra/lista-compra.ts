@@ -4,6 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LocalStorageProvider } from '../../providers/local-storage/local-storage';
+import { MyApp } from '../../app/app.component';
 
 /**
  * Generated class for the ListaCompraPage page.
@@ -28,7 +29,7 @@ export class ListaCompraPage {
   public stars: Array<{ icon: string }>;
   public puntuacion: number = 0;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public storage: LocalStorageProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public storage: LocalStorageProvider,public app: MyApp) {
     this.idCompra = navParams.get('idCompra');
     this.idCliente = navParams.get('idCliente');
     this.fecha = this.formatDate(navParams.get('fecha'));
@@ -139,8 +140,14 @@ export class ListaCompraPage {
       )
   }
 
-  goToEmpresa(empresa){
-    console.log(empresa);
+  goToEmpresa(){
+    console.log(this.idCliente);
+    this.ws.getEmpresa(this.idCliente)
+    .subscribe(
+      (res)=>{
+        this.app.nav.push('EmpresaPage', { empresa: res.data[0] });
+      }
+    )
   }
 
 }

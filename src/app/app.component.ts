@@ -127,14 +127,15 @@ export class MyApp {
 
   pc() {
     let user = {
-      "id": 3,
-      "nombre": "John Rueda",
-      "email": "john@gmail.com",
-      "estado": 1,
-      "imagen": 'usuario_3.jpg',
+      id: 3,
+      nombre: "John Rueda",
+      email: "john@gmail.com",
+      estado: 1,
+      imagen: 'usuario_3.jpg',
       "created_at": "2017-06-27 14:26:55",
       "updated_at": "2017-06-29 11:20:24",
-      "id_perfil": 2
+      "id_perfil": 2,
+      telefono: '1234567899'
     }
     this.auth.user = user;
     this.login = true;

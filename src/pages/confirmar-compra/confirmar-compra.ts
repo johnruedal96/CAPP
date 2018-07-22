@@ -18,27 +18,27 @@ import { LocalStorageProvider } from '../../providers/local-storage/local-storag
 })
 export class ConfirmarCompraPage {
 
-  public direccionNombre: string;
+  public direccion: string;
   public direccionId: number;
   public formaPagoNombre: string;
   public formaPagoId: number;
   public productos: any;
   public cliente: any;
   public total: number;
-  public docimicio_respuesta: number;
+  public domicilio_respuesta: number;
   public cotizacion: number;
   public loader;
   public disabledButtonEnviar: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public ws: WebServiceProvider, public auth: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
-    this.direccionNombre = this.navParams.get('direccionNombre');
+    this.direccion = this.navParams.get('direccion');
     this.direccionId = this.navParams.get('direccionId');
     this.formaPagoNombre = this.navParams.get('formaPagoNombre');
     this.formaPagoId = this.navParams.get('formaPagoId');
     this.productos = this.navParams.get('productos');
     this.cliente = this.navParams.get('cliente');
     this.total = this.navParams.get('total');
-    this.docimicio_respuesta = this.navParams.get('docimicio_respuesta');
+    this.domicilio_respuesta = this.navParams.get('domicilio_respuesta');
     this.cotizacion = this.navParams.get('cotizacion');
   }
 

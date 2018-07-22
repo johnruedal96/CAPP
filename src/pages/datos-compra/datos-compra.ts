@@ -27,7 +27,9 @@ export class DatosCompraPage {
   public formasPagoSelectedId: any;
   public formasPagoSelectedName: any;
   public total: number;
-  public docimicio_respuesta: number;
+  public domicilio_respuesta: string;
+  public direccion: string;
+  public direccionId: number;
   public cotizacion: number;
   public spinnerDireccion: boolean = true;
   public spinnerPago: boolean = true;
@@ -36,7 +38,9 @@ export class DatosCompraPage {
     this.cliente = this.navParams.get('cliente');
     this.lista = this.navParams.get('lista');
     this.total = this.navParams.get('total');
-    this.docimicio_respuesta = this.navParams.get('docimicio_respuesta');
+    this.domicilio_respuesta = this.navParams.get('domicilio_respuesta');
+    this.direccion = this.navParams.get('direccion');
+    this.direccionId = this.navParams.get('direccionId');
     this.cotizacion = this.navParams.get('cotizacion');
   }
 
@@ -108,14 +112,15 @@ export class DatosCompraPage {
   siguiente() {
     let params = {
       direccionNombre: this.direccionSelectedName,
-      direccionId: this.direccionSelectedId,
       formaPagoNombre: this.formasPagoSelectedName,
       formaPagoId: this.formasPagoSelectedId,
       productos: this.lista,
       cliente: this.cliente,
       total: this.total,
       cotizacion: this.cotizacion,
-      docimicio_respuesta: this.docimicio_respuesta
+      domicilio_respuesta: this.domicilio_respuesta,
+      direccion: this.direccion,
+      direccionId: this.direccionId
     }
     this.navCtrl.push('ConfirmarCompraPage', params);
   }

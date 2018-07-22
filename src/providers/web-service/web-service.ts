@@ -11,6 +11,7 @@ import 'rxjs/add/operator/map';
 export class WebServiceProvider {
 
 	public url: string;
+	public urlGetEmpresa: string;
 	public urlSearch: string;
 	public urlSearchProducto: string;
 	public urlProductos: string;
@@ -35,6 +36,7 @@ export class WebServiceProvider {
 	constructor(public http: Http) {
 		// this.url = "http://www.cappco.com.co/capp_admin/wscapp/show/";
 		this.url = "http://www.cappco.com.co/capp_admin/wscapp/getEmpresas/";
+		this.urlGetEmpresa = "http://www.cappco.com.co/capp_admin/wscapp/getEmpresa/";
 		this.urlSearch = "http://www.cappco.com.co/capp_admin/wscapp/search/";
 		this.urlSearchProducto = "http://www.cappco.com.co/capp_admin/wscapp/searchProducto/";
 		this.urlProductos = "http://www.cappco.com.co/capp_admin/wscapp/productos/";
@@ -60,6 +62,11 @@ export class WebServiceProvider {
 	getEmpresas(tipo) {
 		let date = new Date();
 		return this.http.get(this.url + tipo + '/' + date.getDay())
+			.map(res => res.json())
+	}
+	
+	getEmpresa(id) {
+		return this.http.get(this.urlGetEmpresa + id)
 			.map(res => res.json())
 	}
 
@@ -91,7 +98,7 @@ export class WebServiceProvider {
 	}
 
 	sendCotizacion(data, token) {
-		let params = 'usuario=' + data.usuario.id;
+		let params = 'usuario=' + data.usuario.id+"&direccion="+data.direccion;
 
 		let options = this.getHeader(token);
 		return this.http.post(this.urlSendCotizacion, params, options)
@@ -138,7 +145,6 @@ export class WebServiceProvider {
 	}
 
 	getCompra(compra) {
-		console.log(compra);
 		return this.http.get(this.urlGetCompra + compra)
 			.map(res => res);
 	}

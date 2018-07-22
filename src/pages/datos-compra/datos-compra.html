@@ -27,7 +27,7 @@
 <ion-content>
 
   <ion-list>
-    <ion-item-group>
+    <!-- <ion-item-group>
       <ion-item-divider color="light">
         <ion-icon name="pin" margin-right></ion-icon>
         Dirección
@@ -54,7 +54,7 @@
           </ion-col>
         </ion-row>
       </ion-item>
-    </ion-item-group>
+    </ion-item-group> -->
     <ion-item-group>
       <ion-item-divider color="light">
         <ion-icon name="card" margin-right></ion-icon>
@@ -81,7 +81,7 @@
       </ion-item>
     </ion-item-group>
     <ion-item padding>
-      <button [disabled]="formasPagoSelectedName == null || direccionSelectedName == null" (click)="siguiente()" ion-button full
+      <button [disabled]="formasPagoSelectedName == null" (click)="siguiente()" ion-button full
         color="darkCapp" padding>Siguiente</button>
     </ion-item>
   </ion-list>

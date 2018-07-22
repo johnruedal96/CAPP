@@ -224,11 +224,9 @@ export class CotizacionPage {
 	}
 
 	alertCotizacionEmpresa() {
-		this.disabledButtonEnviar = true;
 		if (this.storage.empresas.length > 0) {
 			this.enviarCotizacion();
 		} else {
-			this.disabledButtonEnviar = false;
 			let alert = this.alertCtrl.create({
 				title: 'Error',
 				message: 'Seleccione minimo una empresa',
@@ -285,12 +283,79 @@ export class CotizacionPage {
 		}
 	}
 
-	enviarCotizacion() {
-		this.loader = this.loadingCtrl.create({
-			content: 'Enviando Cotización'
-		});
+	enviarCotizacion(){
+		if(this.auth.user.telefono === ''){
+				let alert = this.alertCtrl.create({
+					title: 'Advertencia',
+					message: 'Ingrese un numero telefónico ',
+					buttons: [
+						{
+							text: 'Aceptar',
+							handler: () => {
+								this.navCtrl.push('PerfilPage');
+							}
+						}
+					]
+				})
+				alert.present();
+				setTimeout(() => {
+					let hdr = alert.instance.hdrId;
+					let desc = alert.instance.descId;
+					let head = window.document.getElementById(hdr);
+					let msg = window.document.getElementById(desc);
+					head.style.textAlign = 'center';
+					msg.style.textAlign = 'center';
+					head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+				}, 100)
+		}else{
+			this.selectDireccion();
 
+			// this.loader = this.loadingCtrl.create({
+			// 	content: 'Enviando Cotización'
+			// });
+	
+			// this.loader.present();
+			// this.auth.getToken()
+			// 	.subscribe(
+			// 	(token) => {
+			// 		let data = {
+			// 			usuario: this.auth.user,
+			// 			lista: this.storage.productos,
+			// 			empresas: this.storage.empresas
+			// 		}
+			// 		this.nroRequestOk = 0;
+			// 		this.nroRequest = this.storage.productos.length + this.storage.empresas.length;
+			// 		this.sendCotizacionWs(data, token.text());
+			// 	},
+			// 	(err) => {
+			// 		this.loader.dismiss();
+			// 		let alert = this.alertCtrl.create({
+			// 			title: 'Error',
+			// 			message: 'La cotización no se ha enviado',
+			// 			buttons: ['Aceptar']
+			// 		})
+			// 		alert.present();
+			// 		setTimeout(() => {
+			// 			let hdr = alert.instance.hdrId;
+			// 			let desc = alert.instance.descId;
+			// 			let head = window.document.getElementById(hdr);
+			// 			let msg = window.document.getElementById(desc);
+			// 			head.style.textAlign = 'center';
+			// 			msg.style.textAlign = 'center';
+			// 			head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+			// 		}, 100)
+	
+			// 	}
+			// 	)
+		}
+	}
+
+	selectDireccion(){
+		this.loader = this.loadingCtrl.create({
+			content: 'Consultando direcciones'
+		});
 		this.loader.present();
+
 		this.auth.getToken()
 			.subscribe(
 			(token) => {
@@ -301,13 +366,14 @@ export class CotizacionPage {
 				}
 				this.nroRequestOk = 0;
 				this.nroRequest = this.storage.productos.length + this.storage.empresas.length;
-				this.sendCotizacionWs(data, token.text());
+				this.consultarDirecciones(token);
+				this.loader.dismiss();
 			},
 			(err) => {
 				this.loader.dismiss();
 				let alert = this.alertCtrl.create({
 					title: 'Error',
-					message: 'La cotización no se ha enviado',
+					message: 'No se han podido consultar las direcciones',
 					buttons: ['Aceptar']
 				})
 				alert.present();
@@ -321,6 +387,60 @@ export class CotizacionPage {
 					head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
 				}, 100)
 
+			}
+			)
+	}
+
+	consultarDirecciones(token){
+		this.ws.getDireccion(this.auth.user.id)
+			.subscribe(
+			(res) => {
+				let direcciones = res.json();
+				let inputs = [];
+
+				direcciones.forEach(element => {
+					let input = {
+						type:'radio',
+						label:element.direccion,
+						value:element.id
+					}
+
+					inputs.push(input);
+				});
+
+				let alert = this.alertCtrl.create({
+					subTitle: 'Seleccione el tipo de empresa',
+					inputs: inputs,
+					buttons: [
+					  {
+						text: 'Administrar Datos Envio',
+						role: 'cancel',
+						handler: () => {
+							this.navCtrl.push('DireccionPage');
+						}
+					  },
+					  {
+						text: 'Enviar',
+						handler: (direccion) => {
+						this.loader = this.loadingCtrl.create({
+							content: 'Enviando Cotización'
+						});
+						this.loader.present();
+						  this.disabledButtonEnviar = true;
+						  let data = {
+							usuario: this.auth.user,
+							lista: this.storage.productos,
+							empresas: this.storage.empresas,
+							direccion:direccion
+						}
+						this.nroRequestOk = 0;
+						this.nroRequest = this.storage.productos.length + this.storage.empresas.length;
+						this.sendCotizacionWs(data, token.text());
+						}
+					  }
+					]
+				  });
+				  alert.present();
 			}
 			)
 	}
