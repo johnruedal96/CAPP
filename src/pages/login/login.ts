@@ -47,6 +47,9 @@ export class LoginPage {
             this.auth.user = JSON.parse(user.text());
             this.app.login = true;
             this.auth.urlImagen = 'http://cappco.com.co/capp_admin/archivos/perfiles/img_user/';
+            window.localStorage.setItem('token', this.auth.token);
+          }else{
+            this.presentAlert('Datos invalidos', 'Datos invalidos, por favor intente de nuevo');
           }
         });
       },

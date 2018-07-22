@@ -284,7 +284,7 @@ export class CotizacionPage {
 	}
 
 	enviarCotizacion(){
-		if(this.auth.user.telefono === ''){
+		if(this.auth.user.telefono === '' || this.auth.user.telefono === '0' || this.auth.user.telefono === 0){
 				let alert = this.alertCtrl.create({
 					title: 'Advertencia',
 					message: 'Ingrese un numero telefónico ',
@@ -359,11 +359,6 @@ export class CotizacionPage {
 		this.auth.getToken()
 			.subscribe(
 			(token) => {
-				let data = {
-					usuario: this.auth.user,
-					lista: this.storage.productos,
-					empresas: this.storage.empresas
-				}
 				this.nroRequestOk = 0;
 				this.nroRequest = this.storage.productos.length + this.storage.empresas.length;
 				this.consultarDirecciones(token);

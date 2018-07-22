@@ -59,7 +59,8 @@ export class AuthProvider {
 
     let post = this.http.post(this.urlLogin, params, options)
       .map(res => {
-        this.extractData(res);
+        // this.extractData(res);
+        this.loader.dismiss();
       });
     let loader = this.loader;
     return { post, loader };
@@ -69,7 +70,7 @@ export class AuthProvider {
     if (res.url == 'http://www.cappco.com.co/inicio') {
       window.localStorage.setItem('token', this.token);
     } else {
-      this.presentAlert('Datos invalidos', 'Datos invalidos, por favor intente de nuevo');
+      this.presentAlert('Datos invalidos', 'Datos invalidos, por favor intente de nuevo ' + res.url);
     }
     this.loader.dismiss();
   }
