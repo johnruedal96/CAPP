@@ -37,11 +37,14 @@
 			<ion-segment-button value="perfil">
 				Perfil
 			</ion-segment-button>
+			<ion-segment-button value="enviadas">
+				Enviadas
+			</ion-segment-button>
 			<ion-segment-button value="cotizaciones">
-				Mis Cotizaciones
+				Respondidas
 			</ion-segment-button>
 			<ion-segment-button value="compras">
-				Mis Compras
+				Compras
 			</ion-segment-button>
 		</ion-segment>
 	</div>
@@ -82,6 +85,35 @@
 			</button>
 		</ion-list>
 
+		<ion-list *ngSwitchCase="'enviadas'">
+			<ion-row class="encabezado">
+				<ion-col col-12>
+					<label>Lista de Cotizaciones Enviadas</label>
+					<button ion-button round clear class="button-refresh" (click)="getCotizacionesEnviadas()">
+						<ion-icon name="refresh"></ion-icon>
+					</button>
+				</ion-col>
+			</ion-row>
+			<div class="spinnerCargando" *ngIf="showSpinner">
+				<ion-spinner class="spinnerCargando" name="crescent"></ion-spinner>
+				<p text-center>Cargando...</p>
+			</div>
+			<div *ngFor="let cotizacion of cotizacionesEnvidas">
+					<div class="item-list-nueva" (click)="verCotizacion(cotizacion, true)">
+						<div class="item-fecha">
+							{{cotizacion.fechaFormat}}
+						</div>
+						<div class="item-estado-1">
+							Productos
+						</div>
+						<div class="productos">
+							{{cotizacion.productos}}
+						</div>
+					</div>
+					<hr>
+			</div>
+		</ion-list>
+
 		<ion-list *ngSwitchCase="'cotizaciones'">
 			<ion-row class="encabezado">
 				<ion-col col-12>
@@ -105,7 +137,7 @@
 					<ion-col col-5 *ngIf="cotizacion.tipo == 3">Servicios</ion-col>
 				</ion-row>
 				<div *ngIf="cotizacion.cotizacion == idShowCotizacion" style="border-bottom: 1px solid">
-					<div class="item-list-nueva" (click)="verCotizacion(cotizacion)">
+					<div class="item-list-nueva" (click)="verCotizacion(cotizacion, false)" *ngIf="cotizacion.total != null">
 						<div class="item-fecha">
 							{{cotizacion.fechaFormat}}
 						</div>
@@ -116,8 +148,21 @@
 							{{cotizacion.cliente}}
 						</div>
 						<div class="item-total">
-							<div *ngIf="cotizacion.total != null" style="color:#5cb85c">$ {{cotizacion.total.toLocaleString()}}</div>
-							<div *ngIf="cotizacion.total == null" style="color:#5cb85c">$ 0</div>
+							<div style="color:#5cb85c">$ {{(cotizacion.total*1).toLocaleString()}}</div>
+						</div>
+					</div>
+					<div class="item-list-nueva" *ngIf="cotizacion.total == null">
+						<div class="item-fecha">
+							{{cotizacion.fechaFormat}}
+						</div>
+						<div class="item-estado-noProductos">
+							Sin Productos
+						</div>
+						<div>
+							{{cotizacion.cliente}}
+						</div>
+						<div class="item-total">
+							<div style="color:#5cb85c">$ 0</div>
 						</div>
 					</div>
 				</div>

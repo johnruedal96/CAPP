@@ -45,7 +45,7 @@
 				<ion-icon name="ios-archive"></ion-icon>
 				Productos
 			</ion-segment-button>
-			<ion-segment-button value="empresaTab" icon-left>
+			<ion-segment-button value="empresaTab" icon-left *ngIf="unicaEmpresa">
 				<ion-icon name="ios-briefcase"></ion-icon>
 				Empresas
 			</ion-segment-button>
@@ -132,7 +132,8 @@
 					<p text-center>Cargando...</p>
 				</div>
 				<ion-row *ngFor="let empresa of empresasLoad">
-					<ion-col col-12 class="items empresas-items" (click)="selectEmpresa(empresa)">
+					<!-- <ion-col col-12 class="items empresas-items" (click)="selectEmpresa(empresa)"> -->
+					<ion-col col-12 class="items empresas-items">
 						<ion-item [color]="empresa.selected ? 'success' : 'white'">
 							<ion-avatar item-start class="avatar">
 								<img class="img-logo" src="{{imagen}}{{empresa.imagen}}">

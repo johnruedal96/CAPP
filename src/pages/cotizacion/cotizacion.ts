@@ -30,6 +30,7 @@ export class CotizacionPage {
 	@ViewChild('searchbar') searchInput: Searchbar;
 	// en cazo que llegue desde la vista de las empresas
 	public empresa: any;
+	public unicaEmpresa: boolean = false;
 	// almacena las empresas seleccioandas
 	public empresas: any = [];
 	// variable que indica si se va a cotizar una o muchas empresas
@@ -63,6 +64,7 @@ export class CotizacionPage {
 		this.empresa = this.navParams.get('empresa');
 		let mantenerProductos = this.navParams.get('mantener');
 		if (this.empresa != undefined) {
+			this.unicaEmpresa = true;
 			this.empresa.selected = true;
 			this.storage.empresas = [];
 			this.storage.empresas.push(this.empresa);
@@ -224,32 +226,33 @@ export class CotizacionPage {
 	}
 
 	alertCotizacionEmpresa() {
-		if (this.storage.empresas.length > 0) {
-			this.enviarCotizacion();
-		} else {
-			let alert = this.alertCtrl.create({
-				title: 'Error',
-				message: 'Seleccione minimo una empresa',
-				buttons: [
-					{
-						text: 'Aceptar',
-						handler: () => {
-							this.tabsCotizacion = 'empresaTab';
-						}
-					}
-				]
-			})
-			alert.present();
-			setTimeout(() => {
-				let hdr = alert.instance.hdrId;
-				let desc = alert.instance.descId;
-				let head = window.document.getElementById(hdr);
-				let msg = window.document.getElementById(desc);
-				head.style.textAlign = 'center';
-				msg.style.textAlign = 'center';
-				head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
-			}, 100)
-		}
+		this.enviarCotizacion();
+		// if (this.storage.empresas.length > 0) {
+		// 	this.enviarCotizacion();
+		// } else {
+		// 	let alert = this.alertCtrl.create({
+		// 		title: 'Error',
+		// 		message: 'Seleccione minimo una empresa',
+		// 		buttons: [
+		// 			{
+		// 				text: 'Aceptar',
+		// 				handler: () => {
+		// 					this.tabsCotizacion = 'empresaTab';
+		// 				}
+		// 			}
+		// 		]
+		// 	})
+		// 	alert.present();
+		// 	setTimeout(() => {
+		// 		let hdr = alert.instance.hdrId;
+		// 		let desc = alert.instance.descId;
+		// 		let head = window.document.getElementById(hdr);
+		// 		let msg = window.document.getElementById(desc);
+		// 		head.style.textAlign = 'center';
+		// 		msg.style.textAlign = 'center';
+		// 		head.innerHTML = '<ion-icon name="warning" style="color:#f0ad4e; text-aling:center; font-size: 3em !important" role="img" class="icon icon-md ion-md-warning" aria-label="warning" ng-reflect-name="warning"></ion-icon>';
+		// 	}, 100)
+		// }
 	}
 
 	alertCotizacionProducto() {
@@ -403,8 +406,13 @@ export class CotizacionPage {
 					inputs.push(input);
 				});
 
+				let subTitle = "Seleccione una dirección";
+				if(inputs.length === 0){
+					subTitle = "Agregue una dirección en el administrador de datos de envio";
+				}
+
 				let alert = this.alertCtrl.create({
-					subTitle: 'Seleccione el tipo de empresa',
+					subTitle: subTitle,
 					inputs: inputs,
 					buttons: [
 					  {
@@ -417,20 +425,34 @@ export class CotizacionPage {
 					  {
 						text: 'Enviar',
 						handler: (direccion) => {
-						this.loader = this.loadingCtrl.create({
-							content: 'Enviando Cotización'
-						});
-						this.loader.present();
-						  this.disabledButtonEnviar = true;
-						  let data = {
-							usuario: this.auth.user,
-							lista: this.storage.productos,
-							empresas: this.storage.empresas,
-							direccion:direccion
-						}
-						this.nroRequestOk = 0;
-						this.nroRequest = this.storage.productos.length + this.storage.empresas.length;
-						this.sendCotizacionWs(data, token.text());
+						if(direccion === undefined){
+							let alertError = this.alertCtrl.create({
+								title: 'Seleccione una dirección',
+								message: 'Para continuar, debe seleccionar una dirección de envio',
+								buttons: ['Aceptar']
+							  })
+							  alertError.present();
+						}else{
+							this.loader = this.loadingCtrl.create({
+								content: 'Enviando Cotización'
+							});
+							this.loader.present();
+							this.disabledButtonEnviar = true;
+							let data = {
+								usuario: this.auth.user,
+								lista: this.storage.productos,
+								empresas: this.storage.empresas,
+								direccion:direccion
+							}
+							this.nroRequestOk = 0;
+							if(this.unicaEmpresa){
+								this.nroRequest = this.storage.productos.length + this.storage.empresas.length;
+							}else{
+								this.nroRequest = this.storage.productos.length;
+							}
+							this.nroRequest = this.storage.productos.length;
+							this.sendCotizacionWs(data, token.text());
+							}
 						}
 					  }
 					]
@@ -454,10 +476,12 @@ export class CotizacionPage {
 					this.saveCotizacionProducto(params, token);
 				}
 
-				for (var i = 0; i < data.empresas.length; i++) {
-					params = 'idCliente=' + data.empresas[i].id;
-					params += '&idCotizacion=' + cotizacion.id;
-					this.saveCotizacionCliente(params, token);
+				if(this.unicaEmpresa){
+					for (var i = 0; i < data.empresas.length; i++) {
+						params = 'idCliente=' + data.empresas[i].id;
+						params += '&idCotizacion=' + cotizacion.id;
+						this.saveCotizacionCliente(params, token);
+					}
 				}
 			},
 			(err) => {

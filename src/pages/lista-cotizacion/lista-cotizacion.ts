@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController, LoadingController } from 'ionic-angular';
 
 import { WebServiceProvider } from '../../providers/web-service/web-service';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -32,9 +32,10 @@ export class ListaCotizacionPage {
 	public estadoId: number;
 	public lista: any;
 	public total: number = 0;
-	public direccion: number;
+	public direccion: number
+	public loader;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public auth: AuthProvider, public alertCtrl: AlertController, public storage: LocalStorageProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public ws: WebServiceProvider, public auth: AuthProvider, public alertCtrl: AlertController, public storage: LocalStorageProvider, public loadingCtrl: LoadingController) {
 		this.id = navParams.get('id');
 		this.fecha = this.formatDate(navParams.get('fecha'));
 		this.hora = this.formatHora(navParams.get('fecha'));
@@ -68,6 +69,7 @@ export class ListaCotizacionPage {
 			.subscribe(
 			(res) => {
 				this.lista = res.json();
+				this.total = 0;
 				for (var i = 0; i < this.lista.length; i++) {
 					if (i == 0) {
 						this.fecha_respuesta = this.formatDate(this.lista[i].fecha_respuesta);
@@ -233,6 +235,35 @@ export class ListaCotizacionPage {
 			}
 		});
 		alert.present();
+	}
+
+	deleteItem(item){
+		let params = "idCotizacion="+item.idCotizacion;
+		params += "&idProducto="+item.idProducto;
+
+		this.loader = this.loadingCtrl.create({
+			content: 'Eliminando...'
+		});
+
+		this.loader.present();
+		this.auth.getToken()
+			.subscribe(
+			(res) => {
+				this.ws.eliminarProductoCotizacion(res.text(), params)
+				.subscribe(
+					(res) => {
+						this.loader.dismiss();
+						this.cargarLista();
+					},
+					(err) => {
+						console.log(err);
+					}
+				)
+			},
+			(err) => {
+				console.log(err);
+			}
+		)
 	}
 
 }

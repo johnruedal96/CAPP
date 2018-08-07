@@ -74,6 +74,10 @@ page-perfil {
 			font-size: 1.2rem;
     		color: #4DB6AC;
 		}
+		.item-estado-noProductos{
+			font-size: 1.2rem;
+    		color: #ff5722b5;
+		}
 		.item-total{
 			width: 100%;
 			height: 2rem;
@@ -154,5 +158,11 @@ page-perfil {
 
 	.toolbar-ios .div_title img, .toolbar-md .div_title img{
 		width: 30px;
+	}
+
+	.productos{
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 }

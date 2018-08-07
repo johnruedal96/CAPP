@@ -26,6 +26,7 @@ export class PerfilPage {
 	public myProfile: string;
 	public seleccionCompra: number;
 	public cotizaciones: any;
+	public cotizacionesEnvidas: any;
 	public compras: any;
 	public showSpinner: boolean;
 	public showSpinnerCompras: boolean;
@@ -44,6 +45,7 @@ export class PerfilPage {
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public auth: AuthProvider, public ws: WebServiceProvider, public modalCtrl: ModalController, public element: ElementRef, public renderer: Renderer, public storage: LocalStorageProvider, public camera: Camera, public file: File, public actionSheetCtrl: ActionSheetController, public alertCtrl: AlertController, public loadingCtrl: LoadingController) {
 		this.cotizaciones = [];
+		this.cotizacionesEnvidas = [];
 		this.compras = [];
 		this.myProfile = this.navParams.get('tab');
 		if (this.myProfile == null) {
@@ -56,6 +58,7 @@ export class PerfilPage {
 		this.email = this.auth.user.email;
 		this.nombreUsuario = this.auth.user.nombre;
 		this.searchCotizacion();
+		this.getCotizacionesEnviadas();
 		this.getCompras();
 		if (!this.storage.desarrollo) {
 			this.isLogged();
@@ -82,13 +85,28 @@ export class PerfilPage {
 		this.cotizaciones = [];
 		this.ws.searchCotizacionUsuario(this.auth.user.id)
 			.subscribe(
-			(res) => {
-				this.cotizaciones = this.formatDate(res.json());
-				this.showSpinner = false;
-			},
-			(err) => {
-				console.log(err);
-			}
+				(res) => {
+					this.cotizaciones = this.formatDate(res.json());
+					this.showSpinner = false;
+				},
+				(err) => {
+					console.log(err);
+				}
+			)
+	}
+
+	getCotizacionesEnviadas(){
+		this.showSpinner = true;
+		this.cotizacionesEnvidas = [];
+		this.ws.getCotizacionesEnviadas(this.auth.user.id)
+			.subscribe(
+				(res) => {
+					this.cotizacionesEnvidas = this.formatDate(res.json());
+					this.showSpinner = false;
+				},
+				(err) => {
+					console.log(err);
+				}
 			)
 	}
 
@@ -135,14 +153,24 @@ export class PerfilPage {
 			)
 	}
 
-	verCotizacion(cotizacion) {
+	verCotizacion(cotizacion, enviada) {
 		let params = {
 			id: cotizacion.cotizacion,
 			fecha: cotizacion.fecha,
-			empresa: cotizacion.cliente,
-			estado: cotizacion.estado,
-			estadoId: cotizacion.estadoid,
-			clienteId: cotizacion.clienteid
+			empresa: "",
+			estado:"Enviado",
+			estadoId: 1,
+			clienteId: 0
+		}
+		if(!enviada){
+			params = {
+				id: cotizacion.cotizacion,
+				fecha: cotizacion.fecha,
+				empresa: cotizacion.cliente,
+				estado: cotizacion.estado,
+				estadoId: cotizacion.estadoid,
+				clienteId: cotizacion.clienteid
+			}
 		}
 		this.navCtrl.push('ListaCotizacionPage', params);
 	}
@@ -287,6 +315,7 @@ export class PerfilPage {
 				let params = 'id=' + this.auth.user.id;
 				params += '&nombre=' + this.auth.user.nombre;
 				params += '&email=' + this.auth.user.email;
+				params += '&telefono=' + this.auth.user.telefono;
 				if (password) {
 					params += '&password=' + this.password;
 				}

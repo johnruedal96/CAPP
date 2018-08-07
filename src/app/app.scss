@@ -70,7 +70,9 @@ super-tabs-toolbar{
     }
 
     super-tab-button{
-        height: 54px !important;
+        height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
     }
 
     ion-icon, span{
@@ -79,7 +81,7 @@ super-tabs-toolbar{
 
     ion-icon{
         font-size: 2.2rem !important;
-        margin: 0 !important;
+        margin: 0 auto !important;
     }
 
     span{
@@ -96,7 +98,7 @@ super-tabs-toolbar{
 }
 
 super-tabs-container{
-    height: calc(100% - 54px) !important;
+    height: calc(100% - 48px) !important;
 }
 
 // .title-and-icon, .selected{

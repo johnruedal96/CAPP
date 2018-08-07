@@ -48,23 +48,12 @@ export class RegistroPage {
 			this.auth.register(formRegister.value)
 				.subscribe(
 				(res) => {
-					let respuesta = this.auth.login(formRegister.value);
-					respuesta.post.subscribe(
-						(data) => {
-							this.auth.isLogged().subscribe(user => {
-								//movil
-								if (user.text() != '') {
-									this.navCtrl.setRoot(TabsPage);
-									this.auth.user = JSON.parse(user.text());
-									this.app.login = true;
-								}
-							});
-						},
-						(err) => {
-							respuesta.loader.dismiss();
-							this.presentAlert('Ha ocurrido un error', 'Por favor intente de nuevo');
-						}
-					)
+					if(res.json().error === undefined){
+						this.presentAlert('Resgitro Exitoso!', 'Por favor inicie sesion');
+						this.navCtrl.push('LoginPage');
+					}else{
+						this.presentAlert('Ha ocurrido un error', res.json().error);
+					}
 				},
 				(err) => {
 					this.presentAlert('Ha ocurrido un error', 'Por favor intente de nuevo');

@@ -19,6 +19,7 @@ export class WebServiceProvider {
 	public urlSendCotizacionProducto: string;
 	public urlSendCotizacionCliente: string;
 	public urlSearchCotizacionUsuario: string;
+	public urlCotizacionesEnviadas: string;
 	public urlGetCotizacion: string;
 	public urlSendCompra: string;
 	public urlSendCompraProducto: string;
@@ -32,6 +33,7 @@ export class WebServiceProvider {
 	public urlSendMessage: string;
 	public urlGetRating: string;
 	public urlPuntuar: string;
+	public urlEliminarproductoCotizacion: string;
 
 	constructor(public http: Http) {
 		// this.url = "http://www.cappco.com.co/capp_admin/wscapp/show/";
@@ -44,6 +46,7 @@ export class WebServiceProvider {
 		this.urlSendCotizacionProducto = "http://www.cappco.com.co/capp_admin/wscapp/cotizacionProducto";
 		this.urlSendCotizacionCliente = "http://www.cappco.com.co/capp_admin/wscapp/cotizacionCliente";
 		this.urlSearchCotizacionUsuario = "http://www.cappco.com.co/capp_admin/wscapp/buscarCotizacionUsuario/";
+		this.urlCotizacionesEnviadas = "http://www.cappco.com.co/capp_admin/wscapp/cotizacionesEnviadas/";
 		this.urlGetCotizacion = "http://www.cappco.com.co/capp_admin/wscapp/getCotizacion/";
 		this.urlSendCompra = "http://www.cappco.com.co/capp_admin/wscapp/compra";
 		this.urlSendCompraProducto = "http://www.cappco.com.co/capp_admin/wscapp/compraProducto";
@@ -57,6 +60,7 @@ export class WebServiceProvider {
 		this.urlSendMessage = "http://www.cappco.com.co/capp_admin/wscapp/sendMenssage";
 		this.urlGetRating = "http://www.cappco.com.co/capp_admin/wscapp/getRating/";
 		this.urlPuntuar = "http://www.cappco.com.co/capp_admin/wscapp/puntuar";
+		this.urlEliminarproductoCotizacion = "http://www.cappco.com.co/capp_admin/wscapp/eliminarProductoCotizacionRespondida";
 	}
 
 	getEmpresas(tipo) {
@@ -119,6 +123,11 @@ export class WebServiceProvider {
 
 	searchCotizacionUsuario(usuario) {
 		return this.http.get(this.urlSearchCotizacionUsuario + usuario)
+			.map(res => res);
+	}
+
+	getCotizacionesEnviadas(usuario) {
+		return this.http.get(this.urlCotizacionesEnviadas + usuario)
 			.map(res => res);
 	}
 
@@ -193,6 +202,12 @@ export class WebServiceProvider {
 	puntuar(token, params) {
 		let options = this.getHeader(token);
 		return this.http.post(this.urlPuntuar, params, options)
+			.map(res => res);
+	}
+	
+	eliminarProductoCotizacion(token, params) {
+		let options = this.getHeader(token);
+		return this.http.post(this.urlEliminarproductoCotizacion, params, options)
 			.map(res => res);
 	}
 
