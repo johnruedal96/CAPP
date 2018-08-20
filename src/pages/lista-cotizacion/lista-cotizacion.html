@@ -93,36 +93,42 @@
 			<ion-col col-2>
 				<label>Cant</label>
 			</ion-col>
-			<ion-col col-6 *ngIf="estadoId == 2">
+			<ion-col *ngIf="estadoId == 2">
 				<label>Producto</label>
 			</ion-col>
-			<ion-col col-10 *ngIf="estadoId == 1">
+			<ion-col *ngIf="estadoId == 1">
 				<label>Producto</label>
 			</ion-col>
 			<ion-col *ngIf="estadoId == 2">
-				<label>Precio</label>
+				<label>Precio Unitario</label>
+			</ion-col>
+			<ion-col *ngIf="estadoId == 2">
+				<label>Precio Total</label>
 			</ion-col>
 		</ion-row>
 		<ion-row color="darkCapp" class="table-head" *ngIf="estadoId == 2">
-			<ion-col col-2>
+			<ion-col col-1>
 				<label></label>
 			</ion-col>
 			<ion-col col-2>
 				<label>Cant</label>
 			</ion-col>
-			<ion-col col-5 *ngIf="estadoId == 2">
+			<ion-col *ngIf="estadoId == 2">
 				<label>Producto</label>
 			</ion-col>
-			<ion-col col-9 *ngIf="estadoId == 1">
+			<ion-col *ngIf="estadoId == 1">
 				<label>Producto</label>
 			</ion-col>
 			<ion-col *ngIf="estadoId == 2">
-				<label>Precio</label>
+				<label>Precio Unitario</label>
+			</ion-col>
+			<ion-col *ngIf="estadoId == 2">
+				<label>Precio Total</label>
 			</ion-col>
 		</ion-row>
 		<div *ngIf="estadoId == 2">
 			<ion-row *ngFor="let item of lista" class="table-body">
-				<ion-col col-2 text-center class="btn-eliminar">
+				<ion-col col-1 text-center class="btn-eliminar">
 					<button ion-button clear>
 						<ion-icon (click)="deleteItem(item)" name="close"></ion-icon>
 					</button>
@@ -135,11 +141,14 @@
 						</ion-col>
 					</ion-row>
 				</ion-col>
-				<ion-col col-5 *ngIf="estadoId == 2">
+				<ion-col *ngIf="estadoId == 2">
 					<div class="divLabel"><label text-center>{{item.nombre}}</label></div>
 				</ion-col>
-				<ion-col col-9 *ngIf="estadoId == 1">
+				<ion-col *ngIf="estadoId == 1">
 					<div class="divLabel"><label text-center>{{item.nombre}}</label></div>
+				</ion-col>
+				<ion-col *ngIf="estadoId == 2">
+					<div class="divLabel"><label style="color:#5cb85c">${{(item.precio*1).toLocaleString()}}</label></div>
 				</ion-col>
 				<ion-col *ngIf="estadoId == 2">
 					<div class="divLabel"><label style="color:#5cb85c">${{(item.precio * item.cantidad).toLocaleString()}}</label></div>

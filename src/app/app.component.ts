@@ -127,7 +127,7 @@ export class MyApp {
 
   pc() {
     let user = {
-      id: 4,
+      id: 8,
       nombre: "John Rueda",
       email: "john@gmail.com",
       estado: 1,

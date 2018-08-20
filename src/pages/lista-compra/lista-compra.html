@@ -59,11 +59,14 @@
 			<ion-col col-2>
 				<label>Cant.</label>
 			</ion-col>
-			<ion-col col-7>
+			<ion-col col-4>
 				<label>Producto</label>
 			</ion-col>
 			<ion-col col-3>
-				<label>Precio</label>
+				<label>Precio Unitario</label>
+			</ion-col>
+			<ion-col col-3>
+				<label>Precio Total</label>
 			</ion-col>
 		</ion-row>
 		<ion-row *ngFor="let item of compra" class="table-body">
@@ -75,11 +78,14 @@
 					</ion-col>
 				</ion-row>
 			</ion-col>
-			<ion-col col-7>
+			<ion-col col-4>
 				<div class="divLabel"><label text-center>{{item.nombre}}</label></div>
 			</ion-col>
 			<ion-col col-3>
-				<div class="divLabel"><label text-center style="color:#5cb85c">${{item.precioTotal.toLocaleString()}}</label></div>
+				<div class="divLabel"><label text-center style="color:#5cb85c">${{(item.precioTotal/item.cantidad).toLocaleString()}}</label></div>
+			</ion-col>
+			<ion-col col-3>
+				<div class="divLabel"><label text-center style="color:#5cb85c">${{(item.precioTotal*1).toLocaleString()}}</label></div>
 			</ion-col>
 		</ion-row>
 		<ion-row style="background-color: #333; color: white">

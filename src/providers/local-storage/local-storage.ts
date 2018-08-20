@@ -19,7 +19,7 @@ export class LocalStorageProvider {
   public productos: any = [];
   public empresaId: any;
   public filtro: boolean = false;
-  public desarrollo: boolean = true;
+  public desarrollo: boolean = false;
 
   constructor(public http: Http) {
 
