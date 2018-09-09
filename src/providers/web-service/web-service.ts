@@ -36,30 +36,35 @@ export class WebServiceProvider {
 	public urlEliminarproductoCotizacion: string;
 
 	constructor(public http: Http) {
+		var security = false;
+		var ht = "http://";
+		if(security){
+			ht = "https://";
+		}
 		// this.url = "http://www.cappco.com.co/capp_admin/wscapp/show/";
-		this.url = "http://www.cappco.com.co/capp_admin/wscapp/getEmpresas/";
-		this.urlGetEmpresa = "http://www.cappco.com.co/capp_admin/wscapp/getEmpresa/";
-		this.urlSearch = "http://www.cappco.com.co/capp_admin/wscapp/search/";
-		this.urlSearchProducto = "http://www.cappco.com.co/capp_admin/wscapp/searchProducto/";
-		this.urlProductos = "http://www.cappco.com.co/capp_admin/wscapp/productos/";
-		this.urlSendCotizacion = "http://www.cappco.com.co/capp_admin/wscapp/cotizacion";
-		this.urlSendCotizacionProducto = "http://www.cappco.com.co/capp_admin/wscapp/cotizacionProducto";
-		this.urlSendCotizacionCliente = "http://www.cappco.com.co/capp_admin/wscapp/cotizacionCliente";
-		this.urlSearchCotizacionUsuario = "http://www.cappco.com.co/capp_admin/wscapp/buscarCotizacionUsuario/";
-		this.urlCotizacionesEnviadas = "http://www.cappco.com.co/capp_admin/wscapp/cotizacionesEnviadas/";
-		this.urlGetCotizacion = "http://www.cappco.com.co/capp_admin/wscapp/getCotizacion/";
-		this.urlSendCompra = "http://www.cappco.com.co/capp_admin/wscapp/compra";
-		this.urlSendCompraProducto = "http://www.cappco.com.co/capp_admin/wscapp/compraProducto";
-		this.urlGetCompras = "http://www.cappco.com.co/capp_admin/wscapp/getComprasUsuario/";
-		this.urlGetCompra = "http://www.cappco.com.co/capp_admin/wscapp/getCompra/";
-		this.urlGetDireccion = "http://www.cappco.com.co/capp_admin/wscapp/getDireccion/";
-		this.urlGuardarDireccion = "http://www.cappco.com.co/capp_admin/wscapp/guardarDireccion";
-		this.urlRemoveDireccion = "http://www.cappco.com.co/capp_admin/wscapp/removeDireccion/";
-		this.urlGetFormasPago = "http://www.cappco.com.co/capp_admin/wscapp/getFormasPago/";
-		this.urlGetUnidad = "http://www.cappco.com.co/capp_admin/wscapp/getUnidad";
-		this.urlSendMessage = "http://www.cappco.com.co/capp_admin/wscapp/sendMenssage";
-		this.urlGetRating = "http://www.cappco.com.co/capp_admin/wscapp/getRating/";
-		this.urlPuntuar = "http://www.cappco.com.co/capp_admin/wscapp/puntuar";
+		this.url = ht + "www.cappco.com.co/capp_admin/wscapp/getEmpresas/";
+		this.urlGetEmpresa = ht + "www.cappco.com.co/capp_admin/wscapp/getEmpresa/";
+		this.urlSearch = ht + "www.cappco.com.co/capp_admin/wscapp/search/";
+		this.urlSearchProducto = ht + "www.cappco.com.co/capp_admin/wscapp/searchProducto/";
+		this.urlProductos = ht + "www.cappco.com.co/capp_admin/wscapp/productos/";
+		this.urlSendCotizacion = ht + "www.cappco.com.co/capp_admin/wscapp/cotizacion";
+		this.urlSendCotizacionProducto = ht + "www.cappco.com.co/capp_admin/wscapp/cotizacionProducto";
+		this.urlSendCotizacionCliente = ht + "www.cappco.com.co/capp_admin/wscapp/cotizacionCliente";
+		this.urlSearchCotizacionUsuario = ht + "www.cappco.com.co/capp_admin/wscapp/buscarCotizacionUsuario/";
+		this.urlCotizacionesEnviadas = ht + "www.cappco.com.co/capp_admin/wscapp/cotizacionesEnviadas/";
+		this.urlGetCotizacion = ht + "www.cappco.com.co/capp_admin/wscapp/getCotizacion/";
+		this.urlSendCompra = ht + "www.cappco.com.co/capp_admin/wscapp/compra";
+		this.urlSendCompraProducto = ht + "www.cappco.com.co/capp_admin/wscapp/compraProducto";
+		this.urlGetCompras = ht + "www.cappco.com.co/capp_admin/wscapp/getComprasUsuario/";
+		this.urlGetCompra = ht + "www.cappco.com.co/capp_admin/wscapp/getCompra/";
+		this.urlGetDireccion = ht + "www.cappco.com.co/capp_admin/wscapp/getDireccion/";
+		this.urlGuardarDireccion = "https://www.cappco.com.co/capp_admin/wscapp/guardarDireccion";
+		this.urlRemoveDireccion = ht + "www.cappco.com.co/capp_admin/wscapp/removeDireccion/";
+		this.urlGetFormasPago = ht + "www.cappco.com.co/capp_admin/wscapp/getFormasPago/";
+		this.urlGetUnidad = ht + "www.cappco.com.co/capp_admin/wscapp/getUnidad";
+		this.urlSendMessage = ht + "www.cappco.com.co/capp_admin/wscapp/sendMenssage";
+		this.urlGetRating = ht + "www.cappco.com.co/capp_admin/wscapp/getRating/";
+		this.urlPuntuar = ht + "www.cappco.com.co/capp_admin/wscapp/puntuar";
 		this.urlEliminarproductoCotizacion = "http://www.cappco.com.co/capp_admin/wscapp/eliminarProductoCotizacionRespondida";
 	}
 
