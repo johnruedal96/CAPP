@@ -15,7 +15,7 @@ import { Facebook } from '@ionic-native/facebook';
 export class AuthProvider {
 
   public user: any;
-  public urlImagen: string = 'http://www.cappco.com.co/capp_admin/archivos/perfiles/img_user/';
+  public urlImagen: string = 'https://www.cappco.com.co/capp_admin/archivos/perfiles/img_user/';
   public imagen: string;
 
   public urlToken: string;
@@ -29,11 +29,11 @@ export class AuthProvider {
   public loginFacebookGoogle;
 
   constructor(public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public fb: Facebook) {
-    this.urlToken = 'http://www.cappco.com.co/api/csrf';
-    this.urlLogin = 'http://www.cappco.com.co/login';
-    this.urlLogout = 'http://www.cappco.com.co/logout';
-    this.urlRegister = 'http://www.cappco.com.co/capp_admin/wscapp/register';
-    this.urlActualizar = 'http://www.cappco.com.co/capp_admin/wscapp/actualizarDatos';
+    this.urlToken = 'https://www.cappco.com.co/api/csrf';
+    this.urlLogin = 'https://www.cappco.com.co/login';
+    this.urlLogout = 'https://www.cappco.com.co/logout';
+    this.urlRegister = 'https://www.cappco.com.co/capp_admin/wscapp/register';
+    this.urlActualizar = 'https://www.cappco.com.co/capp_admin/wscapp/actualizarDatos';
 
   }
 
@@ -67,7 +67,7 @@ export class AuthProvider {
   }
 
   extractData(res) {
-    if (res.url == 'http://www.cappco.com.co/inicio') {
+    if (res.url == 'https://www.cappco.com.co/inicio') {
       window.localStorage.setItem('token', this.token);
     } else {
       this.presentAlert('Datos invalidos', 'Datos invalidos, por favor intente de nuevo ' + res.url);
@@ -107,27 +107,35 @@ export class AuthProvider {
     return true;
   }
 
-  register(data) {
-    let headers = new Headers({
-      'X-CSRF-TOKEN': data._token,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    });
-    let options = new RequestOptions({
-      headers: headers
-    });
+  getHeader(token) {
+		let headers = new Headers({
+			'X-CSRF-TOKEN': token,
+			'Content-Type': 'application/x-www-form-urlencoded',
+		});
 
+		return new RequestOptions({
+			headers: headers
+		});
+	}
+
+  register(data) {
     this.token = data._token;
+
+    
+    let options = this.getHeader(this.token);
+    console.log(options);
 
     // let params = '_token=' + data._token;
     let params = 'nombre=' + data.nombre;
     params += '&email=' + data.email;
     params += '&password=' + data.password;
 
-    return this.http.post(this.urlRegister, params, options);
+    return this.http.post(this.urlRegister, params, options)
+      .map(res => res);
   }
 
   isLogged() {
-    return this.http.get('http://www.cappco.com.co/api/user')
+    return this.http.get('https://www.cappco.com.co/api/user')
       .map(user => user);
   }
 
