@@ -60,7 +60,7 @@ export class WebServiceProvider {
 		this.urlGetDireccion = ht + "www.cappco.com.co/capp_admin/wscapp/getDireccion/";
 		this.urlGuardarDireccion = "https://www.cappco.com.co/capp_admin/wscapp/guardarDireccion";
 		this.urlRemoveDireccion = ht + "www.cappco.com.co/capp_admin/wscapp/removeDireccion/";
-		this.urlGetFormasPago = ht + "www.cappco.com.co/capp_admin/wscapp/getFormasPago/";
+		this.urlGetFormasPago = ht + "www.cappco.com.co/capp_admin/wscapp/getFormasPago";
 		this.urlGetUnidad = ht + "www.cappco.com.co/capp_admin/wscapp/getUnidad";
 		this.urlSendMessage = ht + "www.cappco.com.co/capp_admin/wscapp/sendMenssage";
 		this.urlGetRating = ht + "www.cappco.com.co/capp_admin/wscapp/getRating/";

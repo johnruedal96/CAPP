@@ -238,32 +238,46 @@ export class ListaCotizacionPage {
 	}
 
 	deleteItem(item){
-		let params = "idCotizacion="+item.idCotizacion;
-		params += "&idProducto="+item.idProducto;
-
-		this.loader = this.loadingCtrl.create({
-			content: 'Eliminando...'
-		});
-
-		this.loader.present();
-		this.auth.getToken()
-			.subscribe(
-			(res) => {
-				this.ws.eliminarProductoCotizacion(res.text(), params)
+		if(this.lista.length === 1){
+			let alert = this.alertCtrl.create({
+				title: 'Error!',
+				subTitle: 'No se puede eliminar el ítem, la lista quedará vacía',
+				buttons: [
+				  {
+					text: 'Aceptar',
+					role: 'cancel'
+				  },
+				]
+			  });
+			  alert.present();
+		}else{
+			let params = "idCotizacion="+item.idCotizacion;
+			params += "&idProducto="+item.idProducto;
+	
+			this.loader = this.loadingCtrl.create({
+				content: 'Eliminando...'
+			});
+	
+			this.loader.present();
+			this.auth.getToken()
 				.subscribe(
-					(res) => {
-						this.loader.dismiss();
-						this.cargarLista();
-					},
-					(err) => {
-						console.log(err);
-					}
-				)
-			},
-			(err) => {
-				console.log(err);
-			}
-		)
+				(res) => {
+					this.ws.eliminarProductoCotizacion(res.text(), params)
+					.subscribe(
+						(res) => {
+							this.loader.dismiss();
+							this.cargarLista();
+						},
+						(err) => {
+							console.log(err);
+						}
+					)
+				},
+				(err) => {
+					console.log(err);
+				}
+			)
+		}
 	}
 
 }

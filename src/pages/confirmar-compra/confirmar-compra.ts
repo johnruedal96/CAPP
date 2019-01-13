@@ -85,6 +85,7 @@ export class ConfirmarCompraPage {
     data += '&cliente=' + this.cliente;
     data += '&direccion=' + this.direccionId;
     data += '&pago=' + this.formaPagoId;
+    data += '&cotizacion=' + this.cotizacion;
     this.ws.sendCompra(data, token)
       .subscribe(
       (res) => {
